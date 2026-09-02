@@ -8,9 +8,9 @@ hide:
 <div class="module-cards grid four-cols">
 
  <!-- Module I Card -->
-    <div class="card module-card" data-module-id="PBE_26.1_8001_I">
+    <div class="card module-card" data-module-id="PBE_26.2_8001_III">
         <div class="card-header">
-            PBE_26.1_8001_I
+            PBE_26.2_8001_III
         </div>
         <div class="card-content">
             <p class="contributors">Arthur Calebe, Pedro Becker, Antonio Damasceno, Brenu</p>
