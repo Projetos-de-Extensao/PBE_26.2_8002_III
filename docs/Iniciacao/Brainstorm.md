@@ -10,7 +10,7 @@ O brainstorm é uma técnica de elicitação de requisitos que consiste em reuni
  
 ## Metodologia
 <p align = "justify">
-A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .... e terminou..., onde o XXXX XXXX foi o moderador, direcionando a equipe com questões pré-elaboradas, e transcrevendo as respostas para o documento.
+A equipe utilizou as questões do 5W2H para organizar ideias gerais sobre o sistema de agendamento para treinamento infantil de alta performance. As respostas foram consolidadas neste documento para orientar a elicitação dos requisitos do projeto.
 </p>
  
 ## Brainstorm
@@ -22,108 +22,70 @@ A equipe se reuniu para debater ideias gerais sobre o projeto via..., começou .
 ### 1. Qual o objetivo principal da aplicação?
  
 <p align = "justify">
-<b>XXXX</b> - Deve ser uma plataforma onde qualquer pessoa possa...
-</p>
- 
-<b>ZZZ</b> - A plataforma deve fornece...
- 
-<b>YYYY</b> - O objetivo da aplicação é....
- 
-<b>WWWW</b> - O principal objetivo da aplicação é a...
- 
-<b>KKKK</b> - A plataforma deve gerenciar...
+<b>Equipe do projeto</b> - O objetivo é criar um sistema de agendamento para treinamento infantil de alta performance, responsável por orquestrar a agenda de treinamentos e validar a disponibilidade simultânea de sala, professor e jovem atleta.
 </p>
  
 ---
  
-### 2. Como será o processo para cadastrar um novo cliente?
+### 2. Por que a aplicação será desenvolvida?
  
 <p align = "justify">
-<b>XXXX</b> - O moderador deverá fazer login e...
- 
-<b>YYYY</b> - O cliente...
- 
-<b>WWWW</b> - Com o usuário logado, ele deverá...
-
-<b>ZZZZ</b> - O cliente...
- 
-<b>KKK</b> - O cliente...
+<b>Equipe do projeto</b> - A aplicação será desenvolvida para evitar agendamentos conflitantes, respeitar os limites biológicos de crianças de 7 a 12 anos e garantir a segurança e a qualidade do acompanhamento.
+</p>
  
 ---
  
-### 3. Como será a forma de adicionar produtos?
+### 3. Onde a aplicação será utilizada?
  
 <p align = "justify">
-<b>XXXX</b> - O cliente ao cadastrar...
+<b>Equipe do projeto</b> - A aplicação será utilizada no centro de treinamento, nas zonas destinadas ao público infantil, como a pista de explosão motora e a sala de testes cognitivos.
 </p>
- 
-<p align = "justify">
-<b>YYYYY</b> - O produto tem...
-</p>
- 
-<b>ZZZZ</b> - O produto....
- 
-<b>XXXX</b> - O produto....
-
  
 ---
  
-### 4. Outras perguntas pertinentes ao contexto
+### 4. Quais regras devem ser consideradas no agendamento?
 
 <p align = "justify">
-<b>XXXX</b> - Com a localização...
- 
-<b>YYYY</b> - O cliente...
- 
-<b>ZZZ</b> - O cliente...
+<b>Equipe do projeto</b> - A marcação deve respeitar a antecedência mínima de 12 horas, os períodos de descanso, transição, hidratação e higienização, além dos horários de manutenção e avaliação técnica.
+</p>
  
 ---
  
-### 5. "Outras perguntas pertinentes ao contexto", Como seria a forma de adicionar do cliente adicionar os produtos ?
+### 5. Quem utilizará a aplicação?
 <p align = "justify">
-<b>XXX</b> - O cliente....
+<b>Equipe do projeto</b> - A aplicação será utilizada por gestores, responsáveis autenticados, professores e profissionais previamente validados pelo coordenador, atendendo jovens atletas de 7 a 12 anos.
 </p>
  
-### 6. Quais informações seriam interessante para o cliente?
+### 6. Quais funcionalidades serão utilizadas no sistema?
 <p align = "justify">
-   <b>XXX</b> - Informações...
-   
-   <b>ZZZZ</b> - O cliente usuário poderá acessar informações...
-
-   <b>WWWWs</b> - O usuário poderá ver scouts de partidas do torneio, ver as regras dos torneios, locais e data das partidas.
-   
+<b>Equipe do projeto</b> - O sistema utilizará um calendário com visões adaptadas ao gestor e aos pais, gestão de salas e equipamentos, categorização de treinadores, bloqueios automáticos, fila de espera, recomendações de treino e registro rápido de métricas pós-treino.
 </p>
  
 ### Requisitos elicitados
  
 |ID|Descrição|
 |----|-------------|
-|BS01| O cliente...|
-|BS02| O cliente...|
-|BS03| O cliente...|
-|BS04| O cliente...|
-|BS05| O cliente...|
-|BS06| O cliente...|
-|BS07| O cliente...|
-|BS08| O cliente...|
-|BS09| O cliente...|
-|BS10| O produto...|
-|BS11| O produto...|
-|BS12| O produto...|
-|BS13| O produto...|
-|BS14| O produto...|
-|BS15| O produto...|
+|BS01| O sistema deve orquestrar a agenda de treinamentos.|
+|BS02| O sistema deve validar a disponibilidade simultânea de sala, professor e jovem atleta.|
+|BS03| O sistema deve evitar agendamentos conflitantes.|
+|BS04| O sistema deve respeitar a antecedência mínima de 12 horas.|
+|BS05| O sistema deve considerar os períodos de descanso, transição, hidratação e higienização.|
+|BS06| O sistema deve considerar os horários de manutenção e avaliação técnica.|
+|BS07| O sistema deve atender jovens atletas de 7 a 12 anos.|
+|BS08| O sistema deve oferecer um calendário com visões adaptadas ao gestor e aos pais.|
+|BS09| O sistema deve permitir a gestão de salas e equipamentos.|
+|BS10| O sistema deve permitir a categorização de treinadores.|
+|BS11| O sistema deve realizar bloqueios automáticos.|
+|BS12| O sistema deve oferecer uma fila de espera.|
+|BS13| O sistema deve oferecer recomendações de treino.|
+|BS14| O sistema deve permitir o registro rápido de métricas pós-treino.|
  
 ## Conclusão
 <p align = "justify">
-Através da aplicação da técnica, foi possível elicitar alguns dos primeiros requisitos do projeto.
+Através da aplicação da técnica, foi possível organizar ideias iniciais e elicitar requisitos para o sistema de agendamento de treinamento infantil de alta performance.
 </p>
-## Referências Bibliográficas
- 
-> BARBOSA, S. D. J; DA SILVA, B. S. Interação humano-computador. Elsevier, 2010.
- 
  
 ## Autor(es)
 | Data | Versão | Descrição | Autor(es) |
 | -- | -- | -- | -- |
-| DD/MM/YYYY | 1.0 | Criação do documento | XXX XXXX, XXXX XXXX, YYY YYYY e ZZZ XXXX |
+| 2026.2 | 1.0 | Criação do documento com base no 5W2H do sistema de agendamento para treinamento infantil de alta performance | Arthur Calebe, Antonio Reuter, Pedro Henrique e Breno Ruf |
