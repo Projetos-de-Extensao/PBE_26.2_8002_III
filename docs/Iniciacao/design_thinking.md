@@ -7,19 +7,19 @@ title: Design Thinking
 
 ### **1. Capa**
 
-- Título do Projeto
-- Nome da Equipe
-- Data
-- Logo da Empresa/Organização (se aplicável)
+- **Título do Projeto**: Sistema de agendamento para treinamento infantil de alta performance
+- **Nome da Equipe**: Grupo 3 do projeto: Arthur Calebe, Antonio Reuter, Pedro Henrique e Breno Ruf
+- **Data**: 2026.2
+- **Logo da Empresa/Organização**: Essa etapa ainda será feita.
 
 ---
 
 ### **2. Introdução**
 
-- **Contexto do Projeto**: Breve descrição do problema ou oportunidade.
-- **Objetivo**: O que se espera alcançar com o projeto.
-- **Público-Alvo**: Quem será impactado pela solução.
-- **Escopo**: Limites e abrangência do projeto.
+- **Contexto do Projeto**: O projeto trata do desenvolvimento de um sistema de agendamento para treinamento infantil de alta performance. O sistema deverá orquestrar a agenda de treinamentos e validar a disponibilidade simultânea de sala, professor e jovem atleta.
+- **Objetivo**: Evitar agendamentos conflitantes, respeitar os limites biológicos de crianças de 7 a 12 anos e garantir a segurança e a qualidade do acompanhamento.
+- **Público-Alvo**: Gestores, responsáveis autenticados, professores e profissionais previamente validados pelo coordenador, atendendo jovens atletas de 7 a 12 anos.
+- **Escopo**: O sistema abrangerá o agendamento no centro de treinamento, incluindo as zonas destinadas ao público infantil, como a pista de explosão motora e a sala de testes cognitivos. Também incluirá calendário, gestão de salas e equipamentos, categorização de treinadores, bloqueios automáticos, fila de espera, recomendações de treino e registro rápido de métricas pós-treino.
 
 ---
 
@@ -27,46 +27,46 @@ title: Design Thinking
 
 #### **3.1. Empatia**
 
-- **Pesquisa**: Métodos utilizados para entender o usuário (entrevistas, observação, etc.).
-- **Insights**: Principais descobertas sobre as necessidades, desejos e dores do usuário.
-- **Personas**: Descrição dos perfis de usuários criados com base na pesquisa.
+- **Pesquisa**: A pesquisa analisou aplicações de alocação de eventos, funcionalidades de calendário, salas, professores e plataformas similares. O Brainstorm foi organizado a partir das questões do 5W2H.
+- **Insights**: É necessário cruzar a disponibilidade da sala, do profissional e do aluno; evitar conflitos de agendamento; respeitar os períodos de descanso, transição, hidratação e higienização; e considerar os horários de manutenção e avaliação técnica.
+- **Personas**: Os usuários identificados são gestores, responsáveis autenticados, professores e profissionais previamente validados pelo coordenador. A descrição detalhada das personas ainda será feita.
 
 #### **3.2. Definição**
 
-- **Problema Central**: Definição clara do problema a ser resolvido (ex.: "Como podemos...?").
-- **Pontos de Vista (POV)**: Frases que sintetizam as necessidades do usuário e os insights.
+- **Problema Central**: Como criar um sistema de agendamento para treinamento infantil de alta performance que evite conflitos, valide simultaneamente a disponibilidade de sala, professor e jovem atleta e respeite as regras de segurança e acompanhamento?
+- **Pontos de Vista (POV)**: Os pontos de vista detalhados dos usuários ainda serão feitos. Os materiais identificam gestores, responsáveis autenticados, professores e profissionais previamente validados pelo coordenador como usuários da aplicação.
 
 #### **3.3. Ideação**
 
-- **Brainstorming**: Lista de ideias geradas pela equipe.
-- **Seleção de Ideias**: Critérios utilizados para escolher as melhores ideias.
-- **Ideias Selecionadas**: Descrição das ideias que serão prototipadas.
+- **Brainstorming**: Foram levantadas as seguintes ideias: calendário com visões adaptadas ao gestor e aos pais; gestão de salas e equipamentos; categorização de treinadores; bloqueios automáticos; fila de espera; recomendações de treino; e registro rápido de métricas pós-treino.
+- **Seleção de Ideias**: As ideias foram relacionadas à necessidade de gerenciar a rotina de treinos, cruzar disponibilidades, evitar conflitos e acompanhar o desenvolvimento motor e cognitivo.
+- **Ideias Selecionadas**: Sistema de agendamento com validação simultânea de sala, professor e jovem atleta, calendário adaptado, gestão de salas e equipamentos, categorização de treinadores, bloqueios automáticos, fila de espera, recomendações de treino e registro rápido de métricas pós-treino.
 
 #### **3.4. Prototipagem**
 
-- **Descrição do Protótipo**: Como a ideia foi transformada em um protótipo (esboço, modelo físico, digital, etc.).
-- **Materiais Utilizados**: Recursos necessários para criar o protótipo.
-- **Testes Realizados**: Como o protótipo foi testado.
+- **Descrição do Protótipo**: Essa etapa ainda será feita.
+- **Materiais Utilizados**: Essa etapa ainda será feita.
+- **Testes Realizados**: Essa etapa ainda será feita.
 
 #### **3.5. Teste**
 
-- **Feedback dos Usuários**: O que os usuários acharam do protótipo.
-- **Ajustes Realizados**: Mudanças feitas com base no feedback.
-- **Resultados Finais**: Descrição da solução final.
+- **Feedback dos Usuários**: Essa etapa ainda será feita.
+- **Ajustes Realizados**: Essa etapa ainda será feita.
+- **Resultados Finais**: Essa etapa ainda será feita.
 
 ---
 
 ### **4. Conclusão**
 
-- **Resultados Obtidos**: O que foi alcançado com o projeto.
-- **Próximos Passos**: O que ainda precisa ser feito ou implementado.
-- **Aprendizados**: Lições aprendidas durante o processo.
+- **Resultados Obtidos**: Foram organizados o contexto, o objetivo, o público-alvo, o problema central e as principais funcionalidades do sistema de agendamento.
+- **Próximos Passos**: Realizar as etapas de definição detalhada das personas, prototipagem e testes com usuários.
+- **Aprendizados**: O sistema deve cruzar as disponibilidades de sala, profissional e aluno, além de respeitar a antecedência mínima de 12 horas, os períodos de descanso, transição, hidratação e higienização e os horários de manutenção e avaliação técnica.
 
 ---
 
 ### **5. Anexos**
 
-- Fotos, gráficos, tabelas, transcrições de entrevistas, etc.
+- Essa etapa ainda será feita.
 
 ---
 
@@ -74,6 +74,6 @@ title: Design Thinking
 
 - Use uma linguagem clara e objetiva.
 - Inclua visualizações, como mapas de empatia, jornadas do usuário ou esboços de ideias.
-- Adapte o documento conforme o estágio do projeto (ex.: um documento inicial pode focar mais na pesquisa, enquanto um final pode detalhar a solução).
+- Adapte o documento conforme o estágio do projeto.
 
-Esse modelo é flexível e pode ser ajustado conforme as necessidades do seu projeto ou da sua equipe. O importante é que o documento reflita o processo colaborativo e iterativo do Design Thinking.
+Esse documento foi preenchido exclusivamente com base no `5w2h.md` e no `Brainstorm.md`.
