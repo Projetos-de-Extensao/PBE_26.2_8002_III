@@ -1,0 +1,371 @@
+@startuml
+
+title Prototipo de Baixa Fidelidade - Sistema de Gestao de Treinos
+
+' =========================================================
+' LOGIN
+' =========================================================
+
+frame "LOGIN" {
+
+  rectangle "SISTEMA DE GESTAO DE TREINOS" as Titulo
+
+  rectangle "E-mail\n\n____________________________" as Email
+
+  rectangle "Senha\n\n____________________________" as Senha
+
+  rectangle "[ ENTRAR ]" as Entrar
+
+  rectangle "[ ESQUECI MINHA SENHA ]" as Recuperar
+
+  rectangle "[ CRIAR CONTA ]" as Criar
+}
+
+
+' =========================================================
+' CADASTRO DO RESPONSAVEL
+' =========================================================
+
+frame "CADASTRO DO RESPONSAVEL" {
+
+  rectangle "CADASTRO" as TituloCadastro
+
+  rectangle "Nome completo\n\n____________________________" as NomeResponsavel
+
+  rectangle "E-mail\n\n____________________________" as EmailCadastro
+
+  rectangle "Senha\n\n____________________________" as SenhaCadastro
+
+  rectangle "Confirmar senha\n\n____________________________" as ConfirmarSenha
+
+  rectangle "Telefone\n\n____________________________" as Telefone
+
+  rectangle "[ CADASTRAR ]" as CadastrarResponsavel
+
+  rectangle "[ CANCELAR ]" as CancelarCadastro
+}
+
+
+' =========================================================
+' RECUPERACAO DE SENHA
+' =========================================================
+
+frame "RECUPERAR SENHA" {
+
+  rectangle "RECUPERACAO DE SENHA" as TituloRecuperacao
+
+  rectangle "Informe seu e-mail\n\n____________________________" as EmailRecuperacao
+
+  rectangle "[ ENVIAR LINK ]" as EnviarLink
+
+  rectangle "[ VOLTAR PARA LOGIN ]" as VoltarLogin
+}
+
+
+' =========================================================
+' PAINEL PRINCIPAL
+' =========================================================
+
+frame "PAINEL PRINCIPAL" {
+
+  rectangle "OLA, RESPONSAVEL!" as Ola
+
+  rectangle "RESUMO\n\nAtletas cadastrados: 2\nTreinos esta semana: 4\nProximo treino: 25/09 - 15:00" as Resumo
+
+  rectangle "[ MEUS ATLETAS ]" as BtnAtletas
+
+  rectangle "[ AGENDA ]" as BtnAgenda
+
+  rectangle "[ RELATORIOS ]" as BtnRelatorios
+
+  rectangle "[ FILA DE ESPERA ]" as BtnFila
+
+  rectangle "[ PERFIL ]" as BtnPerfil
+
+  rectangle "[ SAIR ]" as BtnSair
+}
+
+
+' =========================================================
+' MEUS ATLETAS
+' =========================================================
+
+frame "MEUS ATLETAS" {
+
+  rectangle "MEUS ATLETAS" as TituloAtletas
+
+  rectangle "JOAO SILVA\n\nIdade: 10 anos\nNivel: Intermediario\nStatus: Ativo" as Atleta1
+
+  rectangle "[ VER PERFIL ]" as Perfil1
+
+  rectangle "[ AGENDAR TREINO ]" as Agendar1
+
+  rectangle "MARIA SILVA\n\nIdade: 8 anos\nNivel: Iniciante\nStatus: Ativo" as Atleta2
+
+  rectangle "[ VER PERFIL ]" as Perfil2
+
+  rectangle "[ AGENDAR TREINO ]" as Agendar2
+
+  rectangle "[ + CADASTRAR ATLETA ]" as NovoAtleta
+}
+
+
+' =========================================================
+' CADASTRO DE ATLETA
+' =========================================================
+
+frame "CADASTRAR ATLETA" {
+
+  rectangle "CADASTRO DO ATLETA" as TituloAtleta
+
+  rectangle "Nome\n\n____________________________" as NomeAtleta
+
+  rectangle "Idade\n\n____________________________" as IdadeAtleta
+
+  rectangle "Nivel de desenvolvimento\n\n[ SELECIONAR ]" as NivelAtleta
+
+  rectangle "Informacoes basicas\n\n____________________________\n____________________________" as InfoAtleta
+
+  rectangle "[ SALVAR ATLETA ]" as SalvarAtleta
+
+  rectangle "[ CANCELAR ]" as CancelarAtleta
+}
+
+
+' =========================================================
+' PERFIL DO ATLETA
+' =========================================================
+
+frame "PERFIL DO ATLETA" {
+
+  rectangle "PERFIL - JOAO SILVA" as TituloPerfilAtleta
+
+  rectangle "Idade: 10 anos\nNivel: Intermediario\nResponsavel: Responsavel\nStatus: Ativo" as DadosAtleta
+
+  rectangle "ULTIMOS TREINOS\n\n19/09 - Futebol - Realizado\n17/09 - Tecnica - Realizado\n15/09 - Fisico - Realizado" as UltimosTreinos
+
+  rectangle "RECUPERACAO\n\nEstado atual: Normal\nProximo periodo de descanso: 24 horas" as Recuperacao
+
+  rectangle "[ AGENDAR TREINO ]" as AgendarPerfil
+
+  rectangle "[ VER RELATORIOS ]" as RelatorioPerfil
+}
+
+
+' =========================================================
+' AGENDAR TREINO
+' =========================================================
+
+frame "AGENDAR TREINO" {
+
+  rectangle "AGENDAR TREINO" as TituloAgendamento
+
+  rectangle "Atleta:\n[ JOAO SILVA ]" as CampoAtleta
+
+  rectangle "Tipo de treino:\n[ FUTEBOL ]" as CampoTipo
+
+  rectangle "Data:\n[ 25/09/2026 ]" as CampoData
+
+  rectangle "Horario:\n[ 15:00 ]" as CampoHorario
+
+  rectangle "Professor:\n[ CARLOS ]" as CampoProfessor
+
+  rectangle "Sala:\n[ SALA 02 ]" as CampoSala
+
+  rectangle "DISPONIBILIDADE\n\nAtleta: DISPONIVEL\nProfessor: DISPONIVEL\nSala: DISPONIVEL" as Disponibilidade
+
+  rectangle "RECUPERACAO\n\nDescanso necessario: OK\nSem conflito de recuperacao" as VerificacaoRecuperacao
+
+  rectangle "[ CONFIRMAR AGENDAMENTO ]" as Confirmar
+
+  rectangle "[ CANCELAR ]" as Cancelar
+}
+
+
+' =========================================================
+' CALENDARIO
+' =========================================================
+
+frame "CALENDARIO DE TREINOS" {
+
+  rectangle "CALENDARIO - SETEMBRO 2026\n\nSEG  TER  QUA  QUI  SEX  SAB  DOM\n21   22   23   24   25   26   27\n\n28   29   30" as Calendario
+
+  rectangle "LEGENDA\n\n[T] Treino agendado\n[D] Horario disponivel\n[R] Periodo de recuperacao\n[B] Horario bloqueado" as Legenda
+
+  rectangle "TREINO SELECIONADO\n\n25/09/2026\nFutebol\n15:00\nProfessor Carlos\nSala 02" as TreinoSelecionado
+
+  rectangle "[ CANCELAR TREINO ]" as CancelarTreino
+
+  rectangle "[ REAGENDAR ]" as Reagendar
+}
+
+
+' =========================================================
+' REAGENDAMENTO
+' =========================================================
+
+frame "REAGENDAR TREINO" {
+
+  rectangle "TREINO ATUAL\n\n25/09/2026 - 15:00\nFutebol\nProfessor Carlos\nSala 02" as TreinoAtual
+
+  rectangle "NOVA DATA\n\n[ 27/09/2026 ]" as NovaData
+
+  rectangle "NOVO HORARIO\n\n[ 10:00 ]" as NovoHorario
+
+  rectangle "NOVO PROFESSOR\n\n[ SELECIONAR ]" as NovoProfessor
+
+  rectangle "NOVA SALA\n\n[ SELECIONAR ]" as NovaSala
+
+  rectangle "[ CONFIRMAR REAGENDAMENTO ]" as ConfirmarReagendamento
+
+  rectangle "[ CANCELAR ]" as CancelarReagendamento
+}
+
+
+' =========================================================
+' FILA DE ESPERA
+' =========================================================
+
+frame "FILA DE ESPERA" {
+
+  rectangle "FILA DE ESPERA" as TituloFila
+
+  rectangle "TREINO\n\nFutebol - 25/09 - 15:00\nSala 02\nProfessor Carlos" as TreinoFila
+
+  rectangle "POSICAO NA FILA\n\n1 - Pedro Silva\n2 - Maria Souza\n3 - Lucas Santos" as PosicaoFila
+
+  rectangle "NOTIFICACAO\n\nExiste uma vaga disponivel.\nO primeiro responsavel sera notificado." as NotificacaoFila
+
+  rectangle "[ CONFIRMAR VAGA ]" as ConfirmarVaga
+
+  rectangle "[ SAIR DA FILA ]" as SairFila
+}
+
+
+' =========================================================
+' RELATORIOS
+' =========================================================
+
+frame "RELATORIOS E ACOMPANHAMENTO" {
+
+  rectangle "ATLETA\n\n[ JOAO SILVA ]" as SelecaoAtleta
+
+  rectangle "INDICADORES\n\nTreinos realizados: 18\nPresenca: 92 por cento\nIntensidade media: 7 de 10\nRecuperacao: Boa" as Indicadores
+
+  rectangle "HISTORICO\n\n05/09 - Intensidade 6 de 10\n12/09 - Intensidade 7 de 10\n19/09 - Intensidade 8 de 10" as Historico
+
+  rectangle "ACOMPANHAMENTO\n\nDesempenho: Evolucao\nFadiga: Normal\nRecuperacao: Adequada" as Acompanhamento
+
+  rectangle "[ VER DETALHES ]" as DetalhesRelatorio
+}
+
+
+' =========================================================
+' PERFIL DO RESPONSAVEL
+' =========================================================
+
+frame "PERFIL DO RESPONSAVEL" {
+
+  rectangle "MEU PERFIL" as TituloPerfil
+
+  rectangle "Nome\nResponsavel" as PerfilNome
+
+  rectangle "E-mail\nresponsavel@email.com" as PerfilEmail
+
+  rectangle "Telefone\n(21) 99999-9999" as PerfilTelefone
+
+  rectangle "[ EDITAR DADOS ]" as EditarPerfil
+
+  rectangle "[ ALTERAR SENHA ]" as AlterarSenha
+}
+
+
+' =========================================================
+' NAVEGACAO
+' =========================================================
+
+Entrar --> BtnAtletas : Login
+
+Criar --> CadastrarResponsavel : Criar conta
+
+CadastrarResponsavel --> Entrar : Cadastro concluido
+
+Recuperar --> EmailRecuperacao : Recuperar senha
+
+EnviarLink --> VoltarLogin : Link enviado
+
+VoltarLogin --> Entrar : Voltar
+
+
+' PAINEL
+
+BtnAtletas --> Atleta1 : Meus atletas
+
+BtnAgenda --> Calendario : Agenda
+
+BtnRelatorios --> SelecaoAtleta : Relatorios
+
+BtnFila --> TituloFila : Fila de espera
+
+BtnPerfil --> TituloPerfil : Perfil
+
+BtnSair --> Entrar : Sair
+
+
+' ATLETAS
+
+NovoAtleta --> NomeAtleta : Cadastrar atleta
+
+SalvarAtleta --> Atleta1 : Cadastro concluido
+
+Perfil1 --> DadosAtleta : Ver perfil
+
+Perfil2 --> DadosAtleta : Ver perfil
+
+Agendar1 --> CampoAtleta : Agendar treino
+
+Agendar2 --> CampoAtleta : Agendar treino
+
+AgendarPerfil --> CampoAtleta : Agendar treino
+
+
+' PERFIL DO ATLETA
+
+RelatorioPerfil --> SelecaoAtleta : Ver relatorios
+
+
+' AGENDAMENTO
+
+Confirmar --> Calendario : Agendamento confirmado
+
+Cancelar --> Atleta1 : Cancelar
+
+Reagendar --> TreinoAtual : Reagendar treino
+
+ConfirmarReagendamento --> Calendario : Alteracao confirmada
+
+CancelarReagendamento --> Calendario : Cancelar
+
+
+' CALENDARIO
+
+CancelarTreino --> Calendario : Treino cancelado
+
+Reagendar --> TreinoAtual : Alterar horario
+
+
+' FILA
+
+ConfirmarVaga --> Calendario : Vaga confirmada
+
+SairFila --> TituloFila : Remover da fila
+
+
+' PERFIL
+
+EditarPerfil --> PerfilNome : Editar dados
+
+AlterarSenha --> Senha : Alterar senha
+
+
+@enduml
