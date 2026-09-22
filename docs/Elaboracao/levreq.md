@@ -373,7 +373,11 @@ A consolidação também tornou visíveis lacunas que não apareciam enquanto os
 </p>
 
 <p align = "justify">
-Resta preencher a matriz de rastreabilidade da seção 5, que depende da atribuição de identificadores aos Casos de Uso descritos em <code>casos_de_uso.md</code>. Concluída essa etapa, o documento passa a servir de entrada direta para o Diagrama de Classes e para os Diagramas de Sequência, conforme previsto nos respectivos templates da fase de Elaboração.
+Com a atribuição dos identificadores UC-01 a UC-11 aos Casos de Uso, a matriz de rastreabilidade da seção 5 foi preenchida e passou a cobrir os quarenta e seis requisitos funcionais. A verificação de cobertura confirmou que os onze Casos de Uso e as vinte e cinco regras de negócio estão vinculados a pelo menos um requisito, e apontou dois pontos de atenção: o RF-07 ainda não possui Caso de Uso próprio e as funções administrativas e de registro pós-treino, do RF-27 ao RF-37, não possuem telas no Protótipo de Baixa Fidelidade, que foi construído apenas sobre a jornada do responsável.
+</p>
+
+<p align = "justify">
+Sanadas essas pendências e definidos os parâmetros listados na seção 4.7, o documento serve de entrada direta para o Diagrama de Classes e para os Diagramas de Sequência, conforme previsto nos respectivos templates da fase de Elaboração.
 </p>
 
 ## Referências
@@ -399,3 +403,4 @@ Resta preencher a matriz de rastreabilidade da seção 5, que depende da atribui
 | 2026.2 | 1.2 | Adição dos requisitos não funcionais RNF-01 a RNF-24 | Pedro Henrique Becker |
 | 2026.2 | 1.3 | Formalização das regras de negócio RN-01 a RN-25 e dos parâmetros pendentes | Pedro Henrique Becker |
 | 2026.2 | 1.4 | Adição da conclusão, das referências e do registro de autoria | Pedro Henrique Becker |
+| 2026.2 | 1.5 | Preenchimento da matriz de rastreabilidade e da análise de cobertura | Pedro Henrique Becker |
