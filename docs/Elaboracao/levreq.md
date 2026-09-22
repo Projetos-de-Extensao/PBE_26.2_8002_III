@@ -97,7 +97,7 @@ O requisito BS01, "orquestrar a agenda de treinamentos", não aparece isolado na
 | RF-13 | Validar a disponibilidade simultânea de sala, professor e atleta no mesmo horário. | Must | ALO-01, BS02 |
 | RF-14 | Bloquear em tempo real agendamentos conflitantes, impedindo a dupla reserva de qualquer recurso. | Must | ALO-02, BS03 |
 | RF-15 | Calcular e reservar a janela de descanso e recuperação física após cada treino, considerando transição, hidratação e higienização. | Must | ALO-03, BS05 |
-| RF-16 | Validar a antecedência mínima exigida para a confirmação ou a alteração de uma marcação, conforme a regra de negócio definida na seção 4. | Must | BS04 |
+| RF-16 | Validar a antecedência mínima exigida para a confirmação ou a alteração de uma marcação, conforme a RN-01. | Must | BS04 |
 | RF-17 | Impedir o agendamento quando o atleta estiver em período de recuperação. | Must | Novo |
 | RF-18 | Sugerir horários alternativos quando houver conflito de agenda entre professor e sala. | Should | Novo |
 | RF-19 | Permitir o cancelamento e o reagendamento pelo responsável, respeitando a janela de cancelamento permitida. | Must | CAL-03 |
@@ -222,11 +222,76 @@ Diferentemente dos requisitos funcionais, os requisitos não funcionais não hav
 ## 4. Regras de Negócio
 
 <p align = "justify">
-Seção a ser preenchida na próxima etapa, formalizando as restrições descritas em prosa na pesquisa e nos fluxos alternativos dos Casos de Uso, como a antecedência mínima de 12 horas, as janelas de descanso e recuperação e os bloqueios por manutenção ou avaliação técnica.
+As regras de negócio formalizam as restrições que condicionam o comportamento do sistema. Elas foram extraídas de duas fontes: os blocos "Regras de Negócio Específicas" da <code>pesquisa.md</code>, que as descreviam em prosa e sem identificador, e os fluxos alternativos dos Casos de Uso, onde apareciam implícitas nas condições de bloqueio. Cada regra concentra o valor ou o critério da política, enquanto o requisito funcional correspondente descreve apenas a validação, de modo que uma mudança de política não exija alterar o texto do requisito.
 </p>
+
+### 4.1 Agendamento e Alocação
 
 | ID | Descrição | Requisito(s) relacionado(s) |
 | -- | --------- | --------------------------- |
+| RN-01 | A confirmação ou a alteração de uma marcação só é permitida com antecedência mínima de 12 horas em relação ao início do treino. | RF-16, RF-19 |
+| RN-02 | Qualquer transação que gere conflito de agenda entre o atleta, o professor ou a sala deve ser interrompida, sem confirmação parcial. | RF-13, RF-14 |
+| RN-03 | A janela reservada após cada treino corresponde à duração do treino somada aos tempos de transição, hidratação e higienização dos equipamentos. | RF-15 |
+| RN-04 | Horários retroativos são bloqueados para agendamento, permanecendo abertos apenas para a inserção de métricas atrasadas pelos professores. | RF-26, RF-35 |
+| RN-05 | Somente responsáveis autenticados podem confirmar ou alterar horários dos atletas vinculados à sua conta. | RF-05, RF-08, RF-19 |
+| RN-06 | O número de atividades de alta intensidade que um mesmo atleta pode realizar na semana é limitado. | RF-21 |
+| RN-07 | O cancelamento ou o reagendamento solicitado fora da janela permitida é bloqueado, com informação da política aplicável ao responsável. | RF-19 |
+
+### 4.2 Cadastro e Acesso
+
+| ID | Descrição | Requisito(s) relacionado(s) |
+| -- | --------- | --------------------------- |
+| RN-08 | O centro de treinamento atende exclusivamente jovens atletas com idade entre 7 e 12 anos. | RF-11 |
+| RN-09 | Um mesmo endereço de e-mail não pode estar associado a mais de uma conta de responsável. | RF-02 |
+| RN-10 | A conta do responsável permanece inativa até a confirmação do cadastro pelo e-mail enviado. | RF-04 |
+| RN-11 | A senha deve atender aos critérios mínimos de segurança definidos pelo sistema para ser aceita. | RF-03 |
+| RN-12 | Cadastros e registros com campos obrigatórios não preenchidos não são aceitos pelo sistema. | RF-12, RF-37 |
+
+### 4.3 Professores
+
+| ID | Descrição | Requisito(s) relacionado(s) |
+| -- | --------- | --------------------------- |
+| RN-13 | O professor só pode ser vinculado às modalidades para as quais tenha certificação técnica previamente validada pelo coordenador. | RF-31, RF-33 |
+| RN-14 | O mesmo profissional não pode iniciar treinos em espaços físicos distintos sem que haja entre eles um intervalo mínimo de deslocamento. | RF-32, RF-13 |
+| RN-15 | Os turnos de almoço e de planejamento do professor são bloqueados automaticamente para agendamento. | RF-32 |
+| RN-16 | A agenda exibida ao professor reflete apenas as modalidades para as quais ele foi validado. | RF-34, RF-31 |
+
+### 4.4 Salas e Equipamentos
+
+| ID | Descrição | Requisito(s) relacionado(s) |
+| -- | --------- | --------------------------- |
+| RN-17 | A reserva é impedida quando a lotação resultante exceder a capacidade máxima recomendada do ambiente. | RF-27, RF-30 |
+| RN-18 | Salas com equipamentos complexos ou de risco avaliado só podem ser reservadas para atividades conduzidas por treinador com a certificação técnica correspondente. | RF-28, RF-33 |
+| RN-19 | Ambientes em horário de manutenção ou de avaliação técnica exclusiva permanecem indisponíveis no calendário. | RF-29 |
+
+### 4.5 Segurança e Desempenho do Atleta
+
+| ID | Descrição | Requisito(s) relacionado(s) |
+| -- | --------- | --------------------------- |
+| RN-20 | Treinos classificados como de alta intensidade são bloqueados quando o relatório de fadiga do atleta indicar necessidade de repouso. | RF-17, RF-39 |
+| RN-21 | Atleta em período de recuperação não pode receber novo agendamento até o término da janela calculada. | RF-17, RF-38 |
+| RN-22 | Relatórios de acompanhamento só são gerados quando houver registros de treino em quantidade suficiente. | RF-41 |
+
+### 4.6 Fila de Espera
+
+| ID | Descrição | Requisito(s) relacionado(s) |
+| -- | --------- | --------------------------- |
+| RN-23 | A seleção do próximo atleta da fila observa a ordem de entrada e a compatibilidade com a vaga liberada. | RF-43 |
+| RN-24 | A vaga oferecida ao responsável expira caso não seja confirmada dentro do prazo estabelecido, sendo repassada ao próximo da fila. | RF-44, RF-45 |
+| RN-25 | Não havendo ninguém na fila de espera, a vaga permanece disponível para novo agendamento livre. | RF-46 |
+
+### 4.7 Parâmetros pendentes de definição
+
+<p align = "justify">
+Quatro regras dependem de valores que ainda não foram fixados em nenhum documento do projeto e que precisam ser definidos pela equipe antes da implementação. Enquanto isso, as regras acima descrevem o critério sem estabelecer o número, e os valores devem ser configuráveis conforme o RNF-24.
+</p>
+
+| Regra | Parâmetro a definir |
+| ----- | ------------------- |
+| RN-06 | Número máximo de atividades de alta intensidade por atleta por semana. |
+| RN-07 | Duração da janela de cancelamento e de reagendamento sem penalidade. |
+| RN-14 | Intervalo mínimo de deslocamento do professor entre espaços físicos distintos. |
+| RN-24 | Prazo de confirmação da vaga oferecida ao responsável na fila de espera. |
 
 ## 5. Matriz de Rastreabilidade
 
