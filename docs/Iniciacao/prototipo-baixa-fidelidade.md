@@ -268,6 +268,10 @@ O protótipo foi desenvolvido utilizando a linguagem **PlantUML**.
 
 title Prototipo de Baixa Fidelidade - Sistema de Gestao de Treinos
 
+' =========================================================
+' LOGIN
+' =========================================================
+
 frame "LOGIN" {
 
   rectangle "SISTEMA DE GESTAO DE TREINOS" as Titulo
@@ -283,6 +287,10 @@ frame "LOGIN" {
   rectangle "[ CRIAR CONTA ]" as Criar
 }
 
+
+' =========================================================
+' CADASTRO DO RESPONSAVEL
+' =========================================================
 
 frame "CADASTRO DO RESPONSAVEL" {
 
@@ -304,6 +312,10 @@ frame "CADASTRO DO RESPONSAVEL" {
 }
 
 
+' =========================================================
+' RECUPERACAO DE SENHA
+' =========================================================
+
 frame "RECUPERAR SENHA" {
 
   rectangle "RECUPERACAO DE SENHA" as TituloRecuperacao
@@ -315,6 +327,10 @@ frame "RECUPERAR SENHA" {
   rectangle "[ VOLTAR PARA LOGIN ]" as VoltarLogin
 }
 
+
+' =========================================================
+' PAINEL PRINCIPAL
+' =========================================================
 
 frame "PAINEL PRINCIPAL" {
 
@@ -336,6 +352,10 @@ frame "PAINEL PRINCIPAL" {
 }
 
 
+' =========================================================
+' MEUS ATLETAS
+' =========================================================
+
 frame "MEUS ATLETAS" {
 
   rectangle "MEUS ATLETAS" as TituloAtletas
@@ -356,6 +376,10 @@ frame "MEUS ATLETAS" {
 }
 
 
+' =========================================================
+' CADASTRO DE ATLETA
+' =========================================================
+
 frame "CADASTRAR ATLETA" {
 
   rectangle "CADASTRO DO ATLETA" as TituloAtleta
@@ -374,6 +398,10 @@ frame "CADASTRAR ATLETA" {
 }
 
 
+' =========================================================
+' PERFIL DO ATLETA
+' =========================================================
+
 frame "PERFIL DO ATLETA" {
 
   rectangle "PERFIL - JOAO SILVA" as TituloPerfilAtleta
@@ -389,6 +417,10 @@ frame "PERFIL DO ATLETA" {
   rectangle "[ VER RELATORIOS ]" as RelatorioPerfil
 }
 
+
+' =========================================================
+' AGENDAR TREINO
+' =========================================================
 
 frame "AGENDAR TREINO" {
 
@@ -416,6 +448,10 @@ frame "AGENDAR TREINO" {
 }
 
 
+' =========================================================
+' CALENDARIO
+' =========================================================
+
 frame "CALENDARIO DE TREINOS" {
 
   rectangle "CALENDARIO - SETEMBRO 2026\n\nSEG  TER  QUA  QUI  SEX  SAB  DOM\n21   22   23   24   25   26   27\n\n28   29   30" as Calendario
@@ -429,6 +465,10 @@ frame "CALENDARIO DE TREINOS" {
   rectangle "[ REAGENDAR ]" as Reagendar
 }
 
+
+' =========================================================
+' REAGENDAMENTO
+' =========================================================
 
 frame "REAGENDAR TREINO" {
 
@@ -448,6 +488,10 @@ frame "REAGENDAR TREINO" {
 }
 
 
+' =========================================================
+' FILA DE ESPERA
+' =========================================================
+
 frame "FILA DE ESPERA" {
 
   rectangle "FILA DE ESPERA" as TituloFila
@@ -464,6 +508,10 @@ frame "FILA DE ESPERA" {
 }
 
 
+' =========================================================
+' RELATORIOS
+' =========================================================
+
 frame "RELATORIOS E ACOMPANHAMENTO" {
 
   rectangle "ATLETA\n\n[ JOAO SILVA ]" as SelecaoAtleta
@@ -477,6 +525,10 @@ frame "RELATORIOS E ACOMPANHAMENTO" {
   rectangle "[ VER DETALHES ]" as DetalhesRelatorio
 }
 
+
+' =========================================================
+' PERFIL DO RESPONSAVEL
+' =========================================================
 
 frame "PERFIL DO RESPONSAVEL" {
 
@@ -494,7 +546,9 @@ frame "PERFIL DO RESPONSAVEL" {
 }
 
 
+' =========================================================
 ' NAVEGACAO
+' =========================================================
 
 Entrar --> BtnAtletas : Login
 
@@ -508,6 +562,9 @@ EnviarLink --> VoltarLogin : Link enviado
 
 VoltarLogin --> Entrar : Voltar
 
+
+' PAINEL
+
 BtnAtletas --> Atleta1 : Meus atletas
 
 BtnAgenda --> Calendario : Agenda
@@ -519,6 +576,9 @@ BtnFila --> TituloFila : Fila de espera
 BtnPerfil --> TituloPerfil : Perfil
 
 BtnSair --> Entrar : Sair
+
+
+' ATLETAS
 
 NovoAtleta --> NomeAtleta : Cadastrar atleta
 
@@ -534,7 +594,13 @@ Agendar2 --> CampoAtleta : Agendar treino
 
 AgendarPerfil --> CampoAtleta : Agendar treino
 
+
+' PERFIL DO ATLETA
+
 RelatorioPerfil --> SelecaoAtleta : Ver relatorios
+
+
+' AGENDAMENTO
 
 Confirmar --> Calendario : Agendamento confirmado
 
@@ -546,13 +612,27 @@ ConfirmarReagendamento --> Calendario : Alteracao confirmada
 
 CancelarReagendamento --> Calendario : Cancelar
 
+
+' CALENDARIO
+
 CancelarTreino --> Calendario : Treino cancelado
+
+Reagendar --> TreinoAtual : Alterar horario
+
+
+' FILA
 
 ConfirmarVaga --> Calendario : Vaga confirmada
 
 SairFila --> TituloFila : Remover da fila
 
+
+' PERFIL
+
 EditarPerfil --> PerfilNome : Editar dados
+
+AlterarSenha --> Senha : Alterar senha
+
 
 @enduml
 ```
