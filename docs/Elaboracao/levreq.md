@@ -97,7 +97,7 @@ O requisito BS01, "orquestrar a agenda de treinamentos", não aparece isolado na
 | RF-13 | Validar a disponibilidade simultânea de sala, professor e atleta no mesmo horário. | Must | ALO-01, BS02 |
 | RF-14 | Bloquear em tempo real agendamentos conflitantes, impedindo a dupla reserva de qualquer recurso. | Must | ALO-02, BS03 |
 | RF-15 | Calcular e reservar a janela de descanso e recuperação física após cada treino, considerando transição, hidratação e higienização. | Must | ALO-03, BS05 |
-| RF-16 | Validar a antecedência mínima de 12 horas para confirmação ou alteração de uma marcação. | Must | BS04 |
+| RF-16 | Validar a antecedência mínima exigida para a confirmação ou a alteração de uma marcação, conforme a regra de negócio definida na seção 4. | Must | BS04 |
 | RF-17 | Impedir o agendamento quando o atleta estiver em período de recuperação. | Must | Novo |
 | RF-18 | Sugerir horários alternativos quando houver conflito de agenda entre professor e sala. | Should | Novo |
 | RF-19 | Permitir o cancelamento e o reagendamento pelo responsável, respeitando a janela de cancelamento permitida. | Must | CAL-03 |
