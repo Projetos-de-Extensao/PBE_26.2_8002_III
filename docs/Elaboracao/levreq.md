@@ -296,11 +296,71 @@ Quatro regras dependem de valores que ainda não foram fixados em nenhum documen
 ## 5. Matriz de Rastreabilidade
 
 <p align = "justify">
-Seção a ser preenchida na próxima etapa, relacionando cada requisito funcional ao Caso de Uso que o realiza, às regras de negócio aplicáveis e à tela correspondente do Protótipo de Baixa Fidelidade.
+A matriz relaciona cada requisito funcional ao Caso de Uso que o realiza, às regras de negócio que o condicionam e à tela correspondente do Protótipo de Baixa Fidelidade. Os identificadores dos Casos de Uso referem-se a <code>casos_de_uso.md</code> e os nomes das telas ao documento <code>prototipo-baixa-fidelidade.md</code>. O traço indica ausência de vínculo, situação analisada ao final da seção.
 </p>
 
 | Requisito | Caso de Uso | Regra(s) de Negócio | Tela do Protótipo |
 | --------- | ----------- | ------------------- | ----------------- |
+| RF-01 | UC-01 | RN-09, RN-11, RN-12 | Cadastro do Responsável |
+| RF-02 | UC-01 | RN-09 | Cadastro do Responsável |
+| RF-03 | UC-01 | RN-11 | Cadastro do Responsável |
+| RF-04 | UC-01 | RN-10 | Cadastro do Responsável |
+| RF-05 | UC-02 | RN-05 | Login |
+| RF-06 | UC-02 | — | Recuperar Senha |
+| RF-07 | — | — | Perfil do Responsável |
+| RF-08 | UC-02, UC-07, UC-08 | RN-05 | — |
+| RF-09 | UC-03 | RN-08 | Cadastrar Atleta |
+| RF-10 | UC-03 | — | Cadastrar Atleta |
+| RF-11 | UC-03 | RN-08 | Cadastrar Atleta |
+| RF-12 | UC-03 | RN-12 | Cadastrar Atleta |
+| RF-13 | UC-04 | RN-02, RN-14 | Agendar Treino |
+| RF-14 | UC-04 | RN-02 | Agendar Treino |
+| RF-15 | UC-04 | RN-03 | Agendar Treino |
+| RF-16 | UC-04 | RN-01 | Agendar Treino |
+| RF-17 | UC-04 | RN-20, RN-21 | Agendar Treino |
+| RF-18 | UC-04 | RN-02 | Agendar Treino |
+| RF-19 | UC-05 | RN-01, RN-05, RN-07 | Calendário de Treinos, Reagendar Treino |
+| RF-20 | UC-04 | — | Agendar Treino |
+| RF-21 | UC-04 | RN-06 | Agendar Treino |
+| RF-22 | UC-06 | — | Calendário de Treinos |
+| RF-23 | UC-06 | — | Calendário de Treinos |
+| RF-24 | UC-06 | — | Calendário de Treinos |
+| RF-25 | UC-06 | — | Perfil do Atleta |
+| RF-26 | UC-04 | RN-04 | Calendário de Treinos |
+| RF-27 | UC-08 | RN-17 | — |
+| RF-28 | UC-08 | RN-18 | — |
+| RF-29 | UC-08 | RN-19 | — |
+| RF-30 | UC-08 | RN-17 | — |
+| RF-31 | UC-07 | RN-13, RN-16 | — |
+| RF-32 | UC-07 | RN-14, RN-15 | — |
+| RF-33 | UC-07 | RN-13, RN-18 | — |
+| RF-34 | UC-09 | RN-16 | — |
+| RF-35 | UC-09 | RN-04 | — |
+| RF-36 | UC-09 | — | — |
+| RF-37 | UC-09 | RN-12 | — |
+| RF-38 | UC-09 | RN-21 | Perfil do Atleta |
+| RF-39 | UC-09 | RN-20 | Perfil do Atleta |
+| RF-40 | UC-11 | — | Relatórios e Acompanhamento |
+| RF-41 | UC-11 | RN-22 | Relatórios e Acompanhamento |
+| RF-42 | UC-05, UC-10 | — | Fila de Espera |
+| RF-43 | UC-10 | RN-23 | Fila de Espera |
+| RF-44 | UC-10 | RN-24 | Fila de Espera |
+| RF-45 | UC-10 | RN-24 | Fila de Espera |
+| RF-46 | UC-10 | RN-25 | Fila de Espera |
+
+### 5.1 Análise de cobertura
+
+<p align = "justify">
+Todos os onze Casos de Uso estão cobertos por ao menos um requisito funcional e todas as vinte e cinco regras de negócio aparecem vinculadas a algum requisito, o que indica que não há regra formalizada sem função que a aplique.
+</p>
+
+<p align = "justify">
+Um único requisito não possui Caso de Uso correspondente: o RF-07, relativo à visualização e à alteração dos dados da conta. A função consta da lista de descrição inicial de <code>casos_de_uso.md</code>, no item Contas, mas não foi detalhada como Caso de Uso próprio, ao contrário do cadastro e da entrada no sistema. Recomenda-se a especificação desse Caso de Uso para completar a rastreabilidade.
+</p>
+
+<p align = "justify">
+Doze requisitos não possuem tela correspondente no Protótipo de Baixa Fidelidade. Onze deles, do RF-27 ao RF-37, compreendem as funções administrativas de cadastro de salas e equipamentos, gestão de professores e registro de desempenho pós-treino, realizadas pelos Casos de Uso UC-07, UC-08 e UC-09. O protótipo foi construído a partir da jornada do responsável e não contempla as interfaces do administrador nem a do professor, que precisam ser prototipadas antes da fase de Construção. O RF-08, por tratar da separação entre perfis de acesso, é transversal às telas e não se vincula a nenhuma em particular.
+</p>
 
 ## Conclusão
 
