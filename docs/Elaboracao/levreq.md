@@ -301,3 +301,41 @@ Seção a ser preenchida na próxima etapa, relacionando cada requisito funciona
 
 | Requisito | Caso de Uso | Regra(s) de Negócio | Tela do Protótipo |
 | --------- | ----------- | ------------------- | ----------------- |
+
+## Conclusão
+
+<p align = "justify">
+Este documento reuniu em um único artefato os stakeholders, os quarenta e seis requisitos funcionais, os vinte e quatro requisitos não funcionais e as vinte e cinco regras de negócio do sistema de agendamento para treinamento infantil de alta performance. Com isso, os requisitos que estavam dispersos entre a pesquisa, o brainstorm e o design thinking, sob três esquemas de identificação distintos, passaram a compor um esquema único de RF, RNF e RN, com a coluna de origem preservando a rastreabilidade até o artefato em que cada requisito foi elicitado pela primeira vez.
+</p>
+
+<p align = "justify">
+A consolidação também tornou visíveis lacunas que não apareciam enquanto os requisitos estavam espalhados. A fase de Iniciação não havia elicitado nenhum requisito não funcional, tampouco requisitos relativos a contas de acesso e a relatórios de acompanhamento, ainda que os Casos de Uso já previssem esses fluxos. Da mesma forma, a formalização das regras de negócio evidenciou quatro parâmetros que nenhum documento do projeto chegou a fixar, registrados na seção 4.7 para decisão da equipe.
+</p>
+
+<p align = "justify">
+Resta preencher a matriz de rastreabilidade da seção 5, que depende da atribuição de identificadores aos Casos de Uso descritos em <code>casos_de_uso.md</code>. Concluída essa etapa, o documento passa a servir de entrada direta para o Diagrama de Classes e para os Diagramas de Sequência, conforme previsto nos respectivos templates da fase de Elaboração.
+</p>
+
+## Referências
+
+> BRASIL. Lei nº 13.709, de 14 de agosto de 2018. Lei Geral de Proteção de Dados Pessoais (LGPD). Disponível em: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm
+
+> ISO/IEC 25010. Systems and software engineering — Systems and software Quality Requirements and Evaluation (SQuaRE) — System and software quality models.
+
+> SOMMERVILLE, Ian. Software Engineering. 10th ed. Pearson, 2015.
+
+> AGILE BUSINESS CONSORTIUM. MoSCoW Prioritisation. DSDM Project Framework.
+
+> `pesquisa.md`, `5w2h.md`, `Brainstorm.md` e `design_thinking.md` - documentos internos do projeto, pasta `docs/Iniciacao`.
+
+> `casos_de_uso.md` - documento interno do projeto, pasta `docs/Elaboracao`.
+
+## Autor(es)
+
+| Data | Versão | Descrição | Autor(es) |
+| -- | -- | -- | -- |
+| 2026.2 | 1.0 | Criação do documento com introdução, objetivo, escopo, metodologia e estrutura das seções | Pedro Henrique Becker |
+| 2026.2 | 1.1 | Adição dos stakeholders e dos requisitos funcionais RF-01 a RF-46 | Pedro Henrique Becker |
+| 2026.2 | 1.2 | Adição dos requisitos não funcionais RNF-01 a RNF-24 | Pedro Henrique Becker |
+| 2026.2 | 1.3 | Formalização das regras de negócio RN-01 a RN-25 e dos parâmetros pendentes | Pedro Henrique Becker |
+| 2026.2 | 1.4 | Adição da conclusão, das referências e do registro de autoria | Pedro Henrique Becker |
