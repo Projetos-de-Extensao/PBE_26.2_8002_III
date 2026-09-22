@@ -1,414 +1,88 @@
 ---
-id: levantamento de requisitos
+id: levantamento_de_requisitos
 title: Levantamento de Requisitos
 ---
-# **06 - Levantamento de Requisitos e Caso de Uso**
 
-**Sistema:** XXXX*)
+# Levantamento de Requisitos
 
----
+## Introdução
 
-## **1. Identificação dos Stakeholders**
+<p align = "justify">
+Este documento consolida o levantamento de requisitos do sistema de agendamento para treinamento infantil de alta performance. Seu propósito é reunir, em um único artefato rastreável, os stakeholders envolvidos, os requisitos funcionais e não funcionais e as regras de negócio que condicionam a marcação de treinos, servindo de referência para os Casos de Uso, o Diagrama de Classes, o Diagrama de Sequência e o Protótipo de Baixa Fidelidade produzidos na fase de Elaboração.
+</p>
 
-- **Clientes:** Pessoas que....
-- **Restaurantes:** Estabelecimentos...
-- **Entregadores:** Responsáveis...
-- **Administrador:** Gerencia....
+### Objetivo
 
----
+<p align = "justify">
+O sistema tem como objetivo orquestrar a agenda de treinamentos de jovens atletas de 7 a 12 anos, validando a disponibilidade simultânea de sala, professor e atleta antes de confirmar qualquer marcação. Com isso, busca-se evitar agendamentos conflitantes, respeitar os limites biológicos da faixa etária atendida e garantir a segurança e a qualidade do acompanhamento realizado pelo centro de treinamento.
+</p>
 
-### **2. Requisitos Funcionais**
+### Escopo
 
-| ID   | Descrição                                                                    | Prioridade |
-| ---- | ------------------------------------------------------------------------------ | ---------- |
-| RF01 | O cliente... | Alta |
-| RF02 | O restaurante... | Média |
-| RF03 | O entregador... | Alta |
+<p align = "justify">
+O escopo abrange a gestão de contas de responsáveis e o vínculo de atletas, o agendamento, o cancelamento e o reagendamento de treinos, o calendário com visões adaptadas ao gestor e aos responsáveis, o cadastro e a disponibilidade de professores, o controle de salas e equipamentos, a fila de espera, o registro de métricas pós-treino e os relatórios de acompanhamento do desenvolvimento motor e cognitivo.
+</p>
 
-### **3. Requisitos Não Funcionais**
+<p align = "justify">
+Estão fora do escopo deste documento o controle financeiro e de mensalidades, a emissão de documentos fiscais e qualquer interface destinada ao uso direto pelo jovem atleta, que figura no sistema como beneficiário e não como usuário operador.
+</p>
 
-- **Performance:** O app...
-- **Segurança:** Dados....
-- **Usabilidade:** Interface...
+## Metodologia
 
----
+<p align = "justify">
+Os requisitos aqui registrados são derivados dos artefatos já produzidos pela equipe na fase de Iniciação: a <code>pesquisa.md</code>, que analisou aplicações de alocação de eventos e plataformas similares e elicitou requisitos nos grupos ALO, CAL, SAL e PRF; o <code>Brainstorm.md</code>, que consolidou os requisitos BS01 a BS14 a partir das questões do 5W2H; e o <code>design_thinking.md</code>, que organizou o problema central e os critérios de uma marcação adequada. Esses identificadores de origem são unificados neste documento em um esquema único de RF, RNF e RN, preservando a rastreabilidade até os Casos de Uso.
+</p>
 
-### **4. Exemplo de Caso de Uso** (Exemplo)
+### Convenção de identificadores
 
-#### **UC01 - Realizar Pedido**
+| Prefixo | Significado |
+| ------- | ----------- |
+| `RF-nn` | Requisito Funcional |
+| `RNF-nn` | Requisito Não Funcional |
+| `RN-nn` | Regra de Negócio |
+| `UC-nn` | Caso de Uso |
 
-- **Atores:** Cliente, Sistema.
-- **Pré-condição:** Cliente está logado e com localização ativa.
-- **Fluxo Principal:**
-  1. Cliente seleciona um restaurante.
-  2. Cliente adiciona itens ao carrinho.
-  3. Cliente escolhe a forma de pagamento (cartão/PIX).
-  4. Sistema confirma o pedido e notifica o restaurante.
-- **Fluxos Alternativos:**
-  - **FA1:** Pagamento recusado → Sistema sugere nova tentativa ou outro método.
-  - **FA2:** Restaurante indisponível → Sistema recomenda opções similares.
-- **Pós-condição:** Pedido é registrado e entra na fila de preparo.
+## 1. Stakeholders
 
----
+<p align = "justify">
+Seção a ser preenchida na próxima etapa, identificando cada parte interessada, sua descrição e seu interesse no sistema.
+</p>
 
-### **5. Protótipo (Exemplo Simplificado)**
+| Stakeholder | Descrição | Interesse no sistema |
+| ----------- | --------- | -------------------- |
 
-- **Tela de Busca:** Barra de pesquisa + filtros (vegan, rápido, etc.).
-- **Carrinho:** Resumo dos itens + botão "Finalizar Pedido".
+## 2. Requisitos Funcionais
 
----
+<p align = "justify">
+Seção a ser preenchida na próxima etapa, consolidando os requisitos elicitados na pesquisa (ALO, CAL, SAL e PRF) e no brainstorm (BS01 a BS14) em um esquema único, com priorização MoSCoW.
+</p>
 
-### **6. Validação**
+| ID | Descrição | Prioridade | Origem |
+| -- | --------- | ---------- | ------ |
 
-- **XXXXX XXX:** Confirmar se o fluxo de atualização é viável.
-- **Teste A/B com Clientes:** Comparar duas versões...
+## 3. Requisitos Não Funcionais
 
+<p align = "justify">
+Seção a ser preenchida na próxima etapa, contemplando desempenho, segurança e proteção de dados de menores de idade, usabilidade, disponibilidade e compatibilidade.
+</p>
 
---
+| ID | Categoria | Descrição | Prioridade |
+| -- | --------- | --------- | ---------- |
 
-### Diagrama de Casos de Uso (Exemplo)
+## 4. Regras de Negócio
 
-Aqui está o diagrama de **Caso de Uso (UML)** para o cenário de **"Realizar Pedido"** no aplicativo de delivery, usando **PlantUML**:
+<p align = "justify">
+Seção a ser preenchida na próxima etapa, formalizando as restrições descritas em prosa na pesquisa e nos fluxos alternativos dos Casos de Uso, como a antecedência mínima de 12 horas, as janelas de descanso e recuperação e os bloqueios por manutenção ou avaliação técnica.
+</p>
 
-### **Código PlantUML**:
+| ID | Descrição | Requisito(s) relacionado(s) |
+| -- | --------- | --------------------------- |
 
-```puml
-@startuml FastDelivery_CasosDeUso
+## 5. Matriz de Rastreabilidade
 
-left to right direction
-skinparam actorStyle awesome
+<p align = "justify">
+Seção a ser preenchida na próxima etapa, relacionando cada requisito funcional ao Caso de Uso que o realiza, às regras de negócio aplicáveis e à tela correspondente do Protótipo de Baixa Fidelidade.
+</p>
 
-actor Cliente
-actor Restaurante as "Restaurante (Sistema)"
-actor Entregador
-
-usecase (UC01: Realizar Pedido) as UC01
-usecase (Selecionar Restaurante) as UC01_1
-usecase (Adicionar Itens ao Carrinho) as UC01_2
-usecase (Escolher Pagamento) as UC01_3
-usecase (Confirmar Pedido) as UC01_4
-
-usecase (Notificar Restaurante) as UC02
-usecase (Notificar Entregador) as UC03
-usecase (Pagamento Recusado) as FA1
-usecase (Restaurante Indisponível) as FA2
-
-Cliente --> UC01
-Cliente --> UC01_1
-Cliente --> UC01_2
-Cliente --> UC01_3
-Cliente --> UC01_4
-
-UC01_4 --> UC02 : <<include>>
-UC02 --> Restaurante
-UC02 --> UC03 : <<extend>>
-UC03 --> Entregador
-
-FA1 .> UC01_3 : <<extend>>
-FA2 .> UC01_1 : <<extend>>
-
-note right of UC01
-  **Pré-condição**: Cliente logado.
-  **Pós-condição**: Pedido registrado.
-end note
-
-@enduml
-```
-
-### **Explicação**:
-1. **Atores**:
-   - `Cliente`: Interage com o sistema para fazer pedidos.
-   - `Restaurante` (Sistema): Recebe notificações de pedidos.
-   - `Entregador`: Recebe alertas para coleta/entrega.
-
-2. **Fluxo Principal** (dentro do caso de uso `UC01`):
-   - Selecionar Restaurante → Adicionar Itens → Escolher Pagamento → Confirmar Pedido.
-
-3. **Relacionamentos**:
-   - `<<include>>`: "Confirmar Pedido" **requer** "Notificar Restaurante".
-   - `<<extend>>`: Fluxos alternativos (pagamento recusado/restaurante indisponível).
-
-4. **Notas**: Condições do cenário.
-
----
-
-### Protótipo
-
-Aqui está o protótipo de **telas do aplicativo de delivery** usando **Salt (PlantUML)**, alinhado ao caso de uso anterior:
-
----
-
-### **Código PlantUML (Salt)**
-```plantuml
-@startsalt
-{
-  {^
-    <b>FastDelivery - Buscar Restaurantes</b>
-  }
-  {
-    [🔍 Buscar...] | [Filtros ▼]
-  }
-  {
-    (X) Restaurante A      | ⭐ 4.5
-    () Restaurante B      | ⭐ 4.2
-    () Restaurante C      | ⭐ 4.7
-  }
-  {
-    [Ver Cardápio] | [Voltar]
-  }
-}
-
-@startsalt
-{
-  {^
-    <b>Restaurante A - Cardápio</b>
-  }
-  {
-    (X) Pizza Margherita   | R$ 35.00
-    () Hambúrguer Artesanal | R$ 28.00
-    () Salada Caesar       | R$ 22.00
-  }
-  {
-    [Adicionar ao Carrinho] | [Voltar]
-  }
-}
-
-@startsalt
-{
-  {^
-    <b>Carrinho de Compras</b>
-  }
-  {
-    "Pizza Margherita"  | R$ 35.00
-    "Hambúrguer"       | R$ 28.00
-    "Taxa de Entrega"  | R$ 5.00
-    --------------------------
-    "Total"            | R$ 68.00
-  }
-  {
-    [Continuar para Pagamento] | [Editar]
-  }
-}
-
-@startsalt
-{
-  {^
-    <b>Pagamento</b>
-  }
-  {
-    () Cartão Crédito (•••• 1234)
-    () PIX
-    () Dinheiro na Entrega
-  }
-  {
-    [Finalizar Pedido] | [Cancelar]
-  }
-}
-
-@startsalt
-{
-  {^
-    <b>Pedido Confirmado!</b>
-  }
-  {
-    ! Pedido #1234 recebido!
-    "Tempo estimado:" 30-40 min.
-  }
-  {
-    [Acompanhar Pedido] | [Voltar ao Início]
-  }
-}
-```
-
----
-
-### **Telas Prototipadas (Fluxo do Caso de Uso)**  
-1. **Buscar Restaurantes**:  
-   - Barra de busca + filtros.  
-   - Lista de restaurantes com seleção (radio buttons).  
-
-2. **Cardápio do Restaurante**:  
-   - Itens selecionáveis com preços.  
-   - Botão para adicionar ao carrinho.  
-
-3. **Carrinho**:  
-   - Resumo dos itens + valor total.  
-   - Ação para prosseguir ao pagamento.  
-
-4. **Pagamento**:  
-   - Opções de pagamento (cartão, PIX, dinheiro).  
-   - Confirmação do pedido.  
-
-5. **Confirmação**:  
-   - Feedback de sucesso + tempo de entrega.  
-
----
-
-### **Como Visualizar**  
-- Cole o código em ferramentas como:  
-  - [PlantText](https://www.planttext.com/) (suporte a Salt).  
-  - VS Code com extensão **PlantUML**.  
-
----
-
-### **Exemplo de Saída (Estilizada)**  
-```
-+------------------------------+
-| FastDelivery - Buscar Restaur.|
-+------------------------------+
-| [🔍 Buscar...] | [Filtros ▼]  |
-+------------------------------+
-| (X) Restaurante A | ⭐ 4.5    |
-| () Restaurante B  | ⭐ 4.2    |
-+------------------------------+
-| [Ver Cardápio] | [Voltar]    |
-+------------------------------+
-```
-
----
-
-### **Personalização**  
-- Para adicionar **mais telas** (ex.: login, acompanhamento de entrega):  
-  ```plantuml
-  @startsalt
-  {
-    {^ <b>Login</b> }
-    {
-      "E-mail:"   [               ]
-      "Senha:"   [               ]
-    }
-    {
-      [Entrar] | [Criar Conta]
-    }
-  }
-  ```
-
-  ---
-
-  ### Diagrama de Classe
-
-  Aqui está o **diagrama de classes conceitual** para o sistema de delivery, representando os principais conceitos e seus relacionamentos:
-
-### Diagrama de Classes (PlantUML)
-
-```plantuml
-@startuml FastDelivery_DiagramaClasses
-
-class Cliente {
-  - id: String
-  - nome: String
-  - email: String
-  - localizacao: String
-  + buscarRestaurantes()
-  + fazerPedido()
-}
-
-class Restaurante {
-  - id: String
-  - nome: String
-  - cardapio: List<Item>
-  - localizacao: String
-  + atualizarCardapio()
-  + confirmarPedido()
-}
-
-class Pedido {
-  - id: String
-  - itens: List<Item>
-  - status: String
-  - valorTotal: Double
-  + calcularTotal()
-  + atualizarStatus()
-}
-
-class Item {
-  - id: String
-  - nome: String
-  - preco: Double
-  - categoria: String
-}
-
-class Entregador {
-  - id: String
-  - nome: String
-  - veiculo: String
-  + aceitarPedido()
-  + atualizarLocalizacao()
-}
-
-class Pagamento {
-  - id: String
-  - metodo: String
-  - valor: Double
-  - status: String
-  + processarPagamento()
-}
-
-' Relacionamentos
-Cliente "1" --> "0..*" Pedido
-Restaurante "1" --> "0..*" Pedido
-Pedido "1" --> "1..*" Item
-Pedido "1" --> "1" Pagamento
-Pedido "1" --> "0..1" Entregador
-Restaurante "1" --> "0..*" Item
-
-@enduml
-```
-
-### Explicação:
-1. **Classes Principais**:
-   - **Cliente**: Realiza pedidos e busca restaurantes.
-   - **Restaurante**: Oferece itens do cardápio e confirma pedidos.
-   - **Pedido**: Agrupa itens, calcula total e rastreia status.
-   - **Item**: Produtos individuais do cardápio.
-   - **Entregador**: Responsável pela entrega.
-   - **Pagamento**: Processa transações.
-
-2. **Relacionamentos**:
-   - Um cliente faz **0 ou N** pedidos.
-   - Um pedido contém **1 ou N** itens.
-   - Um restaurante tem **0 ou N** itens no cardápio.
-   - Cada pedido tem **exatamente 1** pagamento.
-   - Um pedido pode estar associado a **0 ou 1** entregador.
-
-3. **Atributos e Métodos**:
-   - Atributos privados (indicados por `-`) e métodos públicos (`+`).
-   - Exemplo: `Pedido.calcularTotal()` soma os preços dos itens.
-
----
-
-
----
-
-### Adaptações Possíveis:
-1. **Adicionar Herança**:
-   ```plantuml
-   class Usuario {
-     - id: String
-     - nome: String
-   }
-   class Cliente {
-     - localizacao: String
-   }
-   class Entregador {
-     - veiculo: String
-   }
-   Usuario <|-- Cliente
-   Usuario <|-- Entregador
-   ```
-
-2. **Incluir Enums** (ex.: status do pedido):
-   ```plantuml
-   enum StatusPedido {
-     EM_PREPARO
-     EM_TRANSITO
-     ENTREGUE
-   }
-   class Pedido {
-     - status: StatusPedido
-   }
-   ```
-
---- 
-
-
+| Requisito | Caso de Uso | Regra(s) de Negócio | Tela do Protótipo |
+| --------- | ----------- | ------------------- | ----------------- |
