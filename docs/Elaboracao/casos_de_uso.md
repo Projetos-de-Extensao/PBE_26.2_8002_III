@@ -36,7 +36,7 @@ title: Diagrama de Casos de Uso
 	- Definição de descanso e recuperação
 	- Controle de intensidade semanal
 
-### Cadastro de responsável no sistema
+### UC-01 - Cadastro de responsável no sistema
 
 * Atores:
 
@@ -64,7 +64,7 @@ title: Diagrama de Casos de Uso
 	- 5a. E-mail de confirmação não é recebido
 		- 5a1. Sistema oferece opção para reenviar o link de confirmação
 
-### Entrada do responsável no sistema
+### UC-02 - Entrada do responsável no sistema
 
 - Atores:
 	- Responsável
@@ -85,7 +85,7 @@ title: Diagrama de Casos de Uso
 	- 2b. Usuário esqueceu a senha
 		- 2b1. Sistema envia instruções para recuperação da conta
 
-### Cadastro de atleta vinculado ao responsável
+### UC-03 - Cadastro de atleta vinculado ao responsável
 
 - Atores:
 	- Responsável
@@ -108,7 +108,7 @@ title: Diagrama de Casos de Uso
 	- 4b. Dados incompletos
 		- 4b1. Sistema impede o cadastro e solicita preenchimento dos campos obrigatórios
 
-### Agendar treino
+### UC-04 - Agendar treino
 
 - Atores:
 	- Responsável
@@ -138,7 +138,7 @@ title: Diagrama de Casos de Uso
 	- 6a. Responsável tenta agendar fora do horário permitido
 		- 6a1. Sistema exibe mensagem informando a regra de antecedência mínima de 12 horas
 
-### Cancelar ou reagendar treino
+### UC-05 - Cancelar ou reagendar treino
 
 - Atores:
 	- Responsável
@@ -163,7 +163,7 @@ title: Diagrama de Casos de Uso
 	- 6a. Existe aluno na fila de espera
 		- 6a1. Sistema notifica automaticamente o responsável disponível
 
-### Visualizar calendário e rotina do atleta
+### UC-06 - Visualizar calendário e rotina do atleta
 
 - Atores:
 	- Responsável
@@ -185,7 +185,7 @@ title: Diagrama de Casos de Uso
 	- 3a. Há horários de pico ou lotação alta
 		- 3a1. Sistema sinaliza visualmente os períodos críticos
 
-### Cadastrar e gerenciar professor
+### UC-07 - Cadastrar e gerenciar professor
 
 - Atores:
 	- Administrador
@@ -209,7 +209,7 @@ title: Diagrama de Casos de Uso
 	- 5a. Há conflito de turno
 		- 5a1. Sistema informa o bloqueio automático para almoço ou planejamento
 
-### Cadastrar e controlar salas e equipamentos
+### UC-08 - Cadastrar e controlar salas e equipamentos
 
 - Atores:
 	- Administrador
@@ -232,7 +232,7 @@ title: Diagrama de Casos de Uso
 	- 6a. Há manutenção programada
 		- 6a1. Sistema mantém o ambiente indisponível no calendário
 
-### Registrar desempenho após o treino
+### UC-09 - Registrar desempenho após o treino
 
 - Atores:
 	- Professor
@@ -258,7 +258,7 @@ title: Diagrama de Casos de Uso
 	- 5a. Professor não preenche todos os campos
 		- 5a1. Sistema solicita preenchimento obrigatório antes do envio
 
-### Gerenciar fila de espera
+### UC-10 - Gerenciar fila de espera
 
 - Atores:
 	- Responsável
@@ -281,7 +281,7 @@ title: Diagrama de Casos de Uso
 	- 4a. Responsável não confirma dentro do prazo
 		- 4a1. Sistema passa a vaga para o próximo da fila
 
-### Visualizar relatórios e acompanhamento do desenvolvimento
+### UC-11 - Visualizar relatórios e acompanhamento do desenvolvimento
 
 - Atores:
 	- Responsável
