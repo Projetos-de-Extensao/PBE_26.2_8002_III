@@ -45,20 +45,114 @@ Os requisitos aqui registrados são derivados dos artefatos já produzidos pela 
 ## 1. Stakeholders
 
 <p align = "justify">
-Seção a ser preenchida na próxima etapa, identificando cada parte interessada, sua descrição e seu interesse no sistema.
+São considerados stakeholders as partes interessadas identificadas no 5W2H e no Design Thinking, tanto as que operam o sistema quanto as que são afetadas por ele sem utilizá-lo diretamente.
 </p>
 
 | Stakeholder | Descrição | Interesse no sistema |
 | ----------- | --------- | -------------------- |
+| Responsável | Pai, mãe ou tutor do jovem atleta. É o titular da conta e o pagante dos treinos. | Agendar, cancelar e reagendar treinos dos dependentes, acompanhar a rotina e o desenvolvimento de cada um. |
+| Jovem atleta | Criança de 7 a 12 anos atendida pelo centro de treinamento. Beneficiário do sistema, não o opera diretamente. | Receber treinos compatíveis com seu nível de desenvolvimento motor e ter respeitados os períodos de descanso e recuperação. |
+| Professor | Profissional que conduz os treinos e registra o desempenho dos atletas. | Consultar a agenda do dia, registrar métricas pós-treino com agilidade e ter seus turnos e bloqueios respeitados. |
+| Administrador | Gestor do centro de treinamento, com perfil administrativo no sistema. | Cadastrar professores, salas e equipamentos, visualizar a lotação total e garantir a capacidade e a segurança dos ambientes. |
+| Coordenador técnico | Responsável por validar previamente a certificação e a área de atuação dos profissionais. | Assegurar que apenas profissionais habilitados sejam vinculados a cada modalidade e faixa etária. |
+| Centro de treinamento | Organização proprietária dos espaços físicos e dos equipamentos. | Ocupação eficiente das salas, cumprimento das janelas de manutenção e conformidade com os limites de segurança. |
+| Equipe de desenvolvimento | Grupo 3 da disciplina de Projeto Back-End do IBMEC. | Entregar o sistema conforme o escopo e os prazos da disciplina, seguindo a metodologia RUP/UP. |
 
 ## 2. Requisitos Funcionais
 
 <p align = "justify">
-Seção a ser preenchida na próxima etapa, consolidando os requisitos elicitados na pesquisa (ALO, CAL, SAL e PRF) e no brainstorm (BS01 a BS14) em um esquema único, com priorização MoSCoW.
+Os requisitos abaixo consolidam, em um esquema único, os requisitos elicitados na <code>pesquisa.md</code> (grupos ALO, CAL, SAL e PRF) e no <code>Brainstorm.md</code> (BS01 a BS14). A coluna Origem preserva a rastreabilidade até o artefato de elicitação; a marcação <em>Novo</em> indica requisito derivado dos Casos de Uso que não havia sido elicitado nos documentos da fase de Iniciação, notadamente os relativos a contas de acesso e a relatórios. A priorização segue a escala MoSCoW já adotada na pesquisa.
 </p>
+
+<p align = "justify">
+O requisito BS01, "orquestrar a agenda de treinamentos", não aparece isolado na tabela por descrever a finalidade geral do sistema, e não uma função verificável: ele é realizado pelo conjunto dos requisitos de agendamento e calendário.
+</p>
+
+### 2.1 Contas e Acesso
 
 | ID | Descrição | Prioridade | Origem |
 | -- | --------- | ---------- | ------ |
+| RF-01 | Permitir o cadastro de responsável com nome, e-mail, senha e dados de contato. | Must | Novo |
+| RF-02 | Validar o formato do e-mail informado e verificar se ainda não está em uso. | Must | Novo |
+| RF-03 | Exigir que a senha atenda a critérios mínimos de segurança e armazená-la criptografada. | Must | Novo |
+| RF-04 | Enviar e-mail de confirmação de cadastro, ativar a conta após a confirmação e permitir o reenvio do link. | Must | Novo |
+| RF-05 | Autenticar o responsável por e-mail e senha e manter a sessão validada. | Must | Novo |
+| RF-06 | Permitir a recuperação de senha por meio de instruções enviadas ao e-mail cadastrado. | Must | Novo |
+| RF-07 | Permitir a visualização e a alteração dos dados da conta. | Should | Novo |
+| RF-08 | Diferenciar os perfis de acesso de responsável, professor e administrador, restringindo as funções de cada um. | Must | Novo |
+
+### 2.2 Atletas
+
+| ID | Descrição | Prioridade | Origem |
+| -- | --------- | ---------- | ------ |
+| RF-09 | Permitir o cadastro de atletas vinculados à conta do responsável, admitindo mais de um atleta por conta. | Must | Novo |
+| RF-10 | Registrar nome, idade, nível de desenvolvimento motor e informações básicas de cada atleta. | Must | Novo |
+| RF-11 | Validar que a idade do atleta esteja entre 7 e 12 anos, impedindo o cadastro fora dessa faixa. | Must | BS07 |
+| RF-12 | Impedir a conclusão do cadastro quando houver campos obrigatórios não preenchidos. | Must | Novo |
+
+### 2.3 Agendamento
+
+| ID | Descrição | Prioridade | Origem |
+| -- | --------- | ---------- | ------ |
+| RF-13 | Validar a disponibilidade simultânea de sala, professor e atleta no mesmo horário. | Must | ALO-01, BS02 |
+| RF-14 | Bloquear em tempo real agendamentos conflitantes, impedindo a dupla reserva de qualquer recurso. | Must | ALO-02, BS03 |
+| RF-15 | Calcular e reservar a janela de descanso e recuperação física após cada treino, considerando transição, hidratação e higienização. | Must | ALO-03, BS05 |
+| RF-16 | Validar a antecedência mínima de 12 horas para confirmação ou alteração de uma marcação. | Must | BS04 |
+| RF-17 | Impedir o agendamento quando o atleta estiver em período de recuperação. | Must | Novo |
+| RF-18 | Sugerir horários alternativos quando houver conflito de agenda entre professor e sala. | Should | Novo |
+| RF-19 | Permitir o cancelamento e o reagendamento pelo responsável, respeitando a janela de cancelamento permitida. | Must | CAL-03 |
+| RF-20 | Recomendar treinos com base no nível de desenvolvimento motor do jovem atleta. | Should | ALO-05, BS13 |
+| RF-21 | Restringir o número máximo de atividades de alta intensidade na mesma semana. | Could | ALO-06 |
+
+### 2.4 Calendário
+
+| ID | Descrição | Prioridade | Origem |
+| -- | --------- | ---------- | ------ |
+| RF-22 | Alternar entre a visão administrativa, com a lotação total do centro, e a visão parental, restrita aos dependentes do responsável. | Must | CAL-01, BS08 |
+| RF-23 | Filtrar o calendário por especialidade do treino, idade ou treinador. | Should | CAL-02 |
+| RF-24 | Destacar visualmente os períodos de descanso, os horários de pico e os horários ociosos do centro de treinamento. | Could | CAL-04 |
+| RF-25 | Exibir o histórico de treinos e as próximas atividades de cada atleta. | Should | Novo |
+| RF-26 | Bloquear o agendamento em horários retroativos, mantendo-os abertos apenas para a inserção de métricas atrasadas pelos professores. | Should | CAL-03 |
+
+### 2.5 Salas e Equipamentos
+
+| ID | Descrição | Prioridade | Origem |
+| -- | --------- | ---------- | ------ |
+| RF-27 | Cadastrar ambientes de treinamento com nome, capacidade, metragem e descrição. | Must | SAL-01, BS09 |
+| RF-28 | Vincular equipamentos específicos de alta performance a cada ambiente. | Should | SAL-02 |
+| RF-29 | Bloquear espaços em horários de manutenção ou de avaliação técnica exclusiva. | Must | SAL-03, BS06 |
+| RF-30 | Apresentar alerta e impedir a reserva quando a capacidade máxima recomendada da sala for excedida. | Must | Novo |
+
+### 2.6 Professores
+
+| ID | Descrição | Prioridade | Origem |
+| -- | --------- | ---------- | ------ |
+| RF-31 | Categorizar treinadores por especialidade técnica e faixa etária de domínio. | Must | PRF-01, BS10 |
+| RF-32 | Gerenciar turnos e disponibilidade dos profissionais, com bloqueios automáticos para almoço e planejamento. | Must | PRF-02, BS11 |
+| RF-33 | Validar a certificação e a área de atuação do professor antes de vinculá-lo a uma modalidade. | Must | Novo |
+| RF-34 | Exibir ao professor a agenda com os treinos do dia. | Must | Novo |
+
+### 2.7 Desempenho e Relatórios
+
+| ID | Descrição | Prioridade | Origem |
+| -- | --------- | ---------- | ------ |
+| RF-35 | Oferecer atalho na agenda para o registro rápido de métricas logo após o treino. | Should | PRF-03, BS14 |
+| RF-36 | Registrar os indicadores de esforço, fadiga e recuperação do atleta ao final do treino. | Must | Novo |
+| RF-37 | Exigir o preenchimento dos campos obrigatórios antes de enviar o registro pós-treino. | Must | Novo |
+| RF-38 | Atualizar o histórico do atleta e a recomendação de descanso a partir do registro pós-treino. | Must | Novo |
+| RF-39 | Sugerir descanso ou bloquear treino futuro quando o indicador de fadiga estiver alto. | Should | Novo |
+| RF-40 | Apresentar relatórios de desempenho, presença e recuperação por atleta e por modalidade. | Should | Novo |
+| RF-41 | Informar ao usuário quando não houver registros suficientes para a geração do relatório. | Could | Novo |
+
+### 2.8 Fila de Espera
+
+| ID | Descrição | Prioridade | Origem |
+| -- | --------- | ---------- | ------ |
+| RF-42 | Acionar automaticamente a fila de espera quando houver cancelamento de um treino agendado. | Should | ALO-04, BS12 |
+| RF-43 | Selecionar o próximo atleta da fila conforme a ordem de entrada e a compatibilidade com a vaga. | Should | Novo |
+| RF-44 | Notificar o responsável do atleta selecionado e permitir a confirmação imediata da vaga. | Should | Novo |
+| RF-45 | Repassar a vaga ao próximo da fila caso o responsável não confirme dentro do prazo. | Should | Novo |
+| RF-46 | Manter a vaga disponível para novo agendamento quando não houver ninguém na fila. | Should | Novo |
 
 ## 3. Requisitos Não Funcionais
 
