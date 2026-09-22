@@ -1,0 +1,68 @@
+@startuml
+title Diagrama de Sequência - Agendamento de Treino
+
+actor "Responsável" as R
+participant "Sistema" as S
+participant "Atleta" as A
+participant "Professor" as P
+participant "Sala" as Sala
+participant "Agenda" as Ag
+
+R -> S: Selecionar atleta e opção de agendamento
+S -> A: Verificar atleta cadastrado
+A --> S: Atleta válido
+
+S -> Ag: Consultar horários disponíveis
+Ag -> P: Verificar disponibilidade
+P --> Ag: Disponibilidade do professor
+
+Ag -> Sala: Verificar disponibilidade
+Sala --> Ag: Disponibilidade da sala
+
+Ag --> S: Retornar horários disponíveis
+S --> R: Exibir calendário
+
+R -> S: Escolher treino, data,\nhorário e professor
+
+S -> A: Validar disponibilidade do atleta
+A --> S: Disponível
+
+S -> P: Validar disponibilidade do professor
+P --> S: Disponível
+
+S -> Sala: Validar disponibilidade da sala
+Sala --> S: Disponível
+
+S -> A: Verificar período de recuperação
+A --> S: Recuperação permitida
+
+alt Sem conflitos e recuperação permitida
+
+    S -> S: Calcular janela de descanso
+    S -> Ag: Registrar agendamento
+    Ag --> S: Agendamento confirmado
+
+    S -> A: Atualizar agenda do atleta
+    S -> P: Atualizar agenda do professor
+    S -> Sala: Reservar sala
+
+    S --> R: Exibir treino na agenda
+
+else Conflito de professor ou sala
+
+    S --> R: Bloquear agendamento
+    S --> R: Sugerir horários alternativos
+
+else Atleta em recuperação
+
+    S --> R: Impedir agendamento
+    S --> R: Informar período de recuperação
+
+else Agendamento com menos de 12 horas
+
+    S --> R: Bloquear agendamento
+    S --> R: Informar antecedência mínima de 12 horas
+
+end
+
+@enduml
