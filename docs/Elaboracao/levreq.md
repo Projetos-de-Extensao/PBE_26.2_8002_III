@@ -157,11 +157,67 @@ O requisito BS01, "orquestrar a agenda de treinamentos", não aparece isolado na
 ## 3. Requisitos Não Funcionais
 
 <p align = "justify">
-Seção a ser preenchida na próxima etapa, contemplando desempenho, segurança e proteção de dados de menores de idade, usabilidade, disponibilidade e compatibilidade.
+Diferentemente dos requisitos funcionais, os requisitos não funcionais não haviam sido elicitados em nenhum documento da fase de Iniciação. Os requisitos desta seção foram derivados das regras de negócio descritas na <code>pesquisa.md</code>, das restrições de contexto levantadas no 5W2H e no Design Thinking e da natureza do público atendido, uma vez que o sistema trata dados pessoais de crianças de 7 a 12 anos e está sujeito ao regime especial previsto na Lei Geral de Proteção de Dados. A priorização segue a mesma escala MoSCoW adotada na seção anterior.
 </p>
+
+### 3.1 Desempenho
 
 | ID | Categoria | Descrição | Prioridade |
 | -- | --------- | --------- | ---------- |
+| RNF-01 | Desempenho | A validação de disponibilidade simultânea de sala, professor e atleta deve retornar resposta em até 3 segundos. | Must |
+| RNF-02 | Desempenho | O calendário mensal deve ser carregado em até 5 segundos, considerando a lotação total do centro de treinamento. | Should |
+| RNF-03 | Desempenho | O sistema deve atender às marcações simultâneas de pelo menos 50 responsáveis sem degradação perceptível do tempo de resposta. | Should |
+
+### 3.2 Segurança e Proteção de Dados
+
+| ID | Categoria | Descrição | Prioridade |
+| -- | --------- | --------- | ---------- |
+| RNF-04 | Segurança | As senhas devem ser armazenadas exclusivamente sob forma criptografada, nunca em texto claro. | Must |
+| RNF-05 | Segurança | Toda a comunicação entre cliente e servidor deve trafegar por canal cifrado (HTTPS). | Must |
+| RNF-06 | Proteção de dados | O tratamento dos dados dos jovens atletas deve observar o regime da LGPD para crianças, condicionado ao consentimento específico do responsável legal. | Must |
+| RNF-07 | Proteção de dados | O responsável deve ter acesso apenas aos dados dos atletas vinculados à própria conta, sem visibilidade sobre os demais. | Must |
+| RNF-08 | Proteção de dados | O sistema deve coletar apenas os dados necessários ao agendamento e ao acompanhamento do treino, sem campos dispensáveis à finalidade. | Should |
+| RNF-09 | Segurança | A sessão do usuário deve expirar automaticamente após período de inatividade, exigindo nova autenticação. | Should |
+| RNF-10 | Auditoria | O sistema deve registrar log de agendamentos, cancelamentos, reagendamentos e registros de desempenho, identificando autor e data e hora da operação. | Should |
+
+### 3.3 Usabilidade
+
+| ID | Categoria | Descrição | Prioridade |
+| -- | --------- | --------- | ---------- |
+| RNF-11 | Usabilidade | A interface deve ser apresentada integralmente em português do Brasil. | Must |
+| RNF-12 | Usabilidade | Toda mensagem de bloqueio deve informar o motivo da recusa e a ação corretiva possível, sem exibir mensagem genérica de erro. | Must |
+| RNF-13 | Usabilidade | O registro de métricas pós-treino deve ser concluído em até três interações, por meio de controles de seleção rápida, para não consumir tempo de quadra do professor. | Should |
+| RNF-14 | Usabilidade | O fluxo de agendamento de um treino deve ser concluído em até cinco passos a partir do painel inicial do responsável. | Should |
+| RNF-15 | Acessibilidade | As sinalizações de estado do calendário, como períodos de descanso e horários bloqueados, não devem depender exclusivamente de cor para serem compreendidas. | Should |
+
+### 3.4 Confiabilidade e Integridade
+
+| ID | Categoria | Descrição | Prioridade |
+| -- | --------- | --------- | ---------- |
+| RNF-16 | Integridade | A confirmação de um agendamento deve ser tratada como transação atômica, de modo que a reserva de atleta, professor e sala seja efetivada integralmente ou não seja efetivada. | Must |
+| RNF-17 | Integridade | Falhas de comunicação ou indisponibilidade momentânea não podem resultar em reserva parcial ou em dupla reserva de um mesmo recurso. | Must |
+| RNF-18 | Confiabilidade | Os dados do sistema devem ser objeto de rotina de backup diária. | Should |
+
+### 3.5 Disponibilidade
+
+| ID | Categoria | Descrição | Prioridade |
+| -- | --------- | --------- | ---------- |
+| RNF-19 | Disponibilidade | O sistema deve permanecer disponível durante todo o horário de funcionamento do centro de treinamento. | Must |
+| RNF-20 | Disponibilidade | As manutenções programadas do sistema devem ocorrer fora do horário de funcionamento do centro de treinamento. | Should |
+
+### 3.6 Compatibilidade e Portabilidade
+
+| ID | Categoria | Descrição | Prioridade |
+| -- | --------- | --------- | ---------- |
+| RNF-21 | Compatibilidade | O sistema deve funcionar nas duas versões mais recentes dos navegadores Google Chrome, Mozilla Firefox e Microsoft Edge. | Must |
+| RNF-22 | Portabilidade | A interface destinada ao responsável deve ser responsiva e utilizável em tela de smartphone, por ser o dispositivo de uso mais provável no contexto de agendamento. | Must |
+
+### 3.7 Manutenibilidade
+
+| ID | Categoria | Descrição | Prioridade |
+| -- | --------- | --------- | ---------- |
+| RNF-23 | Manutenibilidade | O sistema deve ser desenvolvido em Python com o framework Django, conforme definido no 5W2H do projeto. | Must |
+| RNF-24 | Manutenibilidade | Os parâmetros das regras de negócio, como antecedência mínima, duração da janela de descanso e limite semanal de atividades de alta intensidade, devem ser configuráveis sem alteração de código-fonte. | Should |
 
 ## 4. Regras de Negócio
 
