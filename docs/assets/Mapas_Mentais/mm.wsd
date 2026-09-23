@@ -3,73 +3,53 @@ skinparam monochrome true
 skinparam ArrowColor #000000
 skinparam NodeFontSize 14
 
-* Sistema de Agendamento\npara Treinamento Infantil\nde Alta Performance
-** 1. Alocação de Eventos (Núcleo)
+* Sistema GAAP\n(Gestão de Atletas\nde Alta Performance)
+** 1. Agendamento & Alocação
 *** Validação de disponibilidade
-    **** Sala
-    **** Professor
-    **** Jovem atleta
-*** Bloqueio de conflitos
-    **** Double-booking em tempo real
-*** Janela de recuperação
-    **** Transição, hidratação, higienização
-*** Fila de espera automática
-*** Recomendação de treinos
-    **** Nível de desenvolvimento motor
-*** Estrutura da alocação
-    **** Atividade
-    **** Profissional
-    **** Responsável (pagante)
-    **** Jovem atleta (beneficiário)
-    **** Sala (recurso físico)
-*** Regras de negócio
-    **** Proteção contra duplicidade
-    **** Cálculo da janela temporal
-    **** Bloqueio por fadiga (segurança)
+**** Profissional habilitado
+**** Sala / Espaço físico
+**** Aluno / Atleta
+*** Prevenção de conflitos
+**** Bloqueio de double-booking
+*** Capacidade máxima
+**** Limite de lotação de salas
+*** Bloqueios administrativos
+**** Manutenção e indisponibilidade
+*** Serviços Suportados
+**** Treino Físico/Técnico
+**** Fisioterapia
+**** Psicologia Esportiva
+**** Nutrição
 
-** 2. Calendário
-*** Visão administrativa (gestor)
-*** Visão parental (pais)
-*** Filtros
-    **** Especialidade
-    **** Idade
-    **** Treinador
-*** Cancelamento e reagendamento
-*** Regras de negócio
-    **** Antecedência mínima de 12h
-    **** Bloqueio de horários retroativos
+** 2. Perfis de Acesso
+*** Administrador
+**** Gestão de alunos e profissionais
+**** Cadastro de salas e serviços
+**** Configuração de grade e bloqueios
+*** Treinador
+**** Consulta da própria agenda
+**** Registro de presença/falta
+**** Elaboração de relatórios de treino
+*** Profissional de Saúde
+**** Agenda especializada (Fisio/Psico/Nutri)
+**** Registro de atendimentos
+*** Aluno / Responsável
+**** Consulta de disponibilidade
+**** Agendamento e histórico
 
 left side
 
-** 3. Salas (Espaços Físicos)
-*** Zonas de treinamento
-    **** Pista de explosão motora
-    **** Sala de testes cognitivos
-*** Limites de capacidade e metragem
-*** Equipamentos vinculados
-*** Bloqueio por manutenção/avaliação
-*** Regra: certificação técnica do treinador
+** 3. Espaços Físicos (Salas)
+*** Salas de Treino / Quadras
+*** Consultórios Multidisciplinares
+*** Gestão de capacidade máxima
+*** Bloqueios por manutenção
 
-** 4. Professores
-*** Categorização
-    **** Especialidade técnica
-    **** Faixa etária de domínio
-*** Turnos com bloqueios automáticos
-*** Registro rápido de métricas
-*** Regras de negócio
-    **** Intervalo mínimo de deslocamento
-    **** Validação prévia do coordenador
-
-** 5. Aplicativos Similares
-*** Tecnofit
-*** Zen Planner
-*** Calendly
-*** Mindbody
-*** Funcionalidades extraídas
-    **** Separação de papéis
-    **** Gestão familiar
-    **** Workflow pós-treino
-    **** Filtro inteligente
+** 4. Operação Pós-Sessão
+*** Confirmação de Presença / Falta
+*** Relatório Técnico de Treino
+*** Observações de Atendimento Clínico
+*** Histórico e Rastreabilidade
 @endmindmap
 
 @startmindmap Mapa_Mental_Brainstorm
@@ -77,52 +57,37 @@ skinparam monochrome true
 skinparam ArrowColor #000000
 skinparam NodeFontSize 14
 
-* Brainstorm\n(baseado no 5W2H)
-** What? Objetivo
-*** Orquestrar a agenda de treinamentos
-*** Validar disponibilidade simultânea
-    **** Sala
-    **** Professor
-    **** Jovem atleta
-*** Requisitos: BS01, BS02
+* Requisitos GAAP\n(Brainstorming)
+** What (O que?)
+*** API REST robusta e documentada
+*** Gestão de sessões e horários
+*** BS01 - Autenticação por perfil
+*** BS02 - Cadastros de base
 
-** Why? Motivo
-*** Evitar agendamentos conflitantes
-*** Respeitar limites biológicos (7 a 12 anos)
-*** Garantir segurança e qualidade
-*** Requisito: BS03
+** Why (Por que?)
+*** Eliminar controles dispersos
+*** BS05 - Prevenir sobreposição de horários
+*** BS06 - Respeitar capacidade das salas
 
-** Where? Local
-*** Centro de treinamento
-*** Pista de explosão motora
-*** Sala de testes cognitivos
-
-** When? Regras temporais
-*** Antecedência mínima de 12 horas
-*** Descanso, transição, hidratação, higienização
-*** Manutenção e avaliação técnica
-*** Requisitos: BS04, BS05, BS06
+** Who (Quem?)
+*** Administrador
+*** Treinador
+*** Profissionais de Saúde
+*** Aluno / Atleta
 
 left side
 
-** Who? Atores
-*** Gestores
-*** Responsáveis autenticados
-*** Professores validados pelo coordenador
-*** Jovens atletas (7 a 12 anos)
-*** Requisito: BS07
+** Where (Onde?)
+*** Centro de Treinamento Esportivo
+*** Salas de treino e consultórios
 
-** How? Funcionalidades
-*** Calendário com visões adaptadas
-*** Gestão de salas e equipamentos
-*** Categorização de treinadores
-*** Bloqueios automáticos
-*** Fila de espera
-*** Recomendações de treino
-*** Registro rápido de métricas pós-treino
-*** Requisitos: BS08 a BS14
+** When (Quando?)
+*** BS03 - Grade horária e bloqueios
+*** BS04 - Validação simultânea de agenda
+*** BS07 - Cancelamento e reagenda
 
-** How much? Custo
-*** Projeto acadêmico (IBMEC)
-*** Sem custo para os desenvolvedores
+** How (Como?)
+*** BS08 - Filtros de consulta de agenda
+*** BS09 - Registro de presença/falta
+*** BS10 - Finalização de relatórios de treino
 @endmindmap

@@ -5,51 +5,67 @@ title: Mapas Mentais
 
 ## Introdução
 
-<p align = "justify">
-Mapa mental consiste em criar resumos cheios de símbolos, cores, setas e frases de efeito com o objetivo de organizar o conteúdo e facilitar associações entre as informações destacadas. Esse material é muito indicado para pessoas que têm facilidade de aprender de forma visual.
+<p align="justify">
+O mapa mental é uma representação visual que organiza ideias, conceitos e fluxos do sistema, facilitando a compreensão da arquitetura e das relações entre os requisitos elicitados no projeto GAAP (Gestão de Atletas de Alta Performance).
 </p>
 
 ## Metodologia
 
-<p align = "justify">
-Os mapas mentais foram construídos a partir dos documentos já produzidos pela equipe: a <code>pesquisa.md</code> (análise de aplicações de alocação de eventos, calendário, salas, professores e plataformas similares) e o <code>Brainstorm.md</code> (perguntas organizadas segundo o 5W2H e os requisitos elicitados BS01 a BS14). Os diagramas foram desenhados com a notação de mindmap do PlantUML e exportados como imagem para este documento. O código-fonte dos dois mapas está versionado em <code>docs/assets/Mapas_Mentais/mm.wsd</code>, permitindo que a equipe reedite e reexporte os diagramas quando o escopo evoluir.
+<p align="justify">
+Os mapas mentais foram construídos a partir da análise de domínio descrita em <code>pesquisa.md</code> e dos requisitos elicitados em <code>Brainstorm.md</code>. A modelagem foi desenvolvida utilizando a notação de <i>mindmap</i> do PlantUML, com código-fonte versionado em <code>docs/assets/Mapas_Mentais/mm.wsd</code>.
 </p>
 
-## Mapa mental - Geral
+---
 
-## Versão 1.0
+## Mapa Mental do Domínio GAAP
 
-### Mapa mental 1 - Pesquisa
-
-<p align = "justify">
-Organiza o núcleo de alocação de eventos e as três frentes levantadas na pesquisa (calendário, salas e professores), além do comparativo com os aplicativos similares (Tecnofit, Zen Planner, Calendly e Mindbody).
+<p align="justify">
+Apresenta o núcleo de agendamentos multidisciplinares (Treino, Fisioterapia, Psicologia e Nutrição), os perfis de acesso e as validações de salas e pós-sessão.
 </p>
 
-[![Mapa mental Pesquisa](../assets/Mapas_Mentais/mapa_mental_pesquisa.png)](../assets/Mapas_Mentais/mapa_mental_pesquisa.png)
+```plantuml
+@startmindmap
+skinparam monochrome true
+* Sistema GAAP (Backend)
+** Agendamento & Alocação
+*** Validação de Profissional
+*** Validação de Sala
+*** Validação de Aluno
+*** Bloqueio de Conflito (Double-booking)
+*** Limite de Capacidade de Sala
+** Serviços Integrados
+*** Treino Físico / Técnico
+*** Fisioterapia
+*** Psicologia Esportiva
+*** Nutrição
+left side
+** Perfis de Acesso
+*** Administrador (Base, Salas, Serviços, Bloqueios)
+*** Treinador (Agenda, Presença, Relatório de Treino)
+*** Profissional de Saúde (Atendimentos Clínicos)
+*** Aluno / Responsável (Consulta e Marcação)
+** Operação Pós-Sessão
+*** Registro de Presença / Falta
+*** Relatório de Treino e Observações
+@endmindmap
+```
 
-### Mapa mental 2 - Brainstorm
-
-<p align = "justify">
-Organiza as seis perguntas do Brainstorm (What, Why, Where, When, Who e How, além do How much) e associa cada uma aos requisitos elicitados BS01 a BS14.
-</p>
-
-[![Mapa mental Brainstorm](../assets/Mapas_Mentais/mapa_mental_brainstorm.png)](../assets/Mapas_Mentais/mapa_mental_brainstorm.png)
+---
 
 ## Conclusão
 
-<p align = "justify">
-Os mapas mentais deram uma visão geral do sistema de agendamento para treinamento infantil de alta performance, conectando a pesquisa sobre alocação de eventos, calendário, salas e professores às perguntas do 5W2H e aos requisitos elicitados no Brainstorm (BS01 a BS14). Esses diagramas servem de base para as próximas etapas de elicitação, como o Design Thinking e o levantamento de requisitos.
+<p align="justify">
+Os diagramas oferecem uma visão sintetizada e estruturada do Backend GAAP, alinhando as necessidades de negócio da escola de treinamento esportivo às diretrizes técnicas de modelagem da disciplina.
 </p>
 
 ## Referências
 
-> PlantUML Mindmap Diagram. Disponível em: https://plantuml.com/mindmap-diagram
-
-> `pesquisa.md` e `Brainstorm.md` - documentos internos do projeto, pasta `docs/Iniciacao`.
-
-> `mm.wsd` - código-fonte dos mapas mentais, pasta `docs/assets/Mapas_Mentais`.
+> PlantUML Mindmap Diagram. Disponível em: https://plantuml.com/mindmap-diagram  
+> Cenário de Aula: Backend GAAP — Disponível em: `docs/Iniciacao/cenario.md`
 
 ## Autor(es)
+
 | Data | Versão | Descrição | Autor(es) |
-| -- | -- | -- | -- |
-| 2026.2 | 1.0 | Criação dos mapas mentais de Pesquisa e Brainstorm do sistema de agendamento para treinamento infantil de alta performance | Arthur Calebe, Antonio Reuter, Pedro Henrique e Breno Ruf |
+| :--- | :---: | :--- | :--- |
+| 2026.2 | 1.0 | Criação dos mapas mentais | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.0 | Atualização para o modelo oficial do GAAP e serviços multidisciplinares | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
