@@ -24,6 +24,7 @@ Este documento apresenta o protótipo conceitual de baixa fidelidade do sistema 
 
 ## 2. Diagrama de Telas e Navegação em PlantUML
 
+```plantuml
 @startsalt
 {+
   <b>SISTEMA GAAP
@@ -37,7 +38,9 @@ Este documento apresenta o protótipo conceitual de baixa fidelidade do sistema 
   [ ENTRAR ] | [ Esqueci minha senha ]
 }
 @endsalt
+```
 
+```plantuml
 @startsalt
 {+
   <b>PAINEL ADMINISTRATIVO
@@ -48,7 +51,9 @@ Este documento apresenta o protótipo conceitual de baixa fidelidade do sistema 
   [ GRADE E BLOQUEIOS ]
 }
 @endsalt
+```
 
+```plantuml
 @startsalt
 {+
   <b>NOVO AGENDAMENTO
@@ -69,7 +74,9 @@ Este documento apresenta o protótipo conceitual de baixa fidelidade do sistema 
   [ CONFIRMAR AGENDAMENTO ] | [ CANCELAR ]
 }
 @endsalt
+```
 
+```plantuml
 @startsalt
 {+
   <b>AGENDA DO DIA
@@ -83,7 +90,9 @@ Este documento apresenta o protótipo conceitual de baixa fidelidade do sistema 
   [ REGISTRAR PRESENÇA ] | [ FINALIZAR RELATÓRIO ]
 }
 @endsalt
+```
 
+```plantuml
 @startsalt
 {+
   <b>RELATÓRIO DE SESSÃO
@@ -106,6 +115,7 @@ Este documento apresenta o protótipo conceitual de baixa fidelidade do sistema 
   [ SALVAR E FINALIZAR ] | [ CANCELAR ]
 }
 @endsalt
+```
 
 ---
 
