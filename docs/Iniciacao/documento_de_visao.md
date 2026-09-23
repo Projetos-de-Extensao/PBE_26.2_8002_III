@@ -8,7 +8,7 @@ title: Documento de Visão
 ## 1. Introdução
 
 <p align="justify">
-O propósito deste documento é fornecer uma visão abrangente sobre o desenvolvimento do backend e API REST do sistema <b>GAAP (Gestão de Atletas de Alta Performance)</b>, desenvolvido no âmbito da disciplina de Projeto Back-End (IBM8936) do curso de Engenharia de Software do Ibmec (2026.2).
+O propósito deste documento é fornecer uma visão abrangente sobre o desenvolvimento do sistema back-end <b>GAAP (Gestão de Atletas de Alta Performance)</b>, desenvolvido no âmbito da disciplina de Projeto Back-End (IBM8936) do curso de Engenharia de Software do Ibmec (2026.2).
 </p>
 
 ---
@@ -20,7 +20,7 @@ O propósito deste documento é fornecer uma visão abrangente sobre o desenvolv
 | **O problema de** | Falta de centralização e controle na gestão de horários, vagas e acompanhamento técnico de atletas. |
 | **Afeta** | Administradores de centros esportivos, treinadores, profissionais de saúde (fisioterapeutas, nutricionistas, psicólogos) e atletas. |
 | **Cujo impacto é** | Ocorrência de sobreposição de horários (*double-booking*), superlotação de salas, falta de controle de presenças e perda do histórico de treinos. |
-| **Uma boa solução seria** | Uma API REST robusta em Django que centralize cadastros, valide regras de agenda em tempo real e registre presenças e relatórios técnicos. |
+| **Uma boa solução seria** | Um sistema back-end robusto em Django que centralize cadastros, valide regras de agenda em tempo real e registre presenças e relatórios técnicos. |
 
 ---
 
@@ -50,7 +50,7 @@ O propósito deste documento é fornecer uma visão abrangente sobre o desenvolv
 2. **Motor de Agendamento Inteligente**: Verificação atômica de disponibilidade de profissional e espaço físico.
 3. **Gestão de Bloqueios**: Indisponibilização de horários por manutenção, planejamento ou eventos.
 4. **Registro Operacional**: Controle de presença (presente/ausente) e preenchimento de relatório pós-treino.
-5. **Histórico e Consultas**: Endpoints de consulta de agenda filtrados por data, aluno, profissional e serviço.
+5. **Histórico e Consultas**: Consultas de agenda filtradas por data, aluno, profissional e serviço.
 
 ---
 

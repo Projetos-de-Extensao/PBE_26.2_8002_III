@@ -17,9 +17,9 @@ title: Design Thinking
 ### **2. Introdução**
 
 - **Contexto do Projeto**: Escolas e centros de treinamento esportivo necessitam de uma solução integrada para orquestrar horários de treinos físicos/técnicos e atendimentos multidisciplinares de saúde (Fisioterapia, Psicologia e Nutrição).
-- **Objetivo**: Desenvolver o backend e API REST para sustentar a operação de agendamentos, validação de disponibilidade de espaços e profissionais, controle de presença e relatórios de treino.
+- **Objetivo**: Desenvolver o sistema back-end para sustentar a operação de agendamentos, validação de disponibilidade de espaços e profissionais, controle de presença e relatórios de treino.
 - **Público-Alvo**: Gestores/Administradores do centro, Treinadores esportivos, Profissionais de Saúde e Atletas/Alunos.
-- **Escopo**: Foco na API REST, autenticação por perfil, regras de consistência de agenda e registro de atividades pós-sessão.
+- **Escopo**: Foco no sistema back-end em Django, autenticação por perfil, regras de consistência de agenda e registro de atividades pós-sessão.
 
 ---
 
@@ -40,7 +40,7 @@ title: Design Thinking
 
 #### **3.2. Definição**
 
-- **Problema Central**: Como estruturar uma API backend segura e eficiente que garanta a integridade dos agendamentos multidisciplinares, impeça choque de horários e centralize o registro de presenças e relatórios de treino?
+- **Problema Central**: Como estruturar um sistema back-end seguro e eficiente que garanta a integridade dos agendamentos multidisciplinares, impeça choque de horários e centralize o registro de presenças e relatórios de treino?
 - **Pontos de Vista (POV)**:
   * *O Administrador precisa de* travas automáticas de lotação e conflito *porque* marcações incorretas geram atrito operacional e risco aos atletas.
   * *O Treinador precisa de* um canal ágil para dar baixa na sessão e registrar observações *porque* precisa comprovar a realização das atividades sem perder tempo administrativo.
@@ -62,12 +62,12 @@ title: Design Thinking
 #### **3.4. Prototipagem**
 
 - **Descrição do Protótipo**: Elaboração de diagramas conceituais de telas e navegação em PlantUML cobrindo login, painel administrativo, agenda do treinador e agendamento de sessões.
-- **Materiais Utilizados**: PlantUML, MkDocs e especificações de contratos de API REST (JSON).
+- **Materiais Utilizados**: PlantUML, MkDocs e especificações conceituais e protótipos de tela.
 - **Testes Realizados**: Validação dos fluxos de navegação contra os Casos de Uso previstos no RUP/UP.
 
 #### **3.5. Teste**
 
-- **Feedback dos Usuários**: Validação dos fluxos com a equipe e revisão de usabilidade dos endpoints para garantir simplicidade nas chamadas REST.
+- **Feedback dos Usuários**: Validação dos fluxos com a equipe e revisão da clareza dos fluxos de operação e regras de negócio.
 - **Ajustes Realizados**: Desacoplamento de regras financeiras e foco estrito na consistência da agenda e na operação técnica.
 - **Resultados Finais**: Modelo aprovado para guiar a modelagem dos diagramas de classes e de sequência da fase de Elaboração.
 

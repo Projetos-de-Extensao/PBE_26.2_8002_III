@@ -24,7 +24,7 @@ title: Iteração 4
 
 ### Pontos Positivos
 * Boa colaboração da equipe e divisão clara de responsabilidades entre as fases do RUP/UP.
-* Eliminação de inconsistências conceituais e foco no escopo real da API REST.
+* Eliminação de inconsistências conceituais e foco no escopo real do sistema back-end.
 
 ### Pontos de Melhoria
 * Manter alinhamento contínuo com os critérios de aceite definidos pelo professor.

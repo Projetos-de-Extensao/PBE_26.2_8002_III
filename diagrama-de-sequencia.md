@@ -8,7 +8,7 @@ title: Diagramas de Sequência
 ## Introdução
 
 <p align="justify">
-O Diagrama de Sequência é uma representação visual que demonstra a interação dinâmica entre objetos e componentes ao longo do tempo. Este documento adota o padrão formal estabelecido na disciplina, garantindo a rastreabilidade direta com os Casos de Uso, Requisitos Funcionais, Regras de Negócio e Telas do Protótipo para os dois cenários mais críticos do sistema <b>GAAP</b>:
+O Diagrama de Sequência é uma representação visual que demonstra a colaboração dinâmica entre os atores, as interfaces (Boundary), a camada de controle (Control) e as entidades do domínio (Entity) ao longo do tempo. O modelo adotado segue o padrão estabelecido na disciplina, garantindo rastreabilidade direta com os Casos de Uso, Requisitos Funcionais, Regras de Negócio e o Protótipo para os dois fluxos essenciais do sistema <b>GAAP</b>:
 </p>
 
 1. **Caso 1: Confirmar Agendamento de Sessão** (Validação de capacidade, conflito e bloqueio).
@@ -35,54 +35,54 @@ O Diagrama de Sequência é uma representação visual que demonstra a interaç�
 ### 3. Cenário Modelado
 * **Objetivo do Cenário**: Realizar a reserva de uma sessão com validação atômica simultânea de disponibilidade.
 * **Pré-condições**: Aluno, profissional, sala e serviço cadastrados; usuário autenticado.
-* **Pós-condições**: Agendamento persistido no banco com status `AGENDADO` e vaga decrementada.
-* **Gatilho de Início**: Usuário submete o formulário de novo agendamento via API (`POST /api/agendamentos/`).
+* **Pós-condições**: Agendamento persistido no banco com status `AGENDADO` e vaga confirmada.
+* **Gatilho de Início**: Usuário confirma a solicitação de agendamento na interface do sistema.
 
 ### 4. Participantes (Lifelines)
 * **Ator**: `Usuario / Aluno`
-* **Boundary**: `API Gateway / View (AgendamentoView)`
-* **Control**: `AgendamentoService`
-* **Entity / Repository**: `BloqueioRepository`, `AgendamentoRepository`, `EspacoRepository`
-* **Database**: `Banco de Dados Relacional`
+* **Boundary (Interface/Tela)**: `TelaAgendamento`
+* **Control (Controlador)**: `AgendamentoController`
+* **Entity (Domínio/Serviços)**: `BloqueioAgenda`, `Espaco`, `Agendamento`
+* **Database**: `Banco de Dados`
 
 ### 5. Fluxo Principal de Mensagens
 
 | Passo | Remetente | Destinatário | Mensagem / Ação | Tipo |
 | :---: | :--- | :--- | :--- | :--- |
-| **1** | Usuario | API | `POST /api/agendamentos/ (aluno, prof, sala, servico, data_hora)` | Síncrono |
-| **2** | API | AgendamentoService | `criar_agendamento(dados)` | Síncrono |
-| **3** | AgendamentoService | BloqueioRepository | `verificar_bloqueios(prof_id, sala_id, data_hora)` | Síncrono |
-| **4** | BloqueioRepository | AgendamentoService | Retorna: `sem_bloqueios` | Retorno |
-| **5** | AgendamentoService | AgendamentoRepository | `verificar_conflito_profissional(prof_id, data_hora)` | Síncrono |
-| **6** | AgendamentoRepository | AgendamentoService | Retorna: `profissional_disponivel` | Retorno |
-| **7** | AgendamentoService | EspacoRepository | `verificar_capacidade_disponivel(sala_id, data_hora)` | Síncrono |
-| **8** | EspacoRepository | AgendamentoService | Retorna: `capacidade_ok (vagas > 0)` | Retorno |
-| **9** | AgendamentoService | AgendamentoRepository | `salvar_agendamento(novo_agendamento)` | Síncrono |
-| **10**| AgendamentoRepository | Banco de Dados | `INSERT INTO agendamento (...) [Transação Atômica]` | Síncrono |
-| **11**| Banco de Dados | AgendamentoRepository | Retorna: `agendamento_id` | Retorno |
-| **12**| AgendamentoRepository | AgendamentoService | Retorna: `AgendamentoConfirmado` | Retorno |
-| **13**| AgendamentoService | API | Retorna: `Sucesso` | Retorno |
-| **14**| API | Usuario | `HTTP 201 Created (JSON dados do agendamento)` | Retorno |
+| **1** | Usuario | TelaAgendamento | `solicitar_agendamento(aluno, prof, sala, servico, data_hora)` | Síncrono |
+| **2** | TelaAgendamento | AgendamentoController | `processar_agendamento(dados)` | Síncrono |
+| **3** | AgendamentoController | BloqueioAgenda | `verificar_bloqueios(prof, sala, data_hora)` | Síncrono |
+| **4** | BloqueioAgenda | AgendamentoController | Retorna: `sem_bloqueios` | Retorno |
+| **5** | AgendamentoController | Agendamento | `verificar_disponibilidade_profissional(prof, data_hora)` | Síncrono |
+| **6** | Agendamento | AgendamentoController | Retorna: `profissional_disponivel` | Retorno |
+| **7** | AgendamentoController | Espaco | `verificar_capacidade(sala, data_hora)` | Síncrono |
+| **8** | Espaco | AgendamentoController | Retorna: `capacidade_disponivel` | Retorno |
+| **9** | AgendamentoController | Agendamento | `criar_agendamento(dados)` | Síncrono |
+| **10**| Agendamento | Banco de Dados | `salvar(registro) [Transação Atômica]` | Síncrono |
+| **11**| Banco de Dados | Agendamento | Retorna: `confirmacao_salvo` | Retorno |
+| **12**| Agendamento | AgendamentoController | Retorna: `AgendamentoConfirmado` | Retorno |
+| **13**| AgendamentoController | TelaAgendamento | Retorna: `exibir_sucesso(dados)` | Retorno |
+| **14**| TelaAgendamento | Usuario | `Apresenta confirmação do agendamento` | Retorno |
 
 ### 6. Fluxos Alternativos e Exceções
 
 | ID | Condição | Descrição do Fluxo | Impacto |
 | :--- | :--- | :--- | :--- |
-| **A1** | Profissional ocupado | Repositório detecta agendamento concorrente no mesmo horário | Retorna `HTTP 409 Conflict`, impede reserva e sugere outros horários. |
-| **A2** | Sala com capacidade esgotada | Lotação máxima atingida para o horário solicitado | Retorna `HTTP 422 Unprocessable Entity`, informando sala cheia. |
-| **E1** | Bloqueio de agenda ativo | Existe bloqueio administrativo cadastrado no período | Retorna `HTTP 403 Forbidden`, informando indisponibilidade do espaço/profissional. |
+| **A1** | Profissional ocupado | Sistema detecta agendamento concorrente no mesmo horário | Notifica indisponibilidade e sugere horários alternativos. |
+| **A2** | Sala com capacidade esgotada | Lotação máxima atingida para o horário solicitado | Impede reserva e informa que a sala está lotada. |
+| **E1** | Bloqueio de agenda ativo | Existe bloqueio administrativo cadastrado no período | Notifica indisponibilidade do espaço/profissional por motivo administrativo. |
 
 ### 7. Regras de Negócio Aplicadas
 * **RN-01**: Sem choque de horário para profissional ou sala.
-* **RN-02**: Somatório de atletas não pode ultrapassar capacidade da sala.
+* **RN-02**: Somatório de atletas não pode ultrapassar a capacidade da sala.
 * **RN-03**: Bloqueios administrativos sobrepõem qualquer agendamento.
-* **RN-04**: Profissional deve ter a especialidade requerida pelo serviço.
+* **RN-04**: Profissional deve possuir a especialidade requerida pelo serviço.
 
 ### 8. Pontos de Validação
 - [x] Fluxo compatível com o Caso de Uso UC-06.
 - [x] Mensagens consistentes com os requisitos funcionais RF-11 a RF-15.
 - [x] Alternativas de conflito e exceções representadas.
-- [x] Participantes aderentes à arquitetura em camadas do Django.
+- [x] Participantes aderentes à arquitetura Model-View-Controller do Django.
 - [x] Correspondência com a tela de agendamento do protótipo.
 
 ### 9. Diagrama PlantUML
@@ -92,48 +92,48 @@ O Diagrama de Sequência é uma representação visual que demonstra a interaç�
 title Diagrama de Sequencia 1 - Confirmar Agendamento
 autonumber
 actor "Usuario / Aluno" as User
-boundary "API Gateway / View" as API
-control "AgendamentoService" as Service
-entity "BloqueioRepository" as BlockRepo
-entity "AgendamentoRepository" as SchedRepo
-entity "EspacoRepository" as RoomRepo
+boundary "TelaAgendamento" as View
+control "AgendamentoController" as Ctrl
+entity "BloqueioAgenda" as Block
+entity "Agendamento" as Sched
+entity "Espaco" as Room
 database "Banco de Dados" as DB
 
-User -> API : POST /api/agendamentos/ (aluno_id, prof_id, sala_id, servico_id, data_hora)
-activate API
+User -> View : solicitar_agendamento(aluno, prof, sala, servico, data_hora)
+activate View
 
-API -> Service : criar_agendamento(dados)
-activate Service
+View -> Ctrl : processar_agendamento(dados)
+activate Ctrl
 
-Service -> BlockRepo : verificar_bloqueios(prof_id, sala_id, data_hora)
-activate BlockRepo
-BlockRepo --> Service : sem_bloqueios
-deactivate BlockRepo
+Ctrl -> Block : verificar_bloqueios(prof, sala, data_hora)
+activate Block
+Block --> Ctrl : sem_bloqueios
+deactivate Block
 
-Service -> SchedRepo : verificar_conflito_profissional(prof_id, data_hora)
-activate SchedRepo
-SchedRepo --> Service : profissional_disponivel
-deactivate SchedRepo
+Ctrl -> Sched : verificar_disponibilidade_profissional(prof, data_hora)
+activate Sched
+Sched --> Ctrl : profissional_disponivel
+deactivate Sched
 
-Service -> RoomRepo : verificar_capacidade_disponivel(sala_id, data_hora)
-activate RoomRepo
-RoomRepo --> Service : capacidade_ok (vagas > 0)
-deactivate RoomRepo
+Ctrl -> Room : verificar_capacidade(sala, data_hora)
+activate Room
+Room --> Ctrl : capacidade_disponivel
+deactivate Room
 
-Service -> SchedRepo : salvar_agendamento(novo_agendamento)
-activate SchedRepo
-SchedRepo -> DB : INSERT INTO agendamento (...) [Transacao Atomica]
+Ctrl -> Sched : criar_agendamento(dados)
+activate Sched
+Sched -> DB : salvar(registro) [Transacao Atomica]
 activate DB
-DB --> SchedRepo : agendamento_salvo (id=123)
+DB --> Sched : confirmacao_salvo
 deactivate DB
-SchedRepo --> Service : AgendamentoConfirmado
-deactivate SchedRepo
+Sched --> Ctrl : AgendamentoConfirmado
+deactivate Sched
 
-Service --> API : Sucesso (Agendamento Criado)
-deactivate Service
+Ctrl --> View : exibir_sucesso(dados)
+deactivate Ctrl
 
-API --> User : HTTP 201 Created (JSON dados do agendamento)
-deactivate API
+View --> User : Apresenta confirmacao do agendamento
+deactivate View
 @enduml
 ```
 
@@ -159,41 +159,41 @@ deactivate API
 * **Objetivo do Cenário**: Registrar a presença ou falta do aluno e consolidar o relatório técnico de atividades e observações.
 * **Pré-condições**: Sessão previamente agendada e concluída; profissional autenticado e vinculado à sessão.
 * **Pós-condições**: Presença gravada, relatório persistido e agendamento atualizado para status `REALIZADO`.
-* **Gatilho de Início**: Profissional submete o relatório via API (`POST /api/agendamentos/{id}/finalizar-relatorio/`).
+* **Gatilho de Início**: Profissional submete o relatório de treino na interface do sistema.
 
 ### 4. Participantes (Lifelines)
 * **Ator**: `Profissional / Treinador`
-* **Boundary**: `API Gateway / View (RelatorioView)`
-* **Control**: `RelatorioService`
-* **Entity / Repository**: `AgendamentoRepository`, `RelatorioRepository`
-* **Database**: `Banco de Dados Relacional`
+* **Boundary (Interface/Tela)**: `TelaRelatorio`
+* **Control (Controlador)**: `RelatorioController`
+* **Entity (Domínio/Serviços)**: `Agendamento`, `RelatorioTreino`
+* **Database**: `Banco de Dados`
 
 ### 5. Fluxo Principal de Mensagens
 
 | Passo | Remetente | Destinatário | Mensagem / Ação | Tipo |
 | :---: | :--- | :--- | :--- | :--- |
-| **1** | Profissional | API | `POST /api/agendamentos/{id}/finalizar-relatorio/ (presenca, atividades, obs)` | Síncrono |
-| **2** | API | RelatorioService | `finalizar_relatorio(id, usuario_autenticado, dados)` | Síncrono |
-| **3** | RelatorioService | AgendamentoRepository | `obter_agendamento_por_id(id)` | Síncrono |
-| **4** | AgendamentoRepository | RelatorioService | Retorna: `agendamento_instancia` | Retorno |
-| **5** | RelatorioService | RelatorioService | `validar_permissao(usuario, agendamento)` | Interno |
-| **6** | RelatorioService | RelatorioRepository | `criar_relatorio(agendamento, presenca, atividades, obs)` | Síncrono |
-| **7** | RelatorioRepository | Banco de Dados | `INSERT INTO relatorio_treino (...)` | Síncrono |
-| **8** | Banco de Dados | RelatorioRepository | Retorna: `relatorio_id` | Retorno |
-| **9** | RelatorioRepository | AgendamentoRepository | `atualizar_status(agendamento_id, 'REALIZADO')` | Síncrono |
-| **10**| AgendamentoRepository | Banco de Dados | `UPDATE agendamento SET status = 'REALIZADO'` | Síncrono |
-| **11**| Banco de Dados | AgendamentoRepository | Retorna: `status_atualizado` | Retorno |
-| **12**| AgendamentoRepository | RelatorioRepository | Retorna: `ok` | Retorno |
-| **13**| RelatorioRepository | RelatorioService | Retorna: `RelatorioFinalizado` | Retorno |
-| **14**| RelatorioService | API | Retorna: `Sucesso` | Retorno |
-| **15**| API | Profissional | `HTTP 200 OK (JSON relatório finalizado)` | Retorno |
+| **1** | Profissional | TelaRelatorio | `submeter_relatorio(agendamento_id, presenca, atividades, obs)` | Síncrono |
+| **2** | TelaRelatorio | RelatorioController | `processar_finalizacao(id, dados)` | Síncrono |
+| **3** | RelatorioController | Agendamento | `buscar_agendamento(id)` | Síncrono |
+| **4** | Agendamento | RelatorioController | Retorna: `instancia_agendamento` | Retorno |
+| **5** | RelatorioController | RelatorioController | `validar_autorizacao(usuario, agendamento)` | Interno |
+| **6** | RelatorioController | RelatorioTreino | `criar_relatorio(agendamento, presenca, atividades, obs)` | Síncrono |
+| **7** | RelatorioTreino | Banco de Dados | `salvar(relatorio)` | Síncrono |
+| **8** | Banco de Dados | RelatorioTreino | Retorna: `relatorio_id` | Retorno |
+| **9** | RelatorioTreino | Agendamento | `marcar_como_realizado()` | Síncrono |
+| **10**| Agendamento | Banco de Dados | `atualizar_status('REALIZADO')` | Síncrono |
+| **11**| Banco de Dados | Agendamento | Retorna: `status_atualizado` | Retorno |
+| **12**| Agendamento | RelatorioTreino | Retorna: `ok` | Retorno |
+| **13**| RelatorioTreino | RelatorioController | Retorna: `RelatorioFinalizado` | Retorno |
+| **14**| RelatorioController | TelaRelatorio | Retorna: `exibir_confirmacao()` | Retorno |
+| **15**| TelaRelatorio | Profissional | `Apresenta mensagem de sucesso` | Retorno |
 
 ### 6. Fluxos Alternativos e Exceções
 
 | ID | Condição | Descrição do Fluxo | Impacto |
 | :--- | :--- | :--- | :--- |
-| **A1** | Profissional não autorizado | Usuário tentando registrar relatório não é o profissional vinculado nem administrador | Retorna `HTTP 403 Forbidden`, bloqueia a operação. |
-| **E1** | Sessão já finalizada | Relatório já havia sido finalizado anteriormente | Retorna `HTTP 400 Bad Request` conforme RN-06 (imutabilidade). |
+| **A1** | Profissional não autorizado | Usuário tentando registrar relatório não é o profissional vinculado nem administrador | Exibe mensagem de permissão negada e bloqueia a operação. |
+| **E1** | Sessão já finalizada | Relatório já havia sido finalizado anteriormente | Informa que o relatório está bloqueado para edição (RN-06). |
 
 ### 7. Regras de Negócio Aplicadas
 * **RN-05**: Apenas o profissional atribuído ou o administrador pode registrar presença e observações.
@@ -203,7 +203,7 @@ deactivate API
 - [x] Fluxo compatível com o Caso de Uso UC-10.
 - [x] Mensagens consistentes com os requisitos funcionais RF-17 e RF-18.
 - [x] Alternativas de permissão e imutabilidade representadas.
-- [x] Participantes aderentes à arquitetura em camadas do Django.
+- [x] Participantes aderentes à arquitetura Model-View-Controller do Django.
 - [x] Correspondência com a tela de relatório do protótipo.
 
 ### 9. Diagrama PlantUML
@@ -213,49 +213,49 @@ deactivate API
 title Diagrama de Sequencia 2 - Finalizar Relatorio de Treino
 autonumber
 actor "Profissional / Treinador" as Coach
-boundary "API Gateway / View" as API
-control "RelatorioService" as Service
-entity "AgendamentoRepository" as SchedRepo
-entity "RelatorioRepository" as ReportRepo
+boundary "TelaRelatorio" as View
+control "RelatorioController" as Ctrl
+entity "Agendamento" as Sched
+entity "RelatorioTreino" as Report
 database "Banco de Dados" as DB
 
-Coach -> API : POST /api/agendamentos/{id}/finalizar-relatorio/ (presenca, atividades, obs)
-activate API
+Coach -> View : submeter_relatorio(agendamento_id, presenca, atividades, obs)
+activate View
 
-API -> Service : finalizar_relatorio(agendamento_id, usuario_autenticado, dados)
-activate Service
+View -> Ctrl : processar_finalizacao(id, dados)
+activate Ctrl
 
-Service -> SchedRepo : obter_agendamento_por_id(id)
-activate SchedRepo
-SchedRepo --> Service : agendamento_instancia
-deactivate SchedRepo
+Ctrl -> Sched : buscar_agendamento(id)
+activate Sched
+Sched --> Ctrl : instancia_agendamento
+deactivate Sched
 
-Service -> Service : validar_permissao(usuario, agendamento)
+Ctrl -> Ctrl : validar_autorizacao(usuario, agendamento)
 
-Service -> ReportRepo : criar_relatorio(agendamento, presenca, atividades, obs)
-activate ReportRepo
-ReportRepo -> DB : INSERT INTO relatorio_treino (...)
+Ctrl -> Report : criar_relatorio(agendamento, presenca, atividades, obs)
+activate Report
+Report -> DB : salvar(relatorio)
 activate DB
-DB --> ReportRepo : relatorio_salvo
+DB --> Report : relatorio_id
 deactivate DB
 
-ReportRepo -> SchedRepo : atualizar_status(agendamento_id, "REALIZADO")
-activate SchedRepo
-SchedRepo -> DB : UPDATE agendamento SET status = 'REALIZADO'
+Report -> Sched : marcar_como_realizado()
+activate Sched
+Sched -> DB : atualizar_status('REALIZADO')
 activate DB
-DB --> SchedRepo : status_atualizado
+DB --> Sched : status_atualizado
 deactivate DB
-SchedRepo --> ReportRepo : ok
-deactivate SchedRepo
+Sched --> Report : ok
+deactivate Sched
 
-ReportRepo --> Service : RelatorioFinalizado
-deactivate ReportRepo
+Report --> Ctrl : RelatorioFinalizado
+deactivate Report
 
-Service --> API : Sucesso (Relatorio Concluido)
-deactivate Service
+Ctrl --> View : exibir_confirmacao()
+deactivate Ctrl
 
-API --> Coach : HTTP 200 OK (JSON relatorio finalizado)
-deactivate API
+View --> Coach : Apresenta mensagem de sucesso
+deactivate View
 @enduml
 ```
 
@@ -267,4 +267,5 @@ deactivate API
 | :--- | :---: | :--- | :--- |
 | 2026.2 | 1.0 | Versão inicial | Grupo 3 |
 | 2026.2 | 2.0 | Elaboração dos diagramas oficiais do Backend GAAP | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
-| 2026.2 | 2.1 | Preenchimento completo das fichas técnicas e tabelas de fluxo conforme padrão oficial | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.1 | Preenchimento completo das fichas técnicas e tabelas de fluxo | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.2 | Alinhamento da notação para o padrão Boundary-Control-Entity do modelo da disciplina | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |

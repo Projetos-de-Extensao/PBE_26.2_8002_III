@@ -20,7 +20,7 @@ A equipe do Grupo 3 debateu os requisitos necessários para viabilizar a gestão
 ## Questões e Debates
 
 ### 1. Qual o objetivo principal da aplicação?
-**Equipe do Projeto**: Desenvolver uma API REST e backend para o sistema GAAP, permitindo a orquestração centralizada de horários, profissionais, alunos e espaços físicos, garantindo a consistência das marcações e o registro das atividades realizadas.
+**Equipe do Projeto**: Desenvolver o sistema back-end GAAP em Python e Django, permitindo a orquestração centralizada de horários, profissionais, alunos e espaços físicos, garantindo a consistência das marcações e o registro das atividades realizadas.
 
 ---
 

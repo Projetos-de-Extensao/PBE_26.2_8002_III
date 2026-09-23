@@ -41,7 +41,7 @@ O fluxo de trabalho da equipe é gerenciado por meio de um quadro Kanban com as 
 ## 3. Ferramental e Governança
 
 * **Versionamento**: Git com fluxo de *feature branches* e *Pull Requests* obrigatórios.
-* **Backend**: Python 3.11+ e Django / Django REST Framework.
+* **Backend**: Python 3.11+ e Django.
 * **Documentação**: MkDocs Material com suporte a diagramas PlantUML.
 
 ---

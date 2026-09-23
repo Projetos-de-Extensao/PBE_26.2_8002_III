@@ -59,7 +59,7 @@ skinparam NodeFontSize 14
 
 * Requisitos GAAP\n(Brainstorming)
 ** What (O que?)
-*** API REST robusta e documentada
+*** Sistema back-end robusto e documentado
 *** Gestão de sessões e horários
 *** BS01 - Autenticação por perfil
 *** BS02 - Cadastros de base

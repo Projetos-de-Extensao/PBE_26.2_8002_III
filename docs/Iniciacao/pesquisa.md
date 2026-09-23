@@ -24,7 +24,7 @@ Escolas e centros de treinamento esportivo de alta performance lidam diariamente
 ### 2.2. Objetivo do Projeto
 
 <p align="justify">
-O objetivo do projeto é conceber, projetar e implementar uma API REST funcional, robusta, testada e documentada para o backend do sistema <b>GAAP</b>. A solução visa centralizar a gestão de agendas de treinos e atendimentos multidisciplinares, validar regras de consistência de horários e capacidade de espaços em tempo real, e registrar o histórico de presenças e relatórios técnicos operacionais.
+O objetivo do projeto é conceber, projetar e implementar um sistema back-end funcional, robusto, testado e documentado denominado <b>GAAP</b>. A solução visa centralizar a gestão de agendas de treinos e atendimentos multidisciplinares, validar regras de consistência de horários e capacidade de espaços em tempo real, e registrar o histórico de presenças e relatórios técnicos operacionais.
 </p>
 
 ### 2.3. Público-Alvo
@@ -56,7 +56,7 @@ O sistema destina-se aos seguintes grupos de usuários:
 
 ### 2.6. Levantamento de Legislação e Conformidade
 
-A concepção da API do GAAP observa as seguintes diretrizes legais e normativas:
+A concepção do sistema GAAP observa as seguintes diretrizes legais e normativas:
 
 1. **Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018)**:
    * **Finalidade e Necessidade**: Coleta restrita aos dados estritamente necessários para identificação, agendamento e segurança durante o treinamento.
@@ -72,5 +72,5 @@ A concepção da API do GAAP observa as seguintes diretrizes legais e normativas
 | Data | Versão | Descrição | Autor(es) |
 | :--- | :---: | :--- | :--- |
 | 2026.2 | 1.0 | Versão inicial da pesquisa de mercado | Arthur Calebe |
-| 2026.2 | 2.0 | Alinhamento da pesquisa ao cenário do Backend GAAP | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.0 | Alinhamento da pesquisa ao cenário do sistema GAAP | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
 | 2026.2 | 2.1 | Inclusão de Objetivo, Público-Alvo e Levantamento de Legislação conforme modelo oficial | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |

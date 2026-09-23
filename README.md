@@ -7,7 +7,7 @@
 
 ## Sobre o Projeto
 
-O **GAAP (Gestão de Atletas de Alta Performance)** é uma solução de backend e API REST desenvolvida em Python/Django para centralizar e orquestrar a operação de escolas e centros de treinamento esportivo. O sistema gerencia horários, profissionais, alunos e espaços físicos para quatro modalidades integradas:
+O **GAAP (Gestão de Atletas de Alta Performance)** é uma solução de back-end desenvolvida em Python e Django para centralizar e orquestrar a operação de escolas e centros de treinamento esportivo. O sistema gerencia horários, profissionais, alunos e espaços físicos para quatro modalidades integradas:
 
 * **Treino** (Físico e Técnico)
 * **Fisioterapia**
@@ -21,7 +21,7 @@ A plataforma garante validação de conflitos em tempo real (*double-booking*), 
 ## Tecnologias Utilizadas
 
 * **Linguagem**: Python 3.11+
-* **Framework Backend**: Django / Django REST Framework
+* **Framework Back-End**: Django
 * **Banco de Dados**: Relacional (SQLite em desenvolvimento / PostgreSQL em produção)
 * **Documentação**: MkDocs com tema Material e suporte a PlantUML
 * **Metodologia**: RUP/UP e Kanban via GitHub Projects
@@ -46,9 +46,7 @@ A plataforma garante validação de conflitos em tempo real (*double-booking*), 
 
 3. Inicie o servidor do MkDocs:
    ```bash
-   mkdocs serve
+   python -X utf8 -m mkdocs serve
    ```
 
 4. Acesse a documentação em seu navegador no endereço: `http://127.0.0.1:8000`
-
-

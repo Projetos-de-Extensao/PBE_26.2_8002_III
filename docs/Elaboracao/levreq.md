@@ -28,7 +28,7 @@ O GAAP tem como objetivo centralizar e orquestrar a operação de agendamentos d
 | **Profissional de Saúde** | Fisioterapeuta, Nutricionista e Psicólogo. | Gestão de atendimentos especializados e registro de evolução clínica/técnica. |
 | **Aluno / Atleta** | Praticante atendido pelo centro esportivo. | Consulta de disponibilidade, agendamento de sessões e acompanhamento de presença. |
 | **Escola Esportiva** | Organização mantenedora. | Maximização do uso dos espaços com segurança e excelência no acompanhamento dos atletas. |
-| **Equipe de Desenvolvimento** | Grupo 3 da disciplina PBE (Ibmec). | Entrega do backend e API REST funcional, testada e documentada com base no RUP/UP. |
+| **Equipe de Desenvolvimento** | Grupo 3 da disciplina PBE (Ibmec). | Entrega do sistema back-end funcional, testada e documentada com base no RUP/UP. |
 
 ---
 
@@ -39,7 +39,7 @@ O GAAP tem como objetivo centralizar e orquestrar a operação de agendamentos d
 | ID | Descrição | Prioridade |
 | :--- | :--- | :---: |
 | **RF-01** | O sistema deve autenticar usuários mediante e-mail e senha com hash seguro. | Must |
-| **RF-02** | O sistema deve restringir o acesso a endpoints e recursos de acordo com o perfil do usuário (Administrador, Treinador, Profissional de Saúde e Aluno). | Must |
+| **RF-02** | O sistema deve restringir o acesso a funcionalidades e dados de acordo com o perfil do usuário (Administrador, Treinador, Profissional de Saúde e Aluno). | Must |
 | **RF-03** | O sistema deve permitir a recuperação de senha por meio de instruções enviadas por e-mail. | Should |
 
 ### 2.2. Cadastros de Base
@@ -87,7 +87,7 @@ O GAAP tem como objetivo centralizar e orquestrar a operação de agendamentos d
 | **RNF-01** | **Segurança** | As senhas de acesso devem ser armazenadas exclusivamente com algoritmos de hash criptográfico seguros (ex.: PBKDF2/Argon2 do Django). | Must |
 | **RNF-02** | **Integridade** | A operação de confirmação de agendamento deve ser tratada como transação atômica no banco de dados para evitar condições de corrida (*race conditions*). | Must |
 | **RNF-03** | **Desempenho** | A verificação de disponibilidade e conflitos de agenda deve responder em menos de 2 segundos sob carga normal. | Should |
-| **RNF-04** | **Arquitetura** | O backend deve ser desenvolvido em Python utilizando o framework Django e expor uma API REST documentada. | Must |
+| **RNF-04** | **Arquitetura** | O backend deve ser desenvolvido em Python utilizando o framework Django. | Must |
 | **RNF-05** | **Persistência** | O esquema de banco de dados deve ser relacional, normalizado e gerenciado através de migrações do Django ORM. | Must |
 | **RNF-06** | **Manutenibilidade**| O código-fonte deve ser modular, coberto por testes automatizados de unidade e integração para os fluxos críticos de validação. | Must |
 

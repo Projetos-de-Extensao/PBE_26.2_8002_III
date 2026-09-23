@@ -18,8 +18,7 @@ title: Bibliografia
 
 * **Frameworks e Tecnologias**:
   * DJANGO SOFTWARE FOUNDATION. *Django Documentation (v5.x)*. Disponível em: <https://docs.djangoproject.com/>.
-  * DJANGO REST FRAMEWORK. *Documentation*. Disponível em: <https://www.django-rest-framework.org/>.
-  * PLANTUML. *PlantUML Language Reference Guide*. Disponível em: <https://plantuml.com/>.
+    * PLANTUML. *PlantUML Language Reference Guide*. Disponível em: <https://plantuml.com/>.
 
 ---
 
