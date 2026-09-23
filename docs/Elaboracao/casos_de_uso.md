@@ -1,304 +1,181 @@
 ---
-id: diagrama_de_casos de uso
-title: Diagrama de Casos de Uso
+id: casos_de_uso
+title: Casos de Uso
 ---
 
-## Casos de Uso
+# Especificação de Casos de Uso — Backend GAAP
 
-### Descrição:
+## 1. Diagrama Geral de Casos de Uso
 
-- Contas
-	- Criação
-	- Entrada
-	- Alteração
-	- Recuperar Senha
-	- Visualização
+```plantuml
+@startuml
+left to right direction
+skinparam packageStyle rectangle
 
-- Responsáveis
-	- Cadastro de dependentes
-	- Agendamento de treinos
-	- Cancelamento e reagendamento
-	- Visualização de calendário e fila de espera
+actor "Administrador" as Admin
+actor "Treinador" as Coach
+actor "Profissional de Saúde" as Health
+actor "Aluno / Responsável" as Student
 
-- Professores
-	- Cadastro e atualização de disponibilidade
-	- Registro de desempenho pós-treino
-	- Visualização da agenda
+rectangle "Backend GAAP" {
+  usecase "UC-01: Autenticar no Sistema" as UC01
+  usecase "UC-02: Manter Cadastro de Alunos" as UC02
+  usecase "UC-03: Manter Cadastro de Profissionais" as UC03
+  usecase "UC-04: Manter Serviços e Salas" as UC04
+  usecase "UC-05: Gerenciar Bloqueios de Agenda" as UC05
+  usecase "UC-06: Confirmar Agendamento de Sessão" as UC06
+  usecase "UC-07: Cancelar ou Reagendar Sessão" as UC07
+  usecase "UC-08: Consultar Agenda Operacional" as UC08
+  usecase "UC-09: Registrar Presença / Falta" as UC09
+  usecase "UC-10: Finalizar Relatório de Treino" as UC10
+}
 
-- Salas e equipamentos
-	- Cadastro de ambientes
-	- Definição de capacidade e uso
-	- Bloqueio por manutenção ou avaliação
+Admin --> UC01
+Admin --> UC02
+Admin --> UC03
+Admin --> UC04
+Admin --> UC05
+Admin --> UC06
+Admin --> UC08
 
-- Treinos
-	- Agendamento
-	- Validação de conflitos
-	- Definição de descanso e recuperação
-	- Controle de intensidade semanal
+Coach --> UC01
+Coach --> UC08
+Coach --> UC09
+Coach --> UC10
 
-### UC-01 - Cadastro de responsável no sistema
+Health --> UC01
+Health --> UC08
+Health --> UC09
+Health --> UC10
 
-* Atores:
+Student --> UC01
+Student --> UC06
+Student --> UC07
+Student --> UC08
+@enduml
+```
 
-	- Responsável
-	- Sistema
+---
 
-- Pré-Condições:
-	- Nenhuma
+## 2. Detalhamento dos Casos de Uso Prioritários
 
-* Fluxo Básico:
-    1. Responsável informa nome, e-mail, senha e dados de cadastro
-    2. Sistema valida os dados informados
-    3. Sistema verifica se o e-mail ainda não está em uso
-    4. Sistema criptografa a senha e salva os dados do responsável
-    5. Sistema envia e-mail de confirmação para o responsável
-    6. Responsável confirma o cadastro
-    7. Sistema registra o usuário como ativo
-    8. Sistema redireciona o responsável para o painel inicial
+### UC-01 — Autenticar no Sistema
+* **Atores**: Administrador, Treinador, Profissional de Saúde, Aluno.
+* **Pré-condições**: Usuário cadastrado e ativo.
+* **Fluxo Principal**:
+  1. Usuário informa e-mail e senha.
+  2. Sistema valida as credenciais contra o hash criptográfico.
+  3. Sistema identifica o perfil do usuário e gera o token de sessão.
+  4. Usuário acessa as rotas autorizadas para o seu perfil.
+* **Fluxos Alternativos**:
+  * *2a. Credenciais inválidas*: Sistema recusa o acesso e informa erro.
 
-- Fluxos Alternativos:
-	- 2a. E-mail informado é inválido
-		- 2a1. Sistema exibe mensagem de erro
-	- 2b. Senha não atende aos critérios de segurança
-		- 2b1. Sistema exibe mensagem de erro
-	- 5a. E-mail de confirmação não é recebido
-		- 5a1. Sistema oferece opção para reenviar o link de confirmação
+---
 
-### UC-02 - Entrada do responsável no sistema
+### UC-02 — Manter Cadastro de Alunos
+* **Atores**: Administrador.
+* **Pré-condições**: Administrador autenticado.
+* **Fluxo Principal**:
+  1. Administrador solicita cadastro de novo aluno com nome, e-mail, telefone e observações.
+  2. Sistema valida os campos obrigatórios e unicidade do e-mail.
+  3. Sistema persiste o registro no banco de dados.
+* **Fluxos Alternativos**:
+  * *2a. E-mail já existente*: Sistema recusa e informa duplicidade.
 
-- Atores:
-	- Responsável
-	- Sistema
+---
 
-- Pré-Condições:
-	- Responsável deve estar cadastrado e ativo
+### UC-03 — Manter Cadastro de Profissionais
+* **Atores**: Administrador.
+* **Pré-condições**: Administrador autenticado.
+* **Fluxo Principal**:
+  1. Administrador cadastra profissional informando dados pessoais e especialidade (*Treinador, Fisioterapeuta, Nutricionista, Psicólogo*).
+  2. Sistema valida e associa o perfil ao profissional.
+  3. Sistema disponibiliza o profissional para alocação na grade de horários.
 
-- Fluxo Básico:
-    - 1. Responsável informa e-mail e senha
-	- 2. Sistema autentica as credenciais
-	- 3. Sistema valida a sessão do usuário
-	- 4. Sistema redireciona o responsável para o painel inicial
+---
 
-- Fluxos Alternativos:
-	- 2a. Dados informados são inválidos
-		- 2a1. Sistema exibe mensagem de erro
-	- 2b. Usuário esqueceu a senha
-		- 2b1. Sistema envia instruções para recuperação da conta
+### UC-04 — Manter Serviços e Salas
+* **Atores**: Administrador.
+* **Pré-condições**: Administrador autenticado.
+* **Fluxo Principal**:
+  1. Administrador cadastra/edita salas (com capacidade máxima) e serviços (*Treino, Fisioterapia, Psicologia, Nutrição*).
+  2. Sistema persiste as configurações para uso na validação de agenda.
 
-### UC-03 - Cadastro de atleta vinculado ao responsável
+---
 
-- Atores:
-	- Responsável
-	- Sistema
+### UC-05 — Gerenciar Bloqueios de Agenda
+* **Atores**: Administrador.
+* **Pré-condições**: Administrador autenticado.
+* **Fluxo Principal**:
+  1. Administrador seleciona profissional ou sala e define período de bloqueio (início, fim e justificativa).
+  2. Sistema registra o bloqueio e impede novas reservas no intervalo especificado.
 
-- Pré-Condições:
-	- Responsável deve estar autenticado
+---
 
-- Fluxo Básico:
-    - 1. Responsável seleciona a opção “Cadastrar aluno”
-	- 2. Sistema solicita nome, idade, nível de desenvolvimento e informações básicas do atleta
-	- 3. Responsável informa os dados do jovem atleta
-	- 4. Sistema valida as informações
-	- 5. Sistema associa o atleta ao responsável
-	- 6. Sistema salva o perfil do atleta no sistema
+### UC-06 — Confirmar Agendamento de Sessão *(Caso Crítico)*
+* **Atores**: Aluno/Responsável, Administrador, Sistema.
+* **Pré-condições**: Aluno, profissional, sala e serviço cadastrados; usuário autenticado.
+* **Fluxo Principal**:
+  1. Usuário seleciona o Aluno, o Serviço (*Treino, Fisio, Psico, Nutri*), o Profissional, a Sala e o Horário desejado.
+  2. Sistema verifica a especialidade do profissional com o serviço solicitado (RN-04).
+  3. Sistema verifica se o profissional já possui outro agendamento no horário (RN-01).
+  4. Sistema verifica se a sala possui bloqueio ativo ou se excederá a capacidade máxima (RN-02, RN-03).
+  5. Sistema valida se o aluno não possui agendamento simultâneo.
+  6. Sistema registra a sessão como confirmada de forma atômica e atualiza a agenda.
+* **Fluxos Alternativos**:
+  * *3a. Conflito de profissional*: Sistema bloqueia e notifica que o profissional está ocupado.
+  * *4a. Sala lotada ou bloqueada*: Sistema bloqueia a reserva e sugere outro horário/espaço.
 
-- Fluxos Alternativos:
-	- 4a. Idade fora da faixa permitida
-		- 4a1. Sistema informa que o atleta deve estar entre 7 e 12 anos
-	- 4b. Dados incompletos
-		- 4b1. Sistema impede o cadastro e solicita preenchimento dos campos obrigatórios
+---
 
-### UC-04 - Agendar treino
+### UC-07 — Cancelar ou Reagendar Sessão
+* **Atores**: Aluno/Responsável, Administrador.
+* **Pré-condições**: Sessão previamente agendada.
+* **Fluxo Principal**:
+  1. Usuário solicita o cancelamento ou novo horário para a sessão.
+  2. Sistema atualiza o status do agendamento e libera a vaga imediatamente na agenda.
 
-- Atores:
-	- Responsável
-	- Sistema
-	- Professor
-	- Sala
+---
 
-- Pré-Condições:
-	- Responsável deve estar autenticado
-	- Atleta deve estar cadastrado
-	- Professor e sala devem estar disponíveis
+### UC-08 — Consultar Agenda Operacional
+* **Atores**: Administrador, Treinador, Profissional de Saúde, Aluno.
+* **Pré-condições**: Usuário autenticado.
+* **Fluxo Principal**:
+  1. Usuário aplica filtros (data, serviço, profissional, sala).
+  2. Sistema retorna a grade horária respeitando o nível de visibilidade de cada perfil.
 
-- Fluxo Básico:
-    - 1. Responsável seleciona o atleta e a opção de agendamento
-	- 2. Sistema apresenta o calendário com horários disponíveis
-	- 3. Responsável escolhe o tipo de treino, a data, o horário e o professor
-	- 4. Sistema valida disponibilidade simultânea de aluno, professor e sala
-	- 5. Sistema calcula a janela de descanso e recuperação necessária
-	- 6. Sistema confirma o agendamento
-	- 7. Sistema exibe o treino na agenda do responsável e do professor
+---
 
-- Fluxos Alternativos:
-	- 4a. Há conflito de agenda entre professor e sala
-		- 4a1. Sistema bloqueia o agendamento e sugere horários alternativos
-	- 5a. Atleta está em período de recuperação
-		- 5a1. Sistema impede o agendamento para evitar sobrecarga
-	- 6a. Responsável tenta agendar fora do horário permitido
-		- 6a1. Sistema exibe mensagem informando a regra de antecedência mínima de 12 horas
+### UC-09 — Registrar Presença / Falta
+* **Atores**: Treinador, Profissional de Saúde, Administrador.
+* **Pré-condições**: Sessão agendada na data corrente ou pretérita.
+* **Fluxo Principal**:
+  1. Profissional acessa a sessão sob sua responsabilidade.
+  2. Profissional marca o status do aluno como Presente ou Ausente.
+  3. Sistema atualiza o registro da sessão.
 
-### UC-05 - Cancelar ou reagendar treino
+---
 
-- Atores:
-	- Responsável
-	- Sistema
-	- Professor
+### UC-10 — Finalizar Relatório de Treino *(Caso Crítico)*
+* **Atores**: Treinador, Profissional de Saúde, Administrador.
+* **Pré-condições**: Sessão realizada e presença confirmada.
+* **Fluxo Principal**:
+  1. Profissional seleciona a sessão realizada.
+  2. Profissional preenche as atividades executadas, observações técnicas e recomendações.
+  3. Sistema valida os campos obrigatórios e finaliza o relatório de treino.
+  4. Sistema bloqueia edições futuras e disponibiliza o histórico para consulta.
 
-- Pré-Condições:
-	- Treino já deve estar agendado
-	- Responsável deve estar autenticado
+---
 
-- Fluxo Básico:
-    - 1. Responsável acessa a agenda de treinos
-	- 2. Sistema lista os treinamentos cadastrados
-	- 3. Responsável seleciona o treino a ser cancelado ou reagendado
-	- 4. Sistema verifica a janela de cancelamento permitida
-	- 5. Sistema atualiza a agenda do aluno, professor e sala
-	- 6. Sistema notifica a fila de espera, se houver vagas disponíveis
+## 3. Conclusão
 
-- Fluxos Alternativos:
-	- 4a. Cancelamento fora do prazo permitido
-		- 4a1. Sistema bloqueia a alteração e informa sobre a política de cancelamento
-	- 6a. Existe aluno na fila de espera
-		- 6a1. Sistema notifica automaticamente o responsável disponível
+<p align="justify">
+Os casos de uso cobrem a totalidade dos fluxos operacionais previstos no MVP do Backend GAAP, garantindo o suporte às validações de capacidade, bloqueios e registro pós-sessão exigidos pela disciplina.
+</p>
 
-### UC-06 - Visualizar calendário e rotina do atleta
+## Autor(es)
 
-- Atores:
-	- Responsável
-	- Sistema
-
-- Pré-Condições:
-	- Responsável deve estar autenticado
-	- Pelo menos um atleta deve estar vinculado à conta
-
-- Fluxo Básico:
-    - 1. Responsável acessa a opção de calendário
-	- 2. Sistema exibe a visão parental com os treinos dos filhos
-	- 3. Sistema destaca períodos de descanso e horários disponíveis
-	- 4. Responsável visualiza o histórico e as próximas atividades
-
-- Fluxos Alternativos:
-	- 2a. Usuário solicita visão administrativa
-		- 2a1. Sistema alterna para a visão da academia com lotação total
-	- 3a. Há horários de pico ou lotação alta
-		- 3a1. Sistema sinaliza visualmente os períodos críticos
-
-### UC-07 - Cadastrar e gerenciar professor
-
-- Atores:
-	- Administrador
-	- Sistema
-	- Professor
-
-- Pré-Condições:
-	- Usuário deve possuir perfil administrativo
-
-- Fluxo Básico:
-    - 1. Administrador acessa o módulo de profissionais
-	- 2. Sistema solicita dados do professor, especialidade e faixa etária de domínio
-	- 3. Administrador informa a disponibilidade e turnos do profissional
-	- 4. Sistema valida a certificação e área de atuação
-	- 5. Sistema salva o cadastro do professor
-    - 6. Sistema atualiza a agenda e a disponibilidade do professor
-
-- Fluxos Alternativos:
-	- 4a. Professor não possui especialização adequada
-		- 4a1. Sistema impede o vínculo com a modalidade correspondente
-	- 5a. Há conflito de turno
-		- 5a1. Sistema informa o bloqueio automático para almoço ou planejamento
-
-### UC-08 - Cadastrar e controlar salas e equipamentos
-
-- Atores:
-	- Administrador
-	- Sistema
-
-- Pré-Condições:
-	- Usuário deve possuir perfil administrativo
-
-- Fluxo Básico:
-    - 1. Administrador acessa o módulo de salas
-	- 2. Sistema solicita nome, capacidade e descrição do ambiente
-	- 3. Administrador informa os equipamentos vinculados
-	- 4. Sistema valida a capacidade e a segurança da sala
-	- 5. Sistema salva o ambiente e suas restrições
-	- 6. Sistema bloqueia a sala em horários de manutenção ou avaliação
-
-- Fluxos Alternativos:
-	- 4a. Sala excede a capacidade máxima recomendada
-		- 4a1. Sistema apresenta alerta e impede a reserva
-	- 6a. Há manutenção programada
-		- 6a1. Sistema mantém o ambiente indisponível no calendário
-
-### UC-09 - Registrar desempenho após o treino
-
-- Atores:
-	- Professor
-	- Sistema
-	- Responsável
-
-- Pré-Condições:
-	- Treino deve estar concluído ou em andamento
-	- Professor deve estar autenticado
-
-- Fluxo Básico:
-    - 1. Professor acessa a agenda do dia
-	- 2. Sistema exibe os treinos agendados para o professor
-	- 3. Professor seleciona o atleta e o treino realizado
-	- 4. Sistema solicita indicadores de esforço, fadiga e recuperação
-	- 5. Professor informa os dados do desempenho
-	- 6. Sistema salva o registro pós-treino
-	- 7. Sistema atualiza o histórico do atleta e a recomendação de descanso
-
-- Fluxos Alternativos:
-	- 4a. Aluno apresenta fadiga alta
-		- 4a1. Sistema sugere descanso ou bloqueio de treino futuro
-	- 5a. Professor não preenche todos os campos
-		- 5a1. Sistema solicita preenchimento obrigatório antes do envio
-
-### UC-10 - Gerenciar fila de espera
-
-- Atores:
-	- Responsável
-	- Sistema
-	- Professor
-
-- Pré-Condições:
-	- Deve existir pelo menos um treino cancelado ou uma vaga disponível
-
-- Fluxo Básico:
-    - 1. Sistema identifica cancelamento de treino agendado
-	- 2. Sistema verifica a fila de espera
-	- 3. Sistema seleciona o próximo aluno conforme a ordem e compatibilidade
-	- 4. Sistema notifica o responsável do aluno selecionado
-	- 5. Sistema oferece a possibilidade de confirmação imediata
-
-- Fluxos Alternativos:
-	- 3a. Nenhum aluno está na fila
-		- 3a1. Sistema mantém a vaga disponível para novo agendamento
-	- 4a. Responsável não confirma dentro do prazo
-		- 4a1. Sistema passa a vaga para o próximo da fila
-
-### UC-11 - Visualizar relatórios e acompanhamento do desenvolvimento
-
-- Atores:
-	- Responsável
-	- Professor
-	- Sistema
-
-- Pré-Condições:
-	- Aluno deve ter pelo menos um treino registrado
-
-- Fluxo Básico:
-    - 1. Usuário acessa o módulo de relatórios
-	- 2. Sistema reúne dados de desempenho, presença e recuperação
-	- 3. Sistema apresenta indicadores gerais por aluno e por modalidade
-	- 4. Usuário analisa o resultado e toma decisões sobre agendamentos futuros
-
-- Fluxos Alternativos:
-	- 2a. Há ausência de dados
-		- 2a1. Sistema informa que ainda não existem registros suficientes
-	- 3a. Treino requer atenção especial
-		- 3a1. Sistema destaca a necessidade de revisão e acompanhamento do professor
+| Data | Versão | Descrição | Autor(es) |
+| :--- | :---: | :--- | :--- |
+| 2026.2 | 1.0 | Criação inicial | Pedro Henrique Becker |
+| 2026.2 | 2.0 | Reestruturação completa dos Casos de Uso com base no cenário GAAP | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
