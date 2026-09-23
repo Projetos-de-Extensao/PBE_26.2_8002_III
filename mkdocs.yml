@@ -1,7 +1,7 @@
 ---
-repo_url: https://github.com/jonh-carvalho/PBE_26.2_8001
+repo_url: https://github.com/jonh-carvalho/PBE_26.2_8002
 site_author: Jonh Carvalho
-site_name: PBE_26.2_8001
+site_name: PBE_26.2_8002
 copyright: Copyright ©️ 2026, Jonh Carvalho
 
 nav: 
@@ -9,6 +9,7 @@ nav:
   - Iniciação: 
       - Index: Iniciacao/index.md
       - Pesquisa: Iniciacao/pesquisa.md
+      - Cenário: Iniciacao/cenario.md
       - 5w2h: Iniciacao/5w2h.md
       - Design Thinking: Iniciacao/design_thinking.md
       - Brainstorming: Iniciacao/Brainstorm.md

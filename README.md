@@ -1,12 +1,52 @@
-# Projeto Back-End 
+# GAAP — Gestão de Atletas de Alta Performance
 
-**Código da Disciplina**: IBM8936<br>
+**Disciplina**: Projeto Back-End (IBM8936) — Ibmec 2026.2  
+**Equipe**: Grupo 3 (Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf)
 
-## Sobre 
-Descreva o seu projeto em linhas gerais. 
+---
 
-## Instalação 
-**Linguagens**: Python, Django<br>
-**Tecnologias**: Github, Visual Studio Code<br>
- os pré-requisitos para rodar o seu projeto são UX, Engenharia de Dados, POO.
+## Sobre o Projeto
 
+O **GAAP (Gestão de Atletas de Alta Performance)** é uma solução de back-end desenvolvida em Python e Django para centralizar e orquestrar a operação de academias e centros de treinamento esportivo. O sistema gerencia horários, profissionais, alunos e espaços físicos para quatro modalidades integradas:
+
+* **Treino** (Físico e Técnico)
+* **Fisioterapia**
+* **Psicologia Esportiva**
+* **Nutrição**
+
+A plataforma garante validação de conflitos em tempo real (*double-booking*), controle estrito de capacidade de salas, gestão de bloqueios de agenda e registro de presenças e relatórios técnicos pós-sessão.
+
+---
+
+## Tecnologias Utilizadas
+
+* **Linguagem**: Python 3.11+
+* **Framework Back-End**: Django
+* **Banco de Dados**: Relacional (SQLite em desenvolvimento / PostgreSQL em produção)
+* **Documentação**: MkDocs com tema Material e suporte a PlantUML
+* **Metodologia**: RUP/UP e Kanban via GitHub Projects
+
+---
+
+## Como Executar a Documentação Localmente
+
+1. Crie e ative um ambiente virtual:
+   ```bash
+   python -m venv venv
+   # No Windows:
+   .\venv\Scripts\activate
+   # No Linux/Mac:
+   source venv/bin/activate
+   ```
+
+2. Instale as dependências:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Inicie o servidor do MkDocs:
+   ```bash
+   python -X utf8 -m mkdocs serve
+   ```
+
+4. Acesse a documentação em seu navegador no endereço: `http://127.0.0.1:8000`

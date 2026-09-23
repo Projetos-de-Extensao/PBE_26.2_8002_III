@@ -2,86 +2,68 @@
 id: documento_de_visao
 title: Documento de Visão
 ---
-## Introdução
 
-<p align = "justify">
-O propósito deste documento é fornecer uma visão geral sobre o projeto que será realizado na disciplina Arquitetura e Desenho de Software 2020/1, na Universidade de Brasília. Sendo assim, Nesse documento serão descritas de maneira resumida as principais funcionalidades, usabilidades, o problema que será abordado e os objetivos da equipe.
+# Documento de Visão — Backend GAAP
+
+## 1. Introdução
+
+<p align="justify">
+O propósito deste documento é fornecer uma visão abrangente sobre o desenvolvimento do sistema back-end <b>GAAP (Gestão de Atletas de Alta Performance)</b>, desenvolvido no âmbito da disciplina de Projeto Back-End (IBM8936) do curso de Engenharia de Software do Ibmec (2026.2).
 </p>
 
-## Descrição do Problema 
+---
 
-<p align = "justify">
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-</p>
+## 2. Descrição do Problema
 
-### Problema
+| Elemento | Descrição |
+| :--- | :--- |
+| **O problema de** | Falta de centralização e controle na gestão de horários, vagas e acompanhamento técnico de atletas. |
+| **Afeta** | Administradores de centros esportivos, treinadores, profissionais de saúde (fisioterapeutas, nutricionistas, psicólogos) e atletas. |
+| **Cujo impacto é** | Ocorrência de sobreposição de horários (*double-booking*), superlotação de salas, falta de controle de presenças e perda do histórico de treinos. |
+| **Uma boa solução seria** | Um sistema back-end robusto em Django que centralize cadastros, valide regras de agenda em tempo real e registre presenças e relatórios técnicos. |
 
-Dificuldade em gerenciar e organizar...
+---
 
-### Impactados
+## 3. Objetivos do Produto
 
-Usuários....
+* Fornecer autenticação segura e autorização com base em papéis (Administrador, Treinador, Profissional de Saúde e Aluno).
+* Garantir integridade na marcação de sessões para as quatro modalidades essenciais: **Treino**, **Fisioterapia**, **Psicologia** e **Nutrição**.
+* Impedir conflitos de horário para profissionais e salas, respeitando a capacidade máxima de cada espaço.
+* Permitir o registro rápido de presenças e a finalização de relatórios técnicos pós-sessão.
 
-### Consequência
+---
 
-A criação de novos....
+## 4. Perfis de Usuário
 
-### Solução
+| Perfil | Descrição e Atribuições |
+| :--- | :--- |
+| **Administrador** | Gestão de alunos, profissionais, serviços, espaços físicos e aplicação de bloqueios de agenda. |
+| **Treinador** | Consulta da grade de treinos, marcação de presença/falta e emissão de relatórios de treino. |
+| **Profissional de Saúde** | Consulta e registro dos atendimentos especializados (Fisioterapia, Psicologia, Nutrição). |
+| **Aluno / Responsável** | Visualização de horários disponíveis, solicitação de agendamentos e histórico de sessões. |
 
-Utilizar a aplicação que será desenvolvida visando resolver...
+---
 
-## Objetivos
+## 5. Principais Recursos e Funcionalidades
 
-<p align = "justify">
-O objetivo da equipe de desenvolvimento é fornecer...
-</p>
+1. **Gestão de Cadastros de Base**: Manutenção de usuários, perfis, salas e serviços.
+2. **Motor de Agendamento Inteligente**: Verificação atômica de disponibilidade de profissional e espaço físico.
+3. **Gestão de Bloqueios**: Indisponibilização de horários por manutenção, planejamento ou eventos.
+4. **Registro Operacional**: Controle de presença (presente/ausente) e preenchimento de relatório pós-treino.
+5. **Histórico e Consultas**: Consultas de agenda filtradas por data, aluno, profissional e serviço.
 
-## Descrição do Usuário 
+---
 
-<p align = "justify">
-Os usuários serão....
-</p>
+## 6. Restrições e Limitações do Escopo
 
-## Recursos do produto
+* O escopo do MVP não inclui gateways de pagamento, prontuários clínicos avançados com certificação digital ou aplicativo móvel nativo.
+* A persistência deve utilizar banco de dados relacional normalizado via Django ORM.
 
-### Conta
+---
 
-<p align = "justify">
-O cliente poderá realizar seu cadastro....
-</p>
+## 7. Autor(es)
 
-### Loja
-
-<p align = "justify">
-O cliente poderá cadastrar uma loja única....
-</p>
-
-### Produto
-
-<p align = "justify">
-O cliente poderá cadastrar....
-</p>
-
-### Pesquisa sobre Lojas
-
-<p align = "justify">
-O cliente poderá pesquisar...
-</p>
-
-## Restrições
-
-<p align = "justify">
-A aplicação não será responsável...
-</p>
-
-## Referências Bibliográficas
-
-> Documento de visão. Disponível em https://www... Acesso em dd/MM/yyYY
-
-> Documento de visão. Disponível em  Acesso em dd/MM/yyYY
-
-## Versionamento
 | Data | Versão | Descrição | Autor(es) |
-| -- | -- | -- | -- |
-| DD/MM/YYYY | 1.0 | Criação do documento | XXX XXXX e ZZZ ZZZZ | 
-
+| :--- | :---: | :--- | :--- |
+| 2026.2 | 1.0 | Criação inicial | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.0 | Reestruturação completa do documento de visão para o Backend GAAP | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
