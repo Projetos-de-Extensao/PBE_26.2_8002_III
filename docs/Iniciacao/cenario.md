@@ -7,7 +7,7 @@ title: Cenário do Projeto - Backend GAAP
 
 ## 1. Contexto e Desafio
 
-Uma escola de treinamento esportivo precisa organizar alunos, profissionais e sessões de **Treino**, **Fisioterapia**, **Psicologia** e **Nutrição**. Atualmente, a operação depende de controles dispersos e não possui uma fonte confiável para acompanhar vagas, presenças e relatórios de treino.
+Uma academia de treinamento esportivo precisa organizar alunos, profissionais e sessões de **Treino**, **Fisioterapia**, **Psicologia** e **Nutrição**. Atualmente, a operação depende de controles dispersos e não possui uma fonte confiável para acompanhar vagas, presenças e relatórios de treino.
 
 A equipe deverá projetar e entregar, em quatro meses, o backend de um recorte inicial do **GAAP (Gestão de Atletas de Alta Performance)**. A proposta parte da análise do ambiente *PKZ & One to One*, mas o produto acadêmico não deve tentar reproduzir todos os módulos clínicos, financeiros, de BI ou mobile observados. O foco é entregar um **sistema back-end funcional, testado e documentado** para sustentar a operação de agenda e treino.
 

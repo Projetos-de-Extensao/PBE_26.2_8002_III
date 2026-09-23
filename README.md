@@ -7,7 +7,7 @@
 
 ## Sobre o Projeto
 
-O **GAAP (Gestão de Atletas de Alta Performance)** é uma solução de back-end desenvolvida em Python e Django para centralizar e orquestrar a operação de escolas e centros de treinamento esportivo. O sistema gerencia horários, profissionais, alunos e espaços físicos para quatro modalidades integradas:
+O **GAAP (Gestão de Atletas de Alta Performance)** é uma solução de back-end desenvolvida em Python e Django para centralizar e orquestrar a operação de academias e centros de treinamento esportivo. O sistema gerencia horários, profissionais, alunos e espaços físicos para quatro modalidades integradas:
 
 * **Treino** (Físico e Técnico)
 * **Fisioterapia**

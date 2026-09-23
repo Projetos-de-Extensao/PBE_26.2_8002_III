@@ -27,7 +27,7 @@ O GAAP tem como objetivo centralizar e orquestrar a operação de agendamentos d
 | **Treinador** | Profissional de educação física / técnico. | Consulta da grade de treinos, controle de presença e elaboração de relatórios técnicos de treino. |
 | **Profissional de Saúde** | Fisioterapeuta, Nutricionista e Psicólogo. | Gestão de atendimentos especializados e registro de evolução clínica/técnica. |
 | **Aluno / Atleta** | Praticante atendido pelo centro esportivo. | Consulta de disponibilidade, agendamento de sessões e acompanhamento de presença. |
-| **Escola Esportiva** | Organização mantenedora. | Maximização do uso dos espaços com segurança e excelência no acompanhamento dos atletas. |
+| **Academia Esportiva** | Organização mantenedora. | Maximização do uso dos espaços com segurança e excelência no acompanhamento dos atletas. |
 | **Equipe de Desenvolvimento** | Grupo 3 da disciplina PBE (Ibmec). | Entrega do sistema back-end funcional, testada e documentada com base no RUP/UP. |
 
 ---

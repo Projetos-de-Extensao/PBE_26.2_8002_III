@@ -55,7 +55,7 @@ left side
 ## Conclusão
 
 <p align="justify">
-Os diagramas oferecem uma visão sintetizada e estruturada do Backend GAAP, alinhando as necessidades de negócio da escola de treinamento esportivo às diretrizes técnicas de modelagem da disciplina.
+Os diagramas oferecem uma visão sintetizada e estruturada do Backend GAAP, alinhando as necessidades de negócio da academia de treinamento esportivo às diretrizes técnicas de modelagem da disciplina.
 </p>
 
 ## Referências

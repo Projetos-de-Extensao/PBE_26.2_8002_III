@@ -18,7 +18,7 @@ title: Pesquisa
 ### 2.1. Contexto do Projeto
 
 <p align="justify">
-Escolas e centros de treinamento esportivo de alta performance lidam diariamente com a alocação de atletas em múltiplas modalidades esportivas e serviços de saúde integrados (Treino Físico/Técnico, Fisioterapia, Nutrição e Psicologia Esportiva). A carência de um sistema integrado gera conflitos de horários de profissionais, superlotação de salas e perda de histórico de presenças e relatórios de evolução.
+Academias e centros de treinamento esportivo de alta performance lidam diariamente com a alocação de atletas em múltiplas modalidades esportivas e serviços de saúde integrados (Treino Físico/Técnico, Fisioterapia, Nutrição e Psicologia Esportiva). A carência de um sistema integrado gera conflitos de horários de profissionais, superlotação de salas e perda de histórico de presenças e relatórios de evolução.
 </p>
 
 ### 2.2. Objetivo do Projeto

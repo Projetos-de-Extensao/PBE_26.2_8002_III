@@ -16,7 +16,7 @@ title: Design Thinking
 
 ### **2. Introdução**
 
-- **Contexto do Projeto**: Escolas e centros de treinamento esportivo necessitam de uma solução integrada para orquestrar horários de treinos físicos/técnicos e atendimentos multidisciplinares de saúde (Fisioterapia, Psicologia e Nutrição).
+- **Contexto do Projeto**: Academias e centros de treinamento esportivo necessitam de uma solução integrada para orquestrar horários de treinos físicos/técnicos e atendimentos multidisciplinares de saúde (Fisioterapia, Psicologia e Nutrição).
 - **Objetivo**: Desenvolver o sistema back-end para sustentar a operação de agendamentos, validação de disponibilidade de espaços e profissionais, controle de presença e relatórios de treino.
 - **Público-Alvo**: Gestores/Administradores do centro, Treinadores esportivos, Profissionais de Saúde e Atletas/Alunos.
 - **Escopo**: Foco no sistema back-end em Django, autenticação por perfil, regras de consistência de agenda e registro de atividades pós-sessão.
