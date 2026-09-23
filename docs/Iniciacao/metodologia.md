@@ -50,5 +50,5 @@ O fluxo de trabalho da equipe é gerenciado por meio de um quadro Kanban com as 
 
 | Data | Versão | Descrição | Autor(es) |
 | :--- | :---: | :--- | :--- |
-| 2026.2 | 1.0 | Criação inicial da metodologia | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
-| 2026.2 | 2.0 | Alinhamento com as diretrizes do RUP/UP e do projeto GAAP | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 1.0 | Criação inicial da metodologia | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.0 | Alinhamento com as diretrizes do RUP/UP e do projeto GAAP | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |

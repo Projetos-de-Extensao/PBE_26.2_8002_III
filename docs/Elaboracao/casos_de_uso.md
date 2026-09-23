@@ -178,4 +178,4 @@ Os casos de uso cobrem a totalidade dos fluxos operacionais previstos no MVP do 
 | Data | Versão | Descrição | Autor(es) |
 | :--- | :---: | :--- | :--- |
 | 2026.2 | 1.0 | Criação inicial | Pedro Henrique Becker |
-| 2026.2 | 2.0 | Reestruturação completa dos Casos de Uso com base no cenário GAAP | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.0 | Reestruturação completa dos Casos de Uso com base no cenário GAAP | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |

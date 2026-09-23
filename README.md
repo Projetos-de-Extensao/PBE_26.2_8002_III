@@ -1,7 +1,7 @@
 # GAAP — Gestão de Atletas de Alta Performance
 
 **Disciplina**: Projeto Back-End (IBM8936) — Ibmec 2026.2  
-**Equipe**: Grupo 3 (Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf)
+**Equipe**: Grupo 3 (Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf)
 
 ---
 

@@ -7,7 +7,7 @@ title: Iteração 6
 
 ## Planejamento da Iteração
 
-#### Participantes: Arthur Calebe, Antonio Reuter, Pedro Henrique Becker, Breno Huf
+#### Participantes: Arthur Calebe, Antonio Reuther, Pedro Henrique Becker, Breno Huf
 
 ### Tarefas da Iteração
 
@@ -16,7 +16,7 @@ title: Iteração 6
 | Alinhamento do escopo do Backend GAAP com a especificação oficial | Todos | Concluído |
 | Elicitação de requisitos e modelagem 5W2H / Brainstorm | Arthur Calebe | Concluído |
 | Elaboração do Documento de Requisitos e Regras de Negócio | Pedro Henrique Becker | Concluído |
-| Modelagem dos Diagramas de Classes e Diagramas de Sequência | Antonio Reuter | Concluído |
+| Modelagem dos Diagramas de Classes e Diagramas de Sequência | Antonio Reuther | Concluído |
 | Prototipação de baixa fidelidade e arquitetura de telas | Breno Huf | Concluído |
 | Configuração do repositório, branches e MkDocs | Todos | Concluído |
 
@@ -36,4 +36,4 @@ title: Iteração 6
 
 | Data | Versão | Descrição | Autor(es) |
 | :--- | :---: | :--- | :--- |
-| 2026.2 | 1.0 | Registro da ata de iteração | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 1.0 | Registro da ata de iteração | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |

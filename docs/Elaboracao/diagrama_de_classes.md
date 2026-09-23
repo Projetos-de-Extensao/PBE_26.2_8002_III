@@ -181,5 +181,5 @@ Agendamento "1" -- "0..1" RelatorioTreino : gera >
 | Data | Versão | Descrição | Autor(es) |
 | :--- | :---: | :--- | :--- |
 | 2026.2 | 1.0 | Versão inicial | Grupo 3 |
-| 2026.2 | 2.0 | Reestruturação completa da modelagem OO para o Backend GAAP | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
-| 2026.2 | 2.1 | Inclusão de Fontes de Entrada e Matriz de Rastreabilidade conforme modelo oficial | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.0 | Reestruturação completa da modelagem OO para o Backend GAAP | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.1 | Inclusão de Fontes de Entrada e Matriz de Rastreabilidade conforme modelo oficial | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |

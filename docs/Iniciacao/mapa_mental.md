@@ -67,5 +67,5 @@ Os diagramas oferecem uma visão sintetizada e estruturada do Backend GAAP, alin
 
 | Data | Versão | Descrição | Autor(es) |
 | :--- | :---: | :--- | :--- |
-| 2026.2 | 1.0 | Criação dos mapas mentais | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
-| 2026.2 | 2.0 | Atualização para o modelo oficial do GAAP e serviços multidisciplinares | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 1.0 | Criação dos mapas mentais | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.0 | Atualização para o modelo oficial do GAAP e serviços multidisciplinares | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |

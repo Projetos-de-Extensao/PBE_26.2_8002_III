@@ -134,4 +134,4 @@ A especificação dos requisitos do Backend GAAP estrutura o escopo exato do MVP
 | Data | Versão | Descrição | Autor(es) |
 | :--- | :---: | :--- | :--- |
 | 2026.2 | 1.0 | Versão inicial | Pedro Henrique Becker |
-| 2026.2 | 2.0 | Reestruturação completa dos requisitos e regras para o Backend GAAP | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.0 | Reestruturação completa dos requisitos e regras para o Backend GAAP | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |

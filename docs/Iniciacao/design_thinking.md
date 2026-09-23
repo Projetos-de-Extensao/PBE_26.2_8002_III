@@ -8,7 +8,7 @@ title: Design Thinking
 ### **1. Capa**
 
 - **Título do Projeto**: Sistema GAAP — Gestão de Atletas de Alta Performance
-- **Nome da Equipe**: Grupo 3 (Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf)
+- **Nome da Equipe**: Grupo 3 (Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf)
 - **Data**: 2026.2
 - **Organização**: Ibmec — Disciplina de Projeto Back-End
 
@@ -85,6 +85,6 @@ title: Design Thinking
 
 | Data | Versão | Descrição | Autor(es) |
 | :--- | :---: | :--- | :--- |
-| 2026.2 | 1.0 | Criação inicial do documento | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
-| 2026.2 | 2.0 | Ajuste de personas, problemas e ideação para o escopo GAAP | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
-| 2026.2 | 2.1 | Complementação de Insights, Personas, POV, Ideação e Teste conforme modelo oficial | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 1.0 | Criação inicial do documento | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.0 | Ajuste de personas, problemas e ideação para o escopo GAAP | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.1 | Complementação de Insights, Personas, POV, Ideação e Teste conforme modelo oficial | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |

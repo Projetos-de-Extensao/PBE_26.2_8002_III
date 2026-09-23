@@ -23,7 +23,7 @@ O Diagrama de Sequência é uma representação visual que demonstra a colabora�
 * **ID do Caso de Uso**: UC-06
 * **Ator(es)**: Aluno / Responsável, Administrador
 * **Prioridade**: Alta (Must)
-* **Responsável**: Arthur Calebe e Antonio Reuter
+* **Responsável**: Arthur Calebe e Antonio Reuther
 * **Data**: 2026.2
 
 ### 2. Referências
@@ -266,6 +266,6 @@ deactivate View
 | Data | Versão | Descrição | Autor(es) |
 | :--- | :---: | :--- | :--- |
 | 2026.2 | 1.0 | Versão inicial | Grupo 3 |
-| 2026.2 | 2.0 | Elaboração dos diagramas oficiais do Backend GAAP | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
-| 2026.2 | 2.1 | Preenchimento completo das fichas técnicas e tabelas de fluxo | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
-| 2026.2 | 2.2 | Alinhamento da notação para o padrão Boundary-Control-Entity do modelo da disciplina | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.0 | Elaboração dos diagramas oficiais do Backend GAAP | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.1 | Preenchimento completo das fichas técnicas e tabelas de fluxo | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.2 | Alinhamento da notação para o padrão Boundary-Control-Entity do modelo da disciplina | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |

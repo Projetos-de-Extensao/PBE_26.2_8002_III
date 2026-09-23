@@ -101,4 +101,4 @@ O protótipo de baixa fidelidade consolida o fluxo das operações fundamentais 
 | Data | Versão | Descrição | Autor(es) |
 | :--- | :---: | :--- | :--- |
 | 2026.2 | 1.0 | Versão inicial | Breno Huf |
-| 2026.2 | 2.0 | Atualização para os fluxos reais do Backend GAAP (Admin, Treinador, Saúde e Aluno) | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.0 | Atualização para os fluxos reais do Backend GAAP (Admin, Treinador, Saúde e Aluno) | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |

@@ -72,5 +72,5 @@ A concepção do sistema GAAP observa as seguintes diretrizes legais e normativa
 | Data | Versão | Descrição | Autor(es) |
 | :--- | :---: | :--- | :--- |
 | 2026.2 | 1.0 | Versão inicial da pesquisa de mercado | Arthur Calebe |
-| 2026.2 | 2.0 | Alinhamento da pesquisa ao cenário do sistema GAAP | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
-| 2026.2 | 2.1 | Inclusão de Objetivo, Público-Alvo e Levantamento de Legislação conforme modelo oficial | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.0 | Alinhamento da pesquisa ao cenário do sistema GAAP | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.1 | Inclusão de Objetivo, Público-Alvo e Levantamento de Legislação conforme modelo oficial | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |

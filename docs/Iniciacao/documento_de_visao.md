@@ -65,5 +65,5 @@ O propósito deste documento é fornecer uma visão abrangente sobre o desenvolv
 
 | Data | Versão | Descrição | Autor(es) |
 | :--- | :---: | :--- | :--- |
-| 2026.2 | 1.0 | Criação inicial | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
-| 2026.2 | 2.0 | Reestruturação completa do documento de visão para o Backend GAAP | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 1.0 | Criação inicial | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.0 | Reestruturação completa do documento de visão para o Backend GAAP | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
