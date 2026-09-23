@@ -8,21 +8,24 @@ title: Protótipo de Baixa Fidelidade
 ## Introdução
 
 <p align="justify">
-Este documento apresenta o protótipo conceitual de baixa fidelidade do sistema GAAP (Gestão de Atletas de Alta Performance). O protótipo utiliza <b>PlantUML</b> para representar os fluxos essenciais de navegação, campos e ações disponíveis para Administradores, Treinadores/Profissionais de Saúde e Alunos/Responsáveis, cobrindo os quatro serviços centrais: <b>Treino</b>, <b>Fisioterapia</b>, <b>Psicologia</b> e <b>Nutrição</b>.
+A construção do protótipo de baixa fidelidade auxilia a equipe de desenvolvimento a detalhar os requisitos, validar os fluxos operacionais e mapear os componentes visuais essenciais do sistema GAAP (Gestão de Atletas de Alta Performance). Com o protótipo, estabelece-se a interface entre os atores e o sistema para os serviços de <b>Treino</b>, <b>Fisioterapia</b>, <b>Psicologia</b> e <b>Nutrição</b>.
+</p>
+
+## Metodologia
+
+<p align="justify">
+A equipe utilizou a linguagem de modelagem de interfaces <b>PlantUML Salt</b> para construir wireframes conceituais de baixa fidelidade, representando campos de entrada, listas de seleção, botões de ação e painéis de controle para os fluxos centrais da aplicação.
 </p>
 
 ---
 
-## 1. Escopo das Telas Prototipadas
+## Telas do Sistema
 
-* **Autenticação**: Login e recuperação de acesso.
-* **Painel do Administrador**: Gestão de Alunos, Profissionais, Serviços, Salas e Bloqueios.
-* **Painel do Treinador / Profissional de Saúde**: Agenda do dia, registro de presença/falta e elaboração de relatório de treino/atendimento.
-* **Painel do Aluno / Responsável**: Consulta de horários, solicitação de agendamento e visualização do histórico.
+### 1. Tela de Login
 
----
-
-## 2. Diagrama de Telas e Navegação em PlantUML
+<p align="justify">
+Permite a autenticação segura de Administradores, Treinadores, Profissionais de Saúde e Alunos/Responsáveis, direcionando cada usuário para o painel correspondente ao seu perfil de acesso (RBAC).
+</p>
 
 ```plantuml
 @startsalt
@@ -40,6 +43,14 @@ Este documento apresenta o protótipo conceitual de baixa fidelidade do sistema 
 @endsalt
 ```
 
+---
+
+### 2. Painel Administrativo
+
+<p align="justify">
+Painel central do Administrador para acesso rápido aos cadastros de base, gestão de alunos e profissionais, configuração de salas e serviços e controle da grade de horários e bloqueios operacionais (RF-03 a RF-10).
+</p>
+
 ```plantuml
 @startsalt
 {+
@@ -52,6 +63,14 @@ Este documento apresenta o protótipo conceitual de baixa fidelidade do sistema 
 }
 @endsalt
 ```
+
+---
+
+### 3. Tela de Novo Agendamento
+
+<p align="justify">
+Interface para agendamento de sessões com exibição do <b>Status de Disponibilidade em tempo real</b>, refletindo a validação simultânea de horários livres, lotação da sala e ausência de bloqueios administrativos (RN-01, RN-02, RN-03 e UC-06).
+</p>
 
 ```plantuml
 @startsalt
@@ -76,6 +95,14 @@ Este documento apresenta o protótipo conceitual de baixa fidelidade do sistema 
 @endsalt
 ```
 
+---
+
+### 4. Agenda do Dia
+
+<p align="justify">
+Visão operacional diária para Treinadores e Profissionais de Saúde (Fisioterapia, Psicologia e Nutrição), permitindo consultar as sessões atribuídas e acionar o registro de presença ou fechamento de relatórios.
+</p>
+
 ```plantuml
 @startsalt
 {+
@@ -92,24 +119,33 @@ Este documento apresenta o protótipo conceitual de baixa fidelidade do sistema 
 @endsalt
 ```
 
+---
+
+### 5. Finalizar Relatório de Treino / Atendimento
+
+<p align="justify">
+Tela de finalização de sessão onde o profissional responsável registra a confirmação de presença do atleta e redige o relatório técnico de atividades e observações clínicas (UC-10, RF-17, RF-18, RN-05 e RN-06).
+</p>
+
 ```plantuml
 @startsalt
 {+
-  <b>RELATÓRIO DE SESSÃO
+  <b>FINALIZAR RELATÓRIO DE SESSÃO
   ==
+  Aluno: Lucas Lima | Serviço: Fisioterapia (Consultório 2)
+  Horário: 10:30 - 11:30 | Data: DD/MM/AAAA
+  --
   Presença: | (X) Presente | () Ausente
   ==
   Atividades Realizadas:
   {S
-    "                                      "
-    "                                      "
-    "                                      "
+    "Exercícios de mobilidade articular e fortalecimento...        "
+    "                                                              "
   }
   Observações Técnicas / Recomendações:
   {S
-    "                                      "
-    "                                      "
-    "                                      "
+    "Evolução satisfatória do quadro clínico sem queixas de dor.  "
+    "                                                              "
   }
   ==
   [ SALVAR E FINALIZAR ] | [ CANCELAR ]
@@ -119,15 +155,20 @@ Este documento apresenta o protótipo conceitual de baixa fidelidade do sistema 
 
 ---
 
-## 3. Conclusão
+## Conclusão
 
 <p align="justify">
-O protótipo de baixa fidelidade consolida o fluxo das operações fundamentais do sistema GAAP, garantindo aderência aos casos de uso prioritários de agendamento, validação de capacidade e registro operacional.
+Os protótipos de baixa fidelidade elaborados em PlantUML Salt consolidam visualmente a arquitetura de informação do sistema GAAP. As telas garantem rastreabilidade direta com os Casos de Uso prioritários (UC-06 e UC-10), com os Requisitos Funcionais e com os Diagramas de Sequência da fase de Elaboração.
 </p>
+
+## Referências
+
+> PlantUML Salt (Graphical Interface). Disponível em: <https://plantuml.com/salt>.  
+> BARBOSA, S. D. J.; SILVA, B. S. *Interação Humano-Computador*. Elsevier, 2010.
 
 ## Autor(es)
 
 | Data | Versão | Descrição | Autor(es) |
-| :--- | :---: | :--- | :--- |
-| 2026.2 | 1.0 | Versão inicial | Breno Huf |
-| 2026.2 | 2.0 | Atualização para os fluxos reais do Backend GAAP (Admin, Treinador, Saúde e Aluno) | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
+| :---: | :---: | :--- | :--- |
+| 2026.2 | 1.0 | Criação inicial do protótipo | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.0 | Implementação dos wireframes em PlantUML Salt com as 4 telas centrais e tela de relatório | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
