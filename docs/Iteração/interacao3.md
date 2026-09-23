@@ -1,54 +1,39 @@
 ---
-id: iteração3
+id: iteracao3
 title: Iteração 3
 ---
-# Iteração 3 (12/09/24 à 25/09/2024)
 
-## Planejamento de Iteração
+# Iteração 3 — Projeto Backend GAAP
 
-#### Presentes na reunião: XXXXX
+## Planejamento da Iteração
 
-### Lista de Tarefas da Iteração
+#### Participantes: Arthur Calebe, Antonio Reuter, Pedro Henrique Becker, Breno Huf
 
-| Tarefa                                                                                       | Responsabilidade |
-| -------------------------------------------------------------------------------------------- | ---------------- |
-| Decidir o nome o projeto.                                                                    | Todos            |
-| Criar o repositório nos padrões (Organizar wiki).                                          | Matheus          |
-| Criar issues no GitHub / ZenHub                                                              | Renan            |
-| Configuração do grupo do Telegram(configurar bot).                                         | Moacir           |
-| Estudar e escolher as metodologias.                                                          | Todos            |
-| [Documento de visão](#)                                            | XXX e XXXXX      |
-| Elaborar[5w2H](#)                                                   | XXX e XXXXX      |
-| [Mapas Mentais](#)                                                  | XXX e XXXXX      |
-| [Brainstorming](#) | Todos            |
-| [Entrevistas](#)                                                    | XXX e XXXXX      |
-| [Prototipação.](#)                                                | XXX e XXXXX      |
+### Tarefas da Iteração
 
-## Sprint Retrospective/Review Meeting
+| Tarefa | Responsável | Status |
+| :--- | :--- | :--- |
+| Alinhamento do escopo do Backend GAAP com a especificação oficial | Todos | Concluído |
+| Elicitação de requisitos e modelagem 5W2H / Brainstorm | Arthur Calebe | Concluído |
+| Elaboração do Documento de Requisitos e Regras de Negócio | Pedro Henrique Becker | Concluído |
+| Modelagem dos Diagramas de Classes e Diagramas de Sequência | Antonio Reuter | Concluído |
+| Prototipação de baixa fidelidade e arquitetura de telas | Breno Huf | Concluído |
+| Configuração do repositório, branches e MkDocs | Todos | Concluído |
 
-#### Presentes na reunião: XXXX
-
-### Dividas da Iteração
-
-### Riscos Encontrados
-
-- Nenhum: Plano de gerenciamento de riscos não implementado.
+## Retrospectiva da Iteração
 
 ### Pontos Positivos
+* Boa colaboração da equipe e divisão clara de responsabilidades entre as fases do RUP/UP.
+* Eliminação de inconsistências conceituais e foco no escopo real da API REST.
 
-![pontos positivos](../assets/Iterações/S1-positivos.png)
+### Pontos de Melhoria
+* Manter alinhamento contínuo com os critérios de aceite definidos pelo professor.
+* Seguir estritamente o fluxo de Pull Requests antes de integrar código à branch principal.
 
-### Pontos Negativos
+---
 
-![pontos negativos](../assets/Iterações/S1-negativos.png)
+## Autor(es)
 
-### O que podemos melhorar?
-
-- Ter mais foco na reuniões para evitar o desperdício de tempo.
-- A equipe deve ter mais autonomia em relação à falta de membros.
-- Podemos utilizar algo ferramenta de timebox para maior efetividade nas reuniões, sugestão: https://timebox.cedrotech.com/
-
-### Ferramentas utilizadas
-
-- Reunião: [Hangouts](https://hangouts.google.com/)
-- Colheita dos pontos: [Mentimeter](https://www.mentimeter.com/)
+| Data | Versão | Descrição | Autor(es) |
+| :--- | :---: | :--- | :--- |
+| 2026.2 | 1.0 | Registro da ata de iteração | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
