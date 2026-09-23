@@ -17,83 +17,93 @@ O brainstorm é uma técnica de elicitação de requisitos que consiste em reuni
 A equipe se reuniu para debater ideias gerais sobre o projeto via Microsoft Teams, começou às 14:00 e terminou às 15:30 do dia 15/08/2026, onde Arthur Calebe foi o moderador, direcionando a equipe com questões pré-elaboradas, e transcrevendo as respostas para o documento.
 </p>
 
----
-
 ## Brainstorm
 
-### Versão 1.0
+## Versão 1.0
 
-#### Perguntas
+## Perguntas
 
-1. Qual o objetivo principal da aplicação?
+### 1. Qual o objetivo principal da aplicação?
 
-Arthur Calebe - Deve ser um sistema back-end que centralize e orquestre a operação da academia, organizando a marcação de treinos e atendimentos multidisciplinares.
-
-Antonio Reuter - A plataforma deve fornecer uma base confiável para gerenciar horários, evitando sobreposição de agenda de profissionais e espaços físicos.
-
-Pedro Henrique Becker - O objetivo é integrar quatro áreas essenciais: Treino, Fisioterapia, Psicologia e Nutrição, garantindo que cada profissional atenda exclusivamente em sua especialidade.
-
-Breno Huf - A aplicação deve gerenciar o fluxo operacional pós-sessão, permitindo registro de presenças e relatórios técnicos de treino e atendimento.
-
----
-
-2. Como será o processo para cadastrar um novo cliente/aluno e os usuários do sistema?
-
-Arthur Calebe - O administrador deverá autenticar-se e cadastrar os perfis de acesso: Administrador, Treinador, Profissional de Saúde e Aluno.
-
-Antonio Reuter - Para os alunos, devem ser registrados dados de identificação, contato, data de nascimento e responsável quando aplicável.
-
-Pedro Henrique Becker - O profissional de saúde deve ter vinculada sua especialidade (Fisioterapia, Psicologia ou Nutrição) para que o sistema valide os agendamentos corretos.
-
-Breno Huf - O sistema deve controlar o acesso por perfil, garantindo que alunos só vejam suas próprias agendas e profissionais suas respectivas sessões.
+<p align="justify">
+<b>Arthur Calebe</b> - Deve ser um sistema back-end que centralize e orquestre a operação da academia, organizando a marcação de treinos e atendimentos multidisciplinares.
+<br><br>
+<b>Antonio Reuter</b> - A plataforma deve fornecer uma base confiável para gerenciar horários, evitando sobreposição de agenda de profissionais e espaços físicos.
+<br><br>
+<b>Pedro Henrique Becker</b> - O objetivo é integrar quatro áreas essenciais: Treino, Fisioterapia, Psicologia e Nutrição, garantindo que cada profissional atenda exclusivamente em sua especialidade.
+<br><br>
+<b>Breno Huf</b> - A aplicação deve gerenciar o fluxo operacional pós-sessão, permitindo registro de presenças e relatórios técnicos de treino e atendimento.
+</p>
 
 ---
 
-3. Como será a forma de gerenciar e agendar os serviços oferecidos (Treino, Fisioterapia, Psicologia e Nutrição)?
+### 2. Como será o processo para cadastrar um novo cliente/aluno e os usuários do sistema?
 
-Arthur Calebe - O administrador cadastra as salas físicas com suas respectivas capacidades máximas e os tipos de serviços disponíveis com suas durações padrão.
-
-Antonio Reuter - O agendamento deve vincular um aluno, um profissional habilitado, a sala correspondente e o horário desejado.
-
-Pedro Henrique Becker - Antes de confirmar o agendamento, o sistema deve validar atomicamente se não há bloqueio administrativo, se o profissional está livre e se a sala possui capacidade disponível.
-
-Breno Huf - O sistema deve permitir tanto agendamentos individuais (atendimentos clínicos) quanto agendamentos em grupo (treinos), respeitando o teto de lotação do espaço.
-
----
-
-4. Quais regras de negócio são essenciais para validar os agendamentos e evitar conflitos?
-
-Arthur Calebe - A regra primordial é impedir conflito de horários (*double-booking*): um profissional ou uma sala não podem ter duas sessões simultâneas.
-
-Antonio Reuter - Devemos respeitar a capacidade máxima de cada sala, impedindo reservas quando o limite de atletas for atingido.
-
-Pedro Henrique Becker - Deve haver um módulo de bloqueios de agenda para manutenções ou indisponibilidades de profissionais e espaços, sobrepondo novas marcações.
-
-Breno Huf - A restrição por especialidade: um treinador não pode ministrar fisioterapia, e um psicólogo não pode ser agendado para treino técnico.
+<p align="justify">
+<b>Arthur Calebe</b> - O administrador deverá autenticar-se e cadastrar os perfis de acesso: Administrador, Treinador, Profissional de Saúde e Aluno.
+<br><br>
+<b>Antonio Reuter</b> - Para os alunos, devem ser registrados dados de identificação, contato, data de nascimento e responsável quando aplicável.
+<br><br>
+<b>Pedro Henrique Becker</b> - O profissional de saúde deve ter vinculada sua especialidade (Fisioterapia, Psicologia ou Nutrição) para que o sistema valide os agendamentos corretos.
+<br><br>
+<b>Breno Huf</b> - O sistema deve controlar o acesso por perfil, garantindo que alunos só vejam suas próprias agendas e profissionais suas respectivas sessões.
+</p>
 
 ---
 
-5. Quais informações e operações seriam importantes para o acompanhamento pós-sessão?
+### 3. Como será a forma de gerenciar e agendar os serviços oferecidos (Treino, Fisioterapia, Psicologia e Nutrição)?
 
-Arthur Calebe - Após a aula ou consulta, o profissional responsável deve marcar a presença ou registrar a falta do aluno.
-
-Antonio Reuter - O treinador ou profissional de saúde deve elaborar um relatório técnico com os exercícios ministrados ou parecer do atendimento.
-
-Pedro Henrique Becker - Apenas o profissional vinculado àquela sessão ou o administrador pode registrar o relatório, assegurando a integridade técnica.
-
-Breno Huf - Uma vez finalizado o relatório, ele deve ser bloqueado para edição para fins de histórico e auditoria.
+<p align="justify">
+<b>Arthur Calebe</b> - O administrador cadastra as salas físicas com suas respectivas capacidades máximas e os tipos de serviços disponíveis com suas durações padrão.
+<br><br>
+<b>Antonio Reuter</b> - O agendamento deve vincular um aluno, um profissional habilitado, a sala correspondente e o horário desejado.
+<br><br>
+<b>Pedro Henrique Becker</b> - Antes de confirmar o agendamento, o sistema deve validar atomicamente se não há bloqueio administrativo, se o profissional está livre e se a sala possui capacidade disponível.
+<br><br>
+<b>Breno Huf</b> - O sistema deve permitir tanto agendamentos individuais (atendimentos clínicos) quanto agendamentos em grupo (treinos), respeitando o teto de lotação do espaço.
+</p>
 
 ---
 
-6. Quais informações seriam interessantes para os alunos e responsáveis acessarem?
+### 4. Quais regras de negócio são essenciais para validar os agendamentos e evitar conflitos?
 
-Arthur Calebe - Os alunos e responsáveis devem visualizar a grade de horários disponíveis para marcar suas sessões de treino ou consultas de saúde.
+<p align="justify">
+<b>Arthur Calebe</b> - A regra primordial é impedir conflito de horários (<i>double-booking</i>): um profissional ou uma sala não podem ter duas sessões simultâneas.
+<br><br>
+<b>Antonio Reuter</b> - Devemos respeitar a capacidade máxima de cada sala, impedindo reservas quando o limite de atletas for atingido.
+<br><br>
+<b>Pedro Henrique Becker</b> - Deve haver um módulo de bloqueios de agenda para manutenções ou indisponibilidades de profissionais e espaços, sobrepondo novas marcações.
+<br><br>
+<b>Breno Huf</b> - A restrição por especialidade: um treinador não pode ministrar fisioterapia, e um psicólogo não pode ser agendado para treino técnico.
+</p>
 
-Antonio Reuter - Eles devem conseguir consultar seu histórico de agendamentos confirmados, cancelados e realizados.
+---
 
-Pedro Henrique Becker - Devem ter visibilidade da confirmação de presença e do registro geral de evolução de seus treinos na academia.
+### 5. Quais informações e operações seriam importantes para o acompanhamento pós-sessão?
 
-Breno Huf - Devem ter a possibilidade de solicitar o cancelamento ou reagendamento com antecedência de acordo com as regras operacionais da academia.
+<p align="justify">
+<b>Arthur Calebe</b> - Após a aula ou consulta, o profissional responsável deve marcar a presença ou registrar a falta do aluno.
+<br><br>
+<b>Antonio Reuter</b> - O treinador ou profissional de saúde deve elaborar um relatório técnico com os exercícios ministrados ou parecer do atendimento.
+<br><br>
+<b>Pedro Henrique Becker</b> - Apenas o profissional vinculado àquela sessão ou o administrador pode registrar o relatório, assegurando a integridade técnica.
+<br><br>
+<b>Breno Huf</b> - Uma vez finalizado o relatório, ele deve ser bloqueado para edição para fins de histórico e auditoria.
+</p>
+
+---
+
+### 6. Quais informações seriam interessantes para os alunos e responsáveis acessarem?
+
+<p align="justify">
+<b>Arthur Calebe</b> - Os alunos e responsáveis devem visualizar a grade de horários disponíveis para marcar suas sessões de treino ou consultas de saúde.
+<br><br>
+<b>Antonio Reuter</b> - Eles devem conseguir consultar seu histórico de agendamentos confirmados, cancelados e realizados.
+<br><br>
+<b>Pedro Henrique Becker</b> - Devem ter visibilidade da confirmação de presença e do registro geral de evolução de seus treinos na academia.
+<br><br>
+<b>Breno Huf</b> - Devem ter a possibilidade de solicitar o cancelamento ou reagendamento com antecedência de acordo com as regras operacionais da academia.
+</p>
 
 ---
 
@@ -133,3 +143,4 @@ Através da aplicação da técnica, foi possível elicitar alguns dos primeiros
 | :---: | :---: | :--- | :--- |
 | 2026.2 | 1.0 | Criação inicial do Brainstorming | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
 | 2026.2 | 2.0 | Reformulação dos requisitos e adequação ao modelo oficial com respostas nominais | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.1 | Correção da numeração das perguntas e formatação dos subtítulos de debate | Arthur Calebe, Antonio Reuter, Pedro Henrique Becker e Breno Huf |
