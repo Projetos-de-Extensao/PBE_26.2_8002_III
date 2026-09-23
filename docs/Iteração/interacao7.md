@@ -17,12 +17,12 @@ title: Iteração 7
 | Criar issues no GitHub / ZenHub                                                              | Renan            |
 | Configuração do grupo do Telegram(configurar bot).                                         | Moacir           |
 | Estudar e escolher as metodologias.                                                          | Todos            |
-| [Documento de visão](https://github.com/xxx/xxx.md)                                            | XXX e XXXXX      |
-| Elaborar[5w2H](https://github.com/xxx/xxx.md)                                                   | XXX e XXXXX      |
-| [Mapas Mentais](https://github.com/xxx/xxx.md)                                                  | XXX e XXXXX      |
-| [Brainstorming](https://github.com/UnBArqDsw/2020.1_G7_TCM/blob/master/docs/base/Brainstorm.md) | Todos            |
-| [Entrevistas](https://github.com/xxx/xxx.md)                                                    | XXX e XXXXX      |
-| [Prototipação.](https://github.com/xxx/xxx.md)                                                | XXX e XXXXX      |
+| [Documento de visão](#)                                            | XXX e XXXXX      |
+| Elaborar[5w2H](#)                                                   | XXX e XXXXX      |
+| [Mapas Mentais](#)                                                  | XXX e XXXXX      |
+| [Brainstorming](#) | Todos            |
+| [Entrevistas](#)                                                    | XXX e XXXXX      |
+| [Prototipação.](#)                                                | XXX e XXXXX      |
 
 ## Sprint Retrospective/Review Meeting
 
