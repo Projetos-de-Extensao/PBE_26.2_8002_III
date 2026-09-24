@@ -27,16 +27,16 @@ title: Design Thinking
 
 #### **3.1. Empatia**
 
-- **Pesquisa**: Análise de processos operacionais em academias e clínicas esportivas, identificando as dores causadas pelo uso de planilhas e anotações descentralizadas.
+- **Pesquisa**: Levantamento do contexto de academias e centros de treinamento esportivo, complementado pelas discussões da equipe no brainstorm. A análise concentrou-se nos problemas de organização de horários, controle de vagas e registro das atividades realizadas.
 - **Insights**:
-  1. *Falta de Sincronia*: Agendamentos manuais geram choque de horário constante para profissionais e salas.
-  2. *Superlotação Invisível*: Salas de treino coletivo ultrapassam a capacidade segura por ausência de travas automáticas.
-  3. *Perda de Histórico*: Relatórios de evolução técnica e registros de presença ficam dispersos em cadernos ou mensagens instantâneas.
-- **Personas**:
-  * **Carlos Mendes (Gestor / Administrador, 42 anos)**: Precisa de uma visão unificada da grade horária, controle de capacidade das salas e facilidade para aplicar bloqueios de manutenção sem desorganizar as turmas.
-  * **Roberto Lima (Treinador de Alta Performance, 34 anos)**: Precisa consultar sua agenda diária pelo sistema de forma rápida e registrar presenças e relatórios técnicos logo após cada sessão.
-  * **Dra. Mariana Souza (Fisioterapeuta Esportiva, 29 anos)**: Necessita que seus atendimentos clínicos sejam restritos ao seu consultório e horário, com sigilo sobre os relatórios emitidos.
-  * **Lucas Fonseca (Atleta de Natação, 19 anos)**: Busca consultar seus treinos marcados com facilidade e ter a garantia de que sua vaga na sala de preparação física está reservada.
+  1. *Conflitos de agenda*: A falta de centralização pode fazer com que um profissional ou espaço seja agendado para sessões no mesmo horário.
+  2. *Controle de capacidade*: Treinos em grupo precisam respeitar o limite de pessoas definido para cada sala.
+  3. *Perda de informações*: Presenças e relatórios de sessões precisam ficar registrados para consulta posterior.
+- **Perfis envolvidos**:
+  * **Administrador**: Cadastra alunos, profissionais, serviços e salas, além de controlar bloqueios e a organização da agenda.
+  * **Treinador**: Consulta seus treinos, registra presença ou falta e preenche o relatório da sessão.
+  * **Profissional de Saúde**: Consulta seus atendimentos e registra as informações relacionadas à sua especialidade.
+  * **Aluno ou Responsável**: Consulta horários disponíveis, solicita agendamentos e acompanha o histórico de sessões.
 
 #### **3.2. Definição**
 
@@ -48,16 +48,17 @@ title: Design Thinking
 
 #### **3.3. Ideação**
 
-- **Brainstorming**:
-  * Validação atômica de horários para evitar sobreposição (*double-booking*).
-  * Limitação de agendamentos com base na capacidade máxima cadastrada para a sala.
-  * Diferenciação de serviços por especialidade técnica (*Treino, Fisio, Psico, Nutrição*).
-  * Registro simplificado de presença (presente/falta) acoplado à emissão do relatório de treino.
-- **Seleção de Ideias**: Critérios baseados na viabilidade técnica para um MVP em 4 meses no Django e no impacto direto na redução de erros operacionais.
-- **Ideias Selecionadas**:
-  1. *Motor de Validação de Agenda*: Regra central que bloqueia conflito de profissional, sala e indisponibilidade administrativa.
-  2. *Controle de Lotação por Espaço*: Verificação de vagas remanescentes antes de confirmar qualquer reserva.
-  3. *Workflow de Finalização de Treino*: Endpoint que atualiza o status para "REALIZADO", marca presença e anexa o relatório técnico imutável.
+- **Ideias discutidas**:
+  * Centralizar os agendamentos de treinos e atendimentos em uma única agenda.
+  * Conferir a disponibilidade do aluno, do profissional e da sala antes de confirmar uma sessão.
+  * Respeitar a capacidade máxima dos espaços nos agendamentos em grupo.
+  * Relacionar cada serviço à especialidade do profissional responsável.
+  * Registrar presença ou falta e o relatório da sessão após o atendimento.
+- **Seleção de ideias**: As ideias foram escolhidas por sua relação direta com os problemas identificados.
+- **Ideias selecionadas**:
+  1. **Validação de agendamentos**: impedir conflitos de horário e considerar bloqueios de profissionais e espaços.
+  2. **Controle de capacidade**: impedir novos agendamentos quando a sala atingir o limite definido.
+  3. **Registro pós-sessão**: permitir o registro de presença ou falta e do relatório técnico correspondente.
 
 #### **3.4. Prototipagem**
 
@@ -75,7 +76,7 @@ title: Design Thinking
 
 ### **4. Conclusão**
 
-- **Resultados Obtidos**: Definição clara do escopo do MVP, validação das personas do centro esportivo, formalização dos critérios de aceitação e seleção das ideias centrais do Backend GAAP.
+- **Resultados Obtidos**: Definição clara do escopo do MVP, identificação dos perfis envolvidos, formalização dos critérios de aceitação e seleção das ideias centrais do Backend GAAP.
 - **Próximos Passos**: Refinamento da arquitetura na fase de Elaboração, modelagem do DER e início da implementação iterativa das migrações e rotas no Django (Construção).
 - **Aprendizados**: A agenda de alta performance exige validações simultâneas e atômicas de múltiplos recursos (aluno, profissional e espaço), tornando a consistência transacional o pilar mais crítico do backend.
 
@@ -88,3 +89,4 @@ title: Design Thinking
 | 2026.2 | 1.0 | Criação inicial do documento | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
 | 2026.2 | 2.0 | Ajuste de personas, problemas e ideação para o escopo GAAP | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
 | 2026.2 | 2.1 | Complementação de Insights, Personas, POV, Ideação e Teste conforme modelo oficial | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.2 | Revisão da empatia e ideação com base no brainstorm e nos perfis do projeto | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
