@@ -153,12 +153,143 @@ Tela de finalização de sessão onde o profissional responsável registra a con
 @endsalt
 ```
 
+### 6. Gestão de Alunos
+
+<p align="justify">
+Tela administrativa para consultar, cadastrar, editar e inativar alunos, mantendo os dados necessários para identificação, contato e agendamento (UC-02, RF-04).
+</p>
+
+```plantuml
+@startsalt
+{+
+  <b>GESTÃO DE ALUNOS
+  ==
+  Filtro: | "Nome ou e-mail                         " | [ BUSCAR ]
+  ==
+  {+
+    <b>Nome | E-mail | Telefone | Situação
+    --
+    Aluno cadastrado | aluno@exemplo.com | (00) 00000-0000 | Ativo
+    Outro aluno | outro@exemplo.com | (00) 00000-0000 | Ativo
+  }
+  ==
+  [ NOVO ALUNO ] | [ EDITAR ] | [ INATIVAR ]
+}
+@endsalt
+```
+
+### 7. Cadastro de Profissional
+
+<p align="justify">
+Tela para o Administrador cadastrar profissionais e associar cada um à sua especialidade, permitindo que o sistema valide a compatibilidade com o serviço agendado (UC-03, RF-05 e RN-04).
+</p>
+
+```plantuml
+@startsalt
+{+
+  <b>CADASTRO DE PROFISSIONAL
+  ==
+  {
+    Nome:        | "Nome completo                         "
+    E-mail:      | "profissional@exemplo.com              "
+    Telefone:    | "(00) 00000-0000                      "
+    Especialidade: | ^Treinador^ Fisioterapeuta ^Psicólogo^ Nutricionista^
+    Situação:    | (X) Ativo | () Inativo
+  }
+  ==
+  [ SALVAR ] | [ CANCELAR ]
+}
+@endsalt
+```
+
+### 8. Cadastro de Serviços e Salas
+
+<p align="justify">
+Tela administrativa para configurar os serviços oferecidos e os espaços físicos utilizados nos agendamentos, incluindo duração padrão e capacidade máxima (UC-04, RF-06 e RF-07).
+</p>
+
+```plantuml
+@startsalt
+{+
+  <b>SERVIÇOS E SALAS
+  ==
+  <b>Novo serviço
+  {
+    Serviço: | ^Treino^ Fisioterapia ^Psicologia^ Nutrição^
+    Duração padrão: | "60 minutos          "
+  }
+  [ ADICIONAR SERVIÇO ]
+  ==
+  <b>Nova sala ou espaço
+  {
+    Nome: | "Sala de preparação física       "
+    Capacidade máxima: | "10                 "
+  }
+  [ ADICIONAR ESPAÇO ]
+  ==
+  Serviços e espaços cadastrados: 4 serviços | 3 espaços
+}
+@endsalt
+```
+
+### 9. Bloqueio de Agenda
+
+<p align="justify">
+Tela para registrar a indisponibilidade temporária de um profissional ou espaço por manutenção, evento ou outro motivo administrativo (UC-05, RF-08 e RN-03).
+</p>
+
+```plantuml
+@startsalt
+{+
+  <b>NOVO BLOQUEIO DE AGENDA
+  ==
+  {
+    Tipo de recurso: | (X) Profissional | () Espaço
+    Recurso:         | ^SELECIONAR^ 
+    Início:          | "DD/MM/AAAA - HH:MM"
+    Fim:             | "DD/MM/AAAA - HH:MM"
+    Justificativa:   | "Manutenção ou indisponibilidade       "
+  }
+  ==
+  <b>ATENÇÃO: novas reservas serão impedidas durante o período informado.
+  ==
+  [ REGISTRAR BLOQUEIO ] | [ CANCELAR ]
+}
+@endsalt
+```
+
+### 10. Minhas Sessões e Histórico
+
+<p align="justify">
+Tela destinada ao Aluno ou Responsável para consultar sessões futuras e anteriores, visualizar o status dos agendamentos e solicitar cancelamento ou reagendamento (UC-07 e UC-08, RF-09, RF-10 e RF-16).
+</p>
+
+```plantuml
+@startsalt
+{+
+  <b>MINHAS SESSÕES
+  ==
+  Período: | "DD/MM/AAAA" | até | "DD/MM/AAAA" | [ FILTRAR ]
+  Serviço: | ^Todos^ Treino Fisioterapia Psicologia Nutrição^
+  ==
+  {+
+    <b>Data/Hora | Serviço | Profissional | Sala | Status
+    --
+    DD/MM - 09:00 | Treino | Profissional | Sala 1 | Confirmado
+    DD/MM - 10:30 | Fisioterapia | Profissional | Consultório 2 | Realizado
+  }
+  ==
+  [ CANCELAR SESSÃO ] | [ REAGENDAR SESSÃO ] | [ VER DETALHES ]
+}
+@endsalt
+```
+
 ---
 
 ## Conclusão
 
 <p align="justify">
-Os protótipos de baixa fidelidade elaborados em PlantUML Salt consolidam visualmente a arquitetura de informação do sistema GAAP. As telas garantem rastreabilidade direta com os Casos de Uso prioritários (UC-06 e UC-10), com os Requisitos Funcionais e com os Diagramas de Sequência da fase de Elaboração.
+Os protótipos de baixa fidelidade elaborados em PlantUML Salt consolidam visualmente a arquitetura de informação do sistema GAAP. As telas cobrem os fluxos de autenticação, cadastros, bloqueios, agendamento, consulta de sessões e registro pós-sessão, mantendo rastreabilidade com os Casos de Uso UC-01 a UC-10 e os Requisitos Funcionais da fase de Elaboração.
 </p>
 
 ## Referências
@@ -172,3 +303,4 @@ Os protótipos de baixa fidelidade elaborados em PlantUML Salt consolidam visual
 | :---: | :---: | :--- | :--- |
 | 2026.2 | 1.0 | Criação inicial do protótipo | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
 | 2026.2 | 2.0 | Implementação dos wireframes em PlantUML Salt com as 4 telas centrais e tela de relatório | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 3.0 | Inclusão de telas de cadastros, bloqueios e consulta de sessões | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
