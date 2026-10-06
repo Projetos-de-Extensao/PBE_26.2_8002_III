@@ -286,10 +286,44 @@ Tela destinada ao Aluno ou Responsável para consultar sessões futuras e anteri
 
 ---
 
+### 11. Painel Financeiro
+
+<p align="justify">
+Tela para que o Administrador acompanhe as receitas e despesas do sistema GAAP em um período selecionado. Apresenta o saldo consolidado e detalha a origem das receitas e o local/categoria de cada gasto, facilitando a conferência e a prestação de contas.
+</p>
+
+```plantuml
+@startsalt
+{+
+  <b>PAINEL FINANCEIRO
+  ==
+  Período: | ^Este mês^ Mês anterior ^Este ano^ Personalizado^ | [ FILTRAR ]
+  ==
+  Receitas: R$ 18.500,00 | Despesas: R$ 7.240,00 | Saldo: R$ 11.260,00
+  ==
+  <b>LANÇAMENTOS FINANCEIROS
+  Tipo: | ^Todos^ Receitas Despesas^ | Categoria/Local: | "Todas as categorias e locais                 " | [ BUSCAR ]
+  {+
+    <b>Data | Tipo | Descrição | Categoria | Local | Valor
+    --
+    05/10/2026 | Receita | Mensalidades dos alunos | Mensalidades | Unidade Centro | R$ 12.000,00
+    08/10/2026 | Receita | Sessões avulsas | Serviços | Unidade Centro | R$ 6.500,00
+    10/10/2026 | Despesa | Pagamento do aluguel | Aluguel | Unidade Centro | R$ 4.000,00
+    12/10/2026 | Despesa | Compra de equipamentos | Equipamentos | Sala de Treino | R$ 2.100,00
+    14/10/2026 | Despesa | Materiais de atendimento | Materiais | Fisioterapia | R$ 1.140,00
+  }
+  ==
+  [ NOVA RECEITA ] | [ NOVA DESPESA ] | [ EXPORTAR RELATÓRIO ]
+}
+@endsalt
+```
+
+---
+
 ## Conclusão
 
 <p align="justify">
-Os protótipos de baixa fidelidade elaborados em PlantUML Salt consolidam visualmente a arquitetura de informação do sistema GAAP. As telas cobrem os fluxos de autenticação, cadastros, bloqueios, agendamento, consulta de sessões e registro pós-sessão, mantendo rastreabilidade com os Casos de Uso UC-01 a UC-10 e os Requisitos Funcionais da fase de Elaboração.
+Os protótipos de baixa fidelidade elaborados em PlantUML Salt consolidam visualmente a arquitetura de informação do sistema GAAP. As telas cobrem os fluxos de autenticação, cadastros, bloqueios, agendamento, consulta de sessões, registro pós-sessão e acompanhamento financeiro, mantendo rastreabilidade com os Casos de Uso UC-01 a UC-10 e os Requisitos Funcionais da fase de Elaboração.
 </p>
 
 ## Referências
