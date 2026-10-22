@@ -1,10 +1,52 @@
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 from django.test import TestCase
 
-from .models import Aluno, Profissional, TipoPerfil, TipoServico
+from .models import (
+    Agendamento,
+    Aluno,
+    Espaco,
+    Profissional,
+    Servico,
+    StatusAgendamento,
+    TipoPerfil,
+    TipoServico,
+)
+
+
+class AgendamentoModelTest(TestCase):
+    def test_agendamento_persiste_relacionamentos_com_servico_espaco_e_profissional(self):
+        servico = Servico.objects.create(
+            nome=TipoServico.TREINO,
+            duracao_minutos=60,
+        )
+        espaco = Espaco.objects.create(
+            nome="Sala 1",
+            capacidade_maxima=10,
+            localizacao="Bloco A",
+        )
+        profissional = Profissional.objects.create(
+            nome="Carlos",
+            email="carlos.agendamento@gaap.com",
+            registro_profissional="CREF-AG-001",
+            especialidade=TipoServico.TREINO,
+        )
+        inicio = datetime(2026, 10, 22, 10, tzinfo=timezone.utc)
+        agendamento = Agendamento.objects.create(
+            data_hora_inicio=inicio,
+            data_hora_fim=inicio + timedelta(hours=1),
+            servico=servico,
+            espaco=espaco,
+            profissional=profissional,
+        )
+
+        agendamento.refresh_from_db()
+        self.assertEqual(agendamento.servico, servico)
+        self.assertEqual(agendamento.espaco, espaco)
+        self.assertEqual(agendamento.profissional, profissional)
+        self.assertEqual(agendamento.status, StatusAgendamento.AGENDADO)
 
 
 class ProfissionalModelTest(TestCase):

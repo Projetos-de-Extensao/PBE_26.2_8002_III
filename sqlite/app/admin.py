@@ -1,9 +1,10 @@
 from django.contrib import admin
-from .models import Aluno, Espaco, Produto, Profissional, Servico
+from .models import Agendamento, Aluno, Espaco, Produto, Profissional, Servico
 
 admin.site.register(Produto)
 admin.site.register(Servico)
 admin.site.register(Espaco)
+admin.site.register(Agendamento)
 
 
 @admin.register(Profissional)

@@ -15,18 +15,18 @@ class TipoPerfil(models.TextChoices):
     ALUNO = "ALUNO", "Aluno"
 
 
-class Produto(models.Model):
-    nome = models.CharField(max_length=100)
-    preco = models.DecimalField(max_digits=6, decimal_places=2)
-    descricao = models.TextField()
-    disponivel = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.nome
-
+class Agendamento(models.Model):
+    id = models.AutoField(primary_key=True)
+    data_hora_inicio = models.DateTimeField(null=False)
+    data_hora_fim = models.DateTimeField(null=False)
+    status = models.CharField(max_length=20, choices=[('PENDENTE', 'Pendente'), ('CONFIRMADO', 'Confirmado'), ('CANCELADO', 'Cancelado')], default='PENDENTE')
+    id_aluno = models.ForeignKey('Aluno', on_delete=models.CASCADE, null=False)
+    id_profissional = models.ForeignKey('Profissional', on_delete=models.CASCADE, null=False)
+    id_servico = models.ForeignKey('Servico', on_delete=models.CASCADE, null=False)
 
 
 class Servico(models.Model):
+    id_servico = models.AutoField(primary_key=True)
     nome = models.CharField(
         max_length=20,
         choices=TipoServico.choices,
@@ -40,6 +40,7 @@ class Servico(models.Model):
 
 
 class Espaco(models.Model):
+    id_espaco = models.AutoField(primary_key=True)
     nome = models.CharField(max_length=100, null=False)
     capacidade_maxima = models.PositiveIntegerField(null=False)
     localizacao = models.CharField(max_length=150, null=False)
