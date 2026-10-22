@@ -12,7 +12,7 @@ sqlite/
 │   ├── api.py            # ViewSets da API REST
 │   ├── api_urls.py       # Rotas do DRF (DefaultRouter)
 │   ├── apps.py
-│   ├── models.py         # Modelos Produto, Servico e Espaco
+│   ├── models.py         # Modelos Produto, Servico, Espaco, Profissional e Aluno
 │   ├── serializers.py    # Serializer ProdutoSerializer
 │   ├── urls.py           # Rotas tradicionais da app
 │   └── views.py
