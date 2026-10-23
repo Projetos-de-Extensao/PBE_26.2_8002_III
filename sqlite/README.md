@@ -9,11 +9,8 @@ sqlite/
 ├── app/
 │   ├── migrations/
 │   ├── admin.py
-│   ├── api.py            # ViewSets da API REST
-│   ├── api_urls.py       # Rotas do DRF (DefaultRouter)
 │   ├── apps.py
-│   ├── models.py         # Modelos Produto, Servico, Espaco, Profissional e Aluno
-│   ├── serializers.py    # Serializer ProdutoSerializer
+│   ├── models.py         # Modelos do domínio GAAP
 │   ├── urls.py           # Rotas tradicionais da app
 │   └── views.py
 ├── project/
@@ -53,7 +50,6 @@ sqlite/
    ```
 
 5. **Acesse no navegador:**
-   - Interface da API REST: [http://localhost:8000/api/produtos/](http://localhost:8000/api/produtos/)
    - Painel Administrativo: [http://localhost:8000/admin/](http://localhost:8000/admin/)
 
 Os modelos `Servico` e `Espaco`, do domínio GAAP, são criados no banco SQLite pela migração
