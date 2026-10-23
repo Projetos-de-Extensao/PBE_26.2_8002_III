@@ -28,6 +28,16 @@ A plataforma garante validação de conflitos em tempo real (*double-booking*), 
 
 ---
 
+## Estrutura do Repositório
+
+* [`backend-gaap/`](./backend-gaap/) contém a aplicação Django e seu banco SQLite de desenvolvimento.
+* [`docs/`](./docs/) contém a documentação do projeto e os artefatos de análise.
+
+SQLite é o banco utilizado no desenvolvimento, não o nome da aplicação. Consulte
+[`backend-gaap/README.md`](./backend-gaap/README.md) para instalar dependências e iniciar o backend.
+
+---
+
 ## Como Executar a Documentação Localmente
 
 1. Crie e ative um ambiente virtual:
