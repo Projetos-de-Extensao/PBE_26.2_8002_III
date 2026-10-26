@@ -12,10 +12,14 @@ from .models import (
 
 admin.site.register(Servico)
 admin.site.register(Espaco)
-admin.site.register(Agendamento)
 admin.site.register(Administrador)
 admin.site.register(BloqueioAgenda)
 admin.site.register(RelatorioTreino)
+
+
+@admin.register(Agendamento)
+class AgendamentoAdmin(admin.ModelAdmin):
+    filter_horizontal = ("alunos",)
 
 
 @admin.register(Profissional)

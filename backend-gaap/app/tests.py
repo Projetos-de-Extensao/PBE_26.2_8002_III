@@ -1,19 +1,216 @@
 from datetime import date, datetime, timedelta, timezone
 
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.test import TestCase
 
 from .models import (
+    Administrador,
     Agendamento,
     Aluno,
     Espaco,
     Profissional,
+    RelatorioTreino,
     Servico,
     StatusAgendamento,
     TipoPerfil,
     TipoServico,
 )
+
+
+class DiagramaMethodsTest(TestCase):
+    def setUp(self):
+        self.administrador = Administrador.objects.create(
+            nome="Admin",
+            email="admin@gaap.com",
+            senha_hash="hash",
+            telefone="111",
+            perfil=TipoPerfil.ADMINISTRADOR,
+            ativo=True,
+            setor="Gestão",
+        )
+        self.profissional = Profissional.objects.create(
+            nome="Carlos",
+            email="carlos.metodos@gaap.com",
+            senha_hash="hash",
+            telefone="222",
+            perfil=TipoPerfil.TREINADOR,
+            ativo=True,
+            registro_profissional="CREF-MET-001",
+            especialidade=TipoServico.TREINO,
+        )
+        self.aluno = Aluno.objects.create(
+            nome="Joana",
+            email="joana.metodos@gaap.com",
+            senha_hash="hash",
+            telefone="333",
+            perfil=TipoPerfil.ALUNO,
+            ativo=True,
+            matricula="MET-001",
+            data_nascimento=date(2000, 5, 10),
+            observacoes_medicas="",
+        )
+        self.servico = Servico.objects.create(
+            nome=TipoServico.TREINO,
+            duracao_minutos=60,
+            ativo=True,
+        )
+        self.espaco = Espaco.objects.create(
+            nome="Sala de testes",
+            capacidade_maxima=10,
+            localizacao="Bloco A",
+            ativo=True,
+        )
+
+    def criar_dados_agendamento(self, inicio):
+        return {
+            "data_hora_inicio": inicio,
+            "data_hora_fim": inicio + timedelta(hours=1),
+            "status": StatusAgendamento.AGENDADO,
+            "profissional": self.profissional,
+            "espaco": self.espaco,
+            "servico": self.servico,
+        }
+
+    def test_administrador_cadastra_usuario_e_configura_recursos(self):
+        usuario = self.administrador.cadastrar_usuario(
+            {
+                "nome": "Novo aluno",
+                "email": "novo@gaap.com",
+                "senha_hash": "hash",
+                "telefone": "444",
+                "perfil": TipoPerfil.ALUNO,
+                "ativo": True,
+                "matricula": "NOVO-001",
+                "data_nascimento": date(2001, 1, 1),
+                "observacoes_medicas": "Sem observacoes",
+            }
+        )
+        sala = self.administrador.configurar_sala(
+            {
+                "nome": "Sala B",
+                "capacidade_maxima": 8,
+                "localizacao": "Bloco B",
+                "ativo": True,
+            }
+        )
+        servico = self.administrador.configurar_servico(
+            {
+                "nome": TipoServico.FISIOTERAPIA,
+                "duracao_minutos": 45,
+                "ativo": True,
+            }
+        )
+        bloqueio = self.administrador.aplicar_bloqueio(
+            {
+                "data_hora_inicio": datetime(2026, 10, 26, 10, tzinfo=timezone.utc),
+                "data_hora_fim": datetime(2026, 10, 26, 11, tzinfo=timezone.utc),
+                "motivo": "Manutenção",
+                "espaco": sala,
+            }
+        )
+
+        self.assertIsInstance(usuario, Aluno)
+        self.assertEqual(sala.nome, "Sala B")
+        self.assertEqual(servico.obter_duracao(), 45)
+        self.assertEqual(bloqueio.espaco, sala)
+
+    def test_aluno_solicita_agendamento_e_consulta_agenda(self):
+        inicio = datetime(2026, 10, 27, 10, tzinfo=timezone.utc)
+        agendamento = self.aluno.solicitar_agendamento(
+            self.criar_dados_agendamento(inicio)
+        )
+
+        self.assertEqual(self.aluno.consultar_agenda(), [agendamento])
+        self.assertEqual(self.profissional.consultar_agenda(), [agendamento])
+        self.assertEqual(agendamento.status, StatusAgendamento.AGENDADO)
+
+    def test_solicitacao_rejeita_conflito_de_horario(self):
+        inicio = datetime(2026, 10, 27, 10, tzinfo=timezone.utc)
+        self.aluno.solicitar_agendamento(self.criar_dados_agendamento(inicio))
+
+        with self.assertRaises(ValidationError):
+            self.aluno.solicitar_agendamento(self.criar_dados_agendamento(inicio))
+
+    def test_metodos_de_servico_espaco_agendamento_e_bloqueio(self):
+        self.assertTrue(self.espaco.verificar_capacidade(10))
+        self.assertFalse(self.espaco.verificar_capacidade(11))
+        self.assertEqual(self.servico.obter_duracao(), 60)
+
+        inicio = datetime(2026, 10, 27, 10, tzinfo=timezone.utc)
+        agendamento = self.aluno.solicitar_agendamento(
+            self.criar_dados_agendamento(inicio)
+        )
+        self.assertFalse(agendamento.validar_conflito())
+        agendamento.cancelar()
+        self.assertEqual(agendamento.status, StatusAgendamento.CANCELADO)
+
+        bloqueio = self.administrador.aplicar_bloqueio(
+            {
+                "data_hora_inicio": inicio,
+                "data_hora_fim": inicio + timedelta(hours=1),
+                "motivo": "Manutenção",
+                "espaco": self.espaco,
+            }
+        )
+        self.assertTrue(
+            bloqueio.verificar_intersecao(
+                inicio + timedelta(minutes=30),
+                inicio + timedelta(hours=2),
+            )
+        )
+
+    def test_profissional_finaliza_relatorio_e_registra_presenca(self):
+        agendamento = Agendamento.objects.create(
+            **self.criar_dados_agendamento(
+                datetime(2026, 10, 27, 10, tzinfo=timezone.utc)
+            )
+        )
+        agendamento.alunos.add(self.aluno)
+        relatorio = self.profissional.finalizar_relatorio(
+            agendamento.id,
+            {
+                "presenca": False,
+                "atividades_realizadas": "Treino de mobilidade",
+                "observacoes_tecnicas": "Sem observações",
+            },
+        )
+
+        self.profissional.registrar_presenca(agendamento.id, True)
+        relatorio.refresh_from_db()
+        self.assertTrue(relatorio.presenca)
+        self.assertIsNotNone(relatorio.data_finalizacao)
+        self.assertEqual(RelatorioTreino.objects.count(), 1)
+
+    def test_usuario_altera_e_autentica_senha(self):
+        self.aluno.alterar_senha("nova-senha")
+        self.aluno.refresh_from_db()
+
+        self.assertTrue(self.aluno.autenticar("nova-senha"))
+        self.assertFalse(self.aluno.autenticar("senha-incorreta"))
+
+    def test_representacao_em_texto_dos_modelos(self):
+        agendamento = Agendamento.objects.create(
+            **self.criar_dados_agendamento(
+                datetime(2026, 10, 28, 10, tzinfo=timezone.utc)
+            )
+        )
+        relatorio = RelatorioTreino(
+            presenca=True,
+            atividades_realizadas="Treino",
+            observacoes_tecnicas="Sem observações",
+            data_finalizacao=datetime(2026, 10, 28, 11, tzinfo=timezone.utc),
+            agendamento=agendamento,
+        )
+
+        self.assertEqual(str(self.administrador), "Admin")
+        self.assertEqual(str(self.profissional), "Carlos")
+        self.assertEqual(str(self.aluno), "Joana")
+        self.assertEqual(str(self.servico), "Treino")
+        self.assertEqual(str(self.espaco), "Sala de testes")
+        self.assertEqual(str(agendamento), f"Agendamento #{agendamento.pk}")
+        self.assertEqual(str(relatorio), f"Relatório do agendamento #{agendamento.pk}")
 
 
 class AgendamentoModelTest(TestCase):
@@ -120,10 +317,16 @@ class AdminTest(TestCase):
 
     def test_paginas_admin_respondem_200(self):
         for url in (
+            "/admin/app/administrador/",
+            "/admin/app/agendamento/",
+            "/admin/app/bloqueioagenda/",
             "/admin/app/profissional/",
             "/admin/app/profissional/add/",
             "/admin/app/aluno/",
             "/admin/app/aluno/add/",
+            "/admin/app/relatoriotreino/",
+            "/admin/app/servico/",
+            "/admin/app/espaco/",
         ):
             with self.subTest(url=url):
                 self.assertEqual(self.client.get(url).status_code, 200)
