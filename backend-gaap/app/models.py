@@ -205,6 +205,9 @@ class Aluno(Usuario):
 
         return agendamento
 
+        def __str__(self):
+            return self.nome
+
 # Armazena a modalidade e a duração de um serviço.
 class Servico(models.Model):
     id = models.AutoField(primary_key=True)
