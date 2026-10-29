@@ -1,5 +1,7 @@
 # GAAP — Gestão de Atletas de Alta Performance
 
+👉 Para rodar o projeto (backend + frontend) e acessar o Swagger em http://127.0.0.1:8000/api/docs/, veja [COMO-RODAR.md](COMO-RODAR.md).
+
 **Disciplina**: Projeto Back-End (IBM8936) — Ibmec 2026.2  
 **Equipe**: Grupo 3 (Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf)
 

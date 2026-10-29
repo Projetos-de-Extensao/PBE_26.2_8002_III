@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'drf_spectacular',
     'app',
 ]
 
@@ -129,4 +130,14 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'GAAP API',
+    'DESCRIPTION': 'Gestão de Atletas de Alta Performance',
+    'VERSION': '1.0.0',
+    'ENUM_NAME_OVERRIDES': {
+        'TipoServicoEnum': 'app.models.TipoServico',
+    },
 }
