@@ -1,16 +1,15 @@
-# Como rodar o GAAP (backend + frontend)
+# Como rodar o GAAP (Backend + Frontend)
 
-Guia rápido para rodar o projeto no PC do laboratório (Windows / PowerShell).
+Guia rápido para rodar o projeto unificado no PC do laboratório (Windows / PowerShell).
 
-São **dois repositórios** e **dois terminais** rodando ao mesmo tempo:
+O projeto reúne **Backend e Frontend no mesmo repositório**:
 
-| Parte    | Repositório                                                   | Endereço                |
-|----------|---------------------------------------------------------------|-------------------------|
-| Backend  | `Projetos-de-Extensao/PBE_26.2_8002_III`                      | http://127.0.0.1:8000   |
-| Frontend | `Arthur-Calebe/Frontend-gaap`                                 | http://localhost:5173   |
+| Parte    | Pasta no Repositório | Endereço                |
+|----------|----------------------|-------------------------|
+| Backend  | `backend-gaap/`      | http://127.0.0.1:8000   |
+| Frontend | `frontend-gaap/`     | http://localhost:5173   |
 
 Links úteis com o backend rodando:
-
 - **Documentação da API (Swagger):** http://127.0.0.1:8000/api/docs/ — clique em **Authorize → basicAuth** para testar as rotas
 - **Contrato OpenAPI (YAML):** http://127.0.0.1:8000/api/schema/
 - **Painel administrativo:** http://127.0.0.1:8000/admin/
@@ -35,18 +34,18 @@ winget install -e --id OpenJS.NodeJS.LTS --scope user
 
 Depois **feche e reabra o VS Code**.
 
-Clone os dois repositórios (em pastas separadas):
+Clone o repositório:
 
 ```powershell
 git clone https://github.com/Projetos-de-Extensao/PBE_26.2_8002_III.git
-git clone https://github.com/Arthur-Calebe/Frontend-gaap.git
+cd PBE_26.2_8002_III
 ```
 
 ---
 
 ## 1. Terminal 1 — Backend (Django)
 
-Na **raiz** do repositório `PBE_26.2_8002_III`:
+Na **raiz** do repositório:
 
 ```powershell
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
@@ -60,23 +59,23 @@ python manage.py runserver
 
 ✅ Deve aparecer `Starting development server at http://127.0.0.1:8000/`.
 
-**Deixe esse terminal quieto.** Não digite nada nele nem use Ctrl+C, senão o backend cai.
+**Deixe esse terminal aberto.** Não digite nada nele nem use Ctrl+C, senão o backend cai.
 
 ---
 
 ## 2. Terminal 2 — Frontend (React + Vite)
 
-Abra um **terminal novo** (botão **+** no painel do terminal) e vá para a pasta `Frontend-gaap`:
+Abra um **novo terminal** no VS Code (botão `+` ou dividir terminal):
 
 ```powershell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-npm install                           # só na primeira vez
+cd frontend-gaap
+npm install                           # só na primeira vez após clonar
 npm run dev
 ```
 
 ✅ Deve aparecer `Local: http://localhost:5173/`.
 
-**Também deixe esse terminal quieto.**
+**Também deixe esse terminal aberto.**
 
 ---
 
@@ -84,11 +83,11 @@ npm run dev
 
 1. Abra **http://localhost:5173**
 2. Clique em **Credenciais** (canto superior direito)
-3. Usuário: `PBGRUPO3`, senha: peça ao grupo
+3. Usuário: `PBGRUPO3` (ou `admin`), senha: peça ao grupo
 4. **Salvar e Conectar**
 5. O rodapé da barra lateral deve ficar verde: **API Conectada**
 
-As credenciais ficam salvas só no navegador. Em outro PC, repita este passo.
+As credenciais ficam salvas no navegador (`localStorage`).
 
 ---
 
@@ -100,8 +99,8 @@ As credenciais ficam salvas só no navegador. Em outro PC, repita este passo.
 | `Python was not found` / `node não reconhecido` | Não instalado ou VS Code não reaberto | Passo 0 e reabrir o VS Code |
 | `Couldn't import Django` | `.venv` não ativado | `.\.venv\Scripts\Activate.ps1` |
 | `can't open file ... manage.py` | Pasta errada | `cd backend-gaap` |
-| `Could not read package.json` | Rodou `npm` na pasta do backend | Vá para a pasta `Frontend-gaap` |
-| `localhost refused to connect` (porta 5173) | Front parou | `npm run dev` no terminal 2 |
+| `Could not read package.json` | Rodou `npm` na pasta do backend | Vá para a pasta `frontend-gaap` |
+| `localhost refused to connect` (porta 5173) | Front parou | `npm run dev` na pasta `frontend-gaap` |
 | Front mostra **"Backend Django Desconectado"** | Django parou | `python manage.py runserver` no terminal 1 (com `.venv` ativo) |
 | Front mostra **credenciais inválidas** / 403 | Senha errada | `python manage.py changepassword PBGRUPO3` |
 

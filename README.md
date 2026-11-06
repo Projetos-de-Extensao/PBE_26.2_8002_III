@@ -1,6 +1,6 @@
 # GAAP — Gestão de Atletas de Alta Performance
 
-👉 Para rodar o projeto (backend + frontend) e acessar o Swagger em http://127.0.0.1:8000/api/docs/, veja [COMO-RODAR.md](COMO-RODAR.md).
+👉 Para rodar o projeto completo (Backend + Frontend) passo a passo, veja [COMO-RODAR.md](COMO-RODAR.md).
 
 **Disciplina**: Projeto Back-End (IBM8936) — Ibmec 2026.2  
 **Equipe**: Grupo 3 (Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf)
@@ -9,56 +9,71 @@
 
 ## Sobre o Projeto
 
-O **GAAP (Gestão de Atletas de Alta Performance)** é uma solução de back-end desenvolvida em Python e Django para centralizar e orquestrar a operação de academias e centros de treinamento esportivo. O sistema gerencia horários, profissionais, alunos e espaços físicos para quatro modalidades integradas:
+O **GAAP (Gestão de Atletas de Alta Performance)** é uma solução completa desenvolvida para centralizar e orquestrar a operação de centros de treinamento esportivo de alto rendimento. O sistema gerencia horários, profissionais multidisciplinares, alunos e espaços físicos para quatro modalidades integradas:
 
 * **Treino** (Físico e Técnico)
 * **Fisioterapia**
 * **Psicologia Esportiva**
 * **Nutrição**
 
-A plataforma garante validação de conflitos em tempo real (*double-booking*), controle estrito de capacidade de salas, gestão de bloqueios de agenda e registro de presenças e relatórios técnicos pós-sessão.
+A plataforma conta com backend robusto em Django REST Framework com validação de conflitos em tempo real (*double-booking*), controle de capacidade de salas, gestão de bloqueios de agenda e registro de relatórios técnicos pós-sessão, além de frontend moderno e intuitivo em React (Vite).
 
 ---
 
 ## Tecnologias Utilizadas
 
-* **Linguagem**: Python 3.11+
-* **Framework Back-End**: Django
+* **Linguagem Back-End**: Python 3.11+
+* **Framework Back-End**: Django & Django REST Framework
+* **Front-End**: React, Vite, Lucide Icons e CSS puro responsivo
 * **Banco de Dados**: Relacional (SQLite em desenvolvimento / PostgreSQL em produção)
-* **Documentação**: MkDocs com tema Material e suporte a PlantUML
+* **Documentação da API**: OpenAPI / Swagger (`/api/docs/`)
+* **Documentação do Projeto**: MkDocs com tema Material e suporte a PlantUML
 * **Metodologia**: RUP/UP e Kanban via GitHub Projects
 
 ---
 
-## Estrutura do Repositório
+## Estrutura do Repositório (Monorepo)
 
-* [`backend-gaap/`](./backend-gaap/) contém a aplicação Django e seu banco SQLite de desenvolvimento.
-* [`docs/`](./docs/) contém a documentação do projeto e os artefatos de análise.
-
-SQLite é o banco utilizado no desenvolvimento, não o nome da aplicação. Consulte
-[`backend-gaap/README.md`](./backend-gaap/README.md) para instalar dependências e iniciar o backend.
+* [`backend-gaap/`](./backend-gaap/) — Aplicação Django (API REST, autenticação e regras de domínio).
+* [`frontend-gaap/`](./frontend-gaap/) — Interface em React com painéis de gestão, agendamento e relatórios.
+* [`docs/`](./docs/) — Documentação completa do projeto e artefatos de análise.
+* [`COMO-RODAR.md`](./COMO-RODAR.md) — Guia detalhado de execução local para o laboratório.
 
 ---
 
-## Como Executar a Documentação Localmente
+## Como Executar o Projeto Completo
 
-1. Crie e ative um ambiente virtual:
-   ```bash
+Acesse o guia rápido [COMO-RODAR.md](COMO-RODAR.md). Em resumo, utilize dois terminais no VS Code:
+
+- **Terminal 1 (Backend):** 
+  ```powershell
+  cd backend-gaap
+  python manage.py runserver
+  ```
+- **Terminal 2 (Frontend):** 
+  ```powershell
+  cd frontend-gaap
+  npm run dev
+  ```
+
+---
+
+## Como Executar a Documentação MkDocs Localmente
+
+1. Crie e ative o ambiente virtual:
+   ```powershell
    python -m venv venv
-   # No Windows:
    .\venv\Scripts\activate
-   # No Linux/Mac:
-   source venv/bin/activate
    ```
 
 2. Instale as dependências:
-   ```bash
+   ```powershell
    pip install -r requirements.txt
    ```
 
 3. Inicie o servidor do MkDocs:
-   ```bash
+   ```powershell
    python -X utf8 -m mkdocs serve
    ```
 
-4. Acesse a documentação em seu navegador no endereço: `http://127.0.0.1:8000`
+4. Acesse a documentação em: `http://127.0.0.1:8000`
