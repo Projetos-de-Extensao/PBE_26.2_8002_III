@@ -211,7 +211,7 @@ class Aluno(Usuario):
 # Armazena a modalidade e a duração de um serviço.
 class Servico(models.Model):
     id = models.AutoField(primary_key=True)
-    nome = models.CharField(max_length=20, choices=TipoServico.choices)
+    nome = models.CharField(max_length=100)
     duracao_minutos = models.IntegerField()
     ativo = models.BooleanField()
 
@@ -220,7 +220,7 @@ class Servico(models.Model):
         return self.duracao_minutos
 
     def __str__(self):
-        return self.get_nome_display()
+        return dict(TipoServico.choices).get(self.nome, self.nome)
 
 
 # Armazena um espaço e verifica se comporta a quantidade de alunos.

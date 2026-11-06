@@ -210,6 +210,12 @@ class DiagramaMethodsTest(TestCase):
         self.assertEqual(str(self.profissional), "Carlos")
         self.assertEqual(str(self.aluno), "Joana")
         self.assertEqual(str(self.servico), "Treino")
+        servico_personalizado = Servico(
+            nome="Pilates",
+            duracao_minutos=50,
+            ativo=True,
+        )
+        self.assertEqual(str(servico_personalizado), "Pilates")
         self.assertEqual(str(self.espaco), "Sala de testes")
         self.assertEqual(str(agendamento), f"Agendamento #{agendamento.pk}")
         self.assertEqual(str(relatorio), f"Relatório do agendamento #{agendamento.pk}")
@@ -375,6 +381,29 @@ class AgendamentoApiTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Servico.objects.filter(pk=servico_id).exists())
+
+    def test_servico_aceita_modalidade_nova_e_disponibiliza_tipos_predefinidos(self):
+        tipos_response = self.client.get("/api/servicos/tipos/")
+
+        self.assertEqual(tipos_response.status_code, status.HTTP_200_OK)
+        self.assertIn(
+            {"value": TipoServico.TREINO, "label": "Treino"},
+            tipos_response.data,
+        )
+
+        response = self.client.post(
+            "/api/servicos/",
+            {
+                "nome": "Pilates",
+                "duracao_minutos": 50,
+                "ativo": True,
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
+        self.assertEqual(response.data["nome"], "Pilates")
+        self.assertTrue(Servico.objects.filter(nome="Pilates").exists())
 
     def test_crud_de_espaco(self):
         response = self.client.post(

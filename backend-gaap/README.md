@@ -80,6 +80,11 @@ relações precisam existir.
 | Bloqueios de agenda | `/api/bloqueios-agenda/` |
 | Relatórios de treino | `/api/relatorios-treino/` |
 
+Para consultar as modalidades predefinidas ao montar o formulário de serviço,
+use `GET /api/servicos/tipos/`. Para cadastrar um serviço, envie `nome`,
+`duracao_minutos` e `ativo` para `POST /api/servicos/`. O nome pode ser um dos
+valores predefinidos (como `TREINO`) ou uma modalidade nova (como `Pilates`).
+
 Para criar um agendamento, envie os IDs de um ou mais alunos, do profissional,
 do espaço e do serviço, além das datas em formato ISO 8601:
 

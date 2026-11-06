@@ -1,4 +1,6 @@
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from .models import (
@@ -10,6 +12,7 @@ from .models import (
     Profissional,
     RelatorioTreino,
     Servico,
+    TipoServico,
 )
 from .serializers import (
     AdministradorSerializer,
@@ -45,6 +48,12 @@ class AlunoViewSet(ProtegidoModelViewSet):
 class ServicoViewSet(ProtegidoModelViewSet):
     queryset = Servico.objects.all().order_by("id")
     serializer_class = ServicoSerializer
+
+    @action(detail=False, methods=["get"])
+    def tipos(self, request):
+        return Response(
+            [{"value": value, "label": label} for value, label in TipoServico.choices]
+        )
 
 
 class EspacoViewSet(ProtegidoModelViewSet):
