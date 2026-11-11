@@ -933,3 +933,57 @@ class AdminTest(TestCase):
         )
         aluno = Aluno.objects.get(matricula="2026010")
         self.assertEqual(aluno.perfil, TipoPerfil.ALUNO)
+
+
+class TokenAuthenticationApiTest(APITestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="usuario_teste",
+            email="teste@gaap.com",
+            password="senha_teste_123",
+        )
+        self.servico = Servico.objects.create(
+            nome=TipoServico.TREINO,
+            duracao_minutos=60,
+            ativo=True,
+        )
+
+    def test_obter_token_com_sucesso(self):
+        response = self.client.post(
+            "/api/token/",
+            {"username": "usuario_teste", "password": "senha_teste_123"},
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("token", response.data)
+        self.assertTrue(len(response.data["token"]) > 20)
+
+    def test_obter_token_com_credenciais_invalidas(self):
+        response = self.client.post(
+            "/api/token/",
+            {"username": "usuario_teste", "password": "senha_errada"},
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_consumir_api_com_token_de_autenticacao(self):
+        token_response = self.client.post(
+            "/api/token/",
+            {"username": "usuario_teste", "password": "senha_teste_123"},
+            format="json",
+        )
+        token = token_response.data["token"]
+
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {token}")
+        response = self.client.get("/api/servicos/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+
+    def test_consumir_api_sem_autenticacao_falha(self):
+        self.client.credentials()
+        response = self.client.get("/api/servicos/")
+        self.assertIn(
+            response.status_code,
+            [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
+        )
+
