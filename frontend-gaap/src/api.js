@@ -3,29 +3,52 @@
 
 const API_BASE = '/api';
 
+export function getAuthToken() {
+  return localStorage.getItem('gaap_auth_token');
+}
+
+export function saveAuthToken(token) {
+  if (token) {
+    localStorage.setItem('gaap_auth_token', token);
+  }
+}
+
 export function getAuthCredentials() {
-  const user = localStorage.getItem('gaap_auth_user') || 'admin';
-  const pass = localStorage.getItem('gaap_auth_pass') || 'admin123';
+  const user = localStorage.getItem('gaap_auth_user') || '';
+  const pass = localStorage.getItem('gaap_auth_pass') || '';
   return { user, pass };
 }
 
 export function saveAuthCredentials(user, pass) {
   localStorage.setItem('gaap_auth_user', user);
-  localStorage.setItem('gaap_auth_pass', pass);
+  if (pass) {
+    localStorage.setItem('gaap_auth_pass', pass);
+  }
 }
 
 export function clearAuthCredentials() {
+  localStorage.removeItem('gaap_auth_token');
   localStorage.removeItem('gaap_auth_user');
   localStorage.removeItem('gaap_auth_pass');
 }
 
 export function getAuthHeader() {
+  const token = getAuthToken();
+  if (token) {
+    return {
+      Authorization: `Token ${token}`,
+    };
+  }
+
   const { user, pass } = getAuthCredentials();
-  if (!user) return {};
-  const encoded = btoa(`${user}:${pass}`);
-  return {
-    Authorization: `Basic ${encoded}`,
-  };
+  if (user && pass) {
+    const encoded = btoa(`${user}:${pass}`);
+    return {
+      Authorization: `Basic ${encoded}`,
+    };
+  }
+
+  return {};
 }
 
 export async function apiRequest(endpoint, options = {}) {
@@ -90,6 +113,23 @@ export async function apiRequest(endpoint, options = {}) {
 
 // Métodos auxiliares
 export const api = {
+  // Autenticação por Token
+  login: async (username, password) => {
+    const data = await apiRequest('/token/', {
+      method: 'POST',
+      body: JSON.stringify({ username, password }),
+      skipAuth: true,
+    });
+    if (data && data.token) {
+      saveAuthToken(data.token);
+      saveAuthCredentials(username, '');
+    }
+    return data;
+  },
+  logout: () => {
+    clearAuthCredentials();
+  },
+
   // Verificação de saúde/conexão
   checkConnection: async () => {
     try {
