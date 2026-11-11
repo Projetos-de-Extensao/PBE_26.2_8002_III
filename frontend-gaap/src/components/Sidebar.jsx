@@ -10,6 +10,7 @@ import {
   Building2,
   Ban,
   Settings,
+  LogOut,
 } from 'lucide-react';
 
 export default function Sidebar({
@@ -18,6 +19,7 @@ export default function Sidebar({
   backendStatus,
   userProfile,
   onOpenAuth,
+  onLogout,
 }) {
   const menuItems = [
     { id: 'dashboard', label: 'Visão Geral', icon: LayoutDashboard },
@@ -69,12 +71,23 @@ export default function Sidebar({
       <div className="sidebar-footer">
         <button
           className="nav-item"
-          style={{ marginBottom: '8px' }}
+          style={{ marginBottom: '4px' }}
           onClick={onOpenAuth}
         >
           <Settings size={18} />
-          <span>Entrar / Criar conta</span>
+          <span>Configurar Token</span>
         </button>
+
+        {onLogout && (
+          <button
+            className="nav-item"
+            style={{ marginBottom: '8px', color: '#f87171' }}
+            onClick={onLogout}
+          >
+            <LogOut size={18} />
+            <span>Sair</span>
+          </button>
+        )}
 
         <div className="status-badge">
           <span

@@ -1,8 +1,15 @@
 // src/components/TopBar.jsx
 import React from 'react';
-import { RefreshCw, KeyRound, Plus } from 'lucide-react';
+import { RefreshCw, KeyRound, Plus, LogOut } from 'lucide-react';
 
-export default function TopBar({ title, onRefresh, onOpenAuth, onNovoAgendamento, loading }) {
+export default function TopBar({
+  title,
+  onRefresh,
+  onOpenAuth,
+  onNovoAgendamento,
+  onLogout,
+  loading,
+}) {
   return (
     <header className="top-bar">
       <h2 className="page-title">{title}</h2>
@@ -28,11 +35,23 @@ export default function TopBar({ title, onRefresh, onOpenAuth, onNovoAgendamento
         <button
           className="btn btn-secondary btn-sm"
           onClick={onOpenAuth}
-          title="Credenciais de Acesso (Basic Auth)"
+          title="Configuração de Token / Autenticação"
         >
           <KeyRound size={15} />
-          <span>Credenciais</span>
+          <span>Token</span>
         </button>
+
+        {onLogout && (
+          <button
+            className="btn btn-secondary btn-sm"
+            onClick={onLogout}
+            title="Sair da conta"
+            style={{ color: '#ef4444' }}
+          >
+            <LogOut size={15} />
+            <span>Sair</span>
+          </button>
+        )}
       </div>
     </header>
   );

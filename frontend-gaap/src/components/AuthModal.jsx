@@ -4,7 +4,6 @@ import { X, KeyRound, ShieldAlert, CheckCircle2 } from 'lucide-react';
 import {
   api,
   getAuthCredentials,
-  saveAuthCredentials,
   clearAuthCredentials,
 } from '../api';
 
@@ -30,7 +29,7 @@ export default function AuthModal({ isOpen, onClose, onSaved }) {
           senha: password,
         });
       }
-      saveAuthCredentials(username, password);
+      await api.login(username, password);
       onSaved();
       onClose();
     } catch (err) {

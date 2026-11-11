@@ -1,7 +1,7 @@
 // src/App.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
-import { api } from './api';
+import { api, getAuthToken } from './api';
 
 // Componentes estruturais
 import Sidebar from './components/Sidebar';
@@ -9,6 +9,7 @@ import TopBar from './components/TopBar';
 import AuthModal from './components/AuthModal';
 
 // Telas
+import LoginView from './views/LoginView';
 import DashboardView from './views/DashboardView';
 import AgendamentosView from './views/AgendamentosView';
 import NovoAgendamentoModal from './views/NovoAgendamentoModal';
@@ -38,7 +39,7 @@ export default function App() {
   // Status de conexão com o backend Django
   const [backendStatus, setBackendStatus] = useState({
     online: true,
-    authenticated: true,
+    authenticated: !!getAuthToken(),
   });
   const canSchedule = userProfile.is_staff || userProfile.perfil === 'RESPONSAVEL';
 
@@ -117,6 +118,16 @@ export default function App() {
     }
   };
 
+  const handleLogout = () => {
+    api.logout();
+    setUserProfile({ is_staff: false, perfil: null });
+    setBackendStatus((prev) => ({ ...prev, authenticated: false }));
+  };
+
+  if (!backendStatus.authenticated) {
+    return <LoginView onLoginSuccess={carregarDados} />;
+  }
+
   return (
     <div className="app-container">
       {/* Barra Lateral */}
@@ -132,6 +143,7 @@ export default function App() {
         backendStatus={backendStatus}
         userProfile={userProfile}
         onOpenAuth={() => setModalAuth(true)}
+        onLogout={handleLogout}
       />
 
       {/* Conteúdo Principal */}
@@ -141,6 +153,7 @@ export default function App() {
           onRefresh={carregarDados}
           onOpenAuth={() => setModalAuth(true)}
           onNovoAgendamento={canSchedule ? () => setModalNovoAgendamento(true) : undefined}
+          onLogout={handleLogout}
           loading={loading}
         />
 
