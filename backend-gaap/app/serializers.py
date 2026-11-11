@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
@@ -11,6 +12,7 @@ from .models import (
     Espaco,
     Profissional,
     RelatorioTreino,
+    Responsavel,
     Servico,
     StatusAgendamento,
 )
@@ -81,13 +83,128 @@ class ProfissionalSerializer(UsuarioSerializer):
 
 
 class AlunoSerializer(UsuarioSerializer):
+    observacoes_medicas = serializers.CharField(required=False, allow_blank=True)
+    responsavel = serializers.PrimaryKeyRelatedField(
+        queryset=Responsavel.objects.all(),
+        required=False,
+    )
+
     class Meta(UsuarioSerializer.Meta):
         model = Aluno
         fields = UsuarioSerializer.Meta.fields + (
             "matricula",
             "data_nascimento",
             "observacoes_medicas",
+            "responsavel",
         )
+
+    def validate(self, attrs):
+        attrs = super(UsuarioSerializer, self).validate(attrs)
+        request = self.context.get("request")
+        if request and not request.user.is_staff:
+            responsavel = Responsavel.objects.filter(
+                email__iexact=request.user.username,
+                ativo=True,
+            ).first()
+            if responsavel is None:
+                raise serializers.ValidationError(
+                    "Somente a equipe ou um responsável pode cadastrar alunos."
+                )
+            attrs["responsavel"] = responsavel
+        elif self.instance is None and not attrs.get("responsavel"):
+            raise serializers.ValidationError(
+                {"responsavel": "Informe o responsável pelo aluno."}
+            )
+        return validate_model_instance(self, attrs, excludes=("senha_hash",))
+
+    def create(self, validated_data):
+        senha = validated_data.pop("senha", None)
+        request = self.context.get("request")
+        if request and not request.user.is_staff:
+            responsavel = validated_data.pop("responsavel")
+            return responsavel.cadastrar_aluno(
+                {
+                    **validated_data,
+                    "senha_hash": make_password(senha) if senha else make_password(None),
+                }
+            )
+
+        validated_data["senha_hash"] = make_password(senha) if senha else make_password(None)
+        validated_data.setdefault("perfil", "ALUNO")
+        validated_data.setdefault("ativo", True)
+        return super(UsuarioSerializer, self).create(validated_data)
+
+
+class ResponsavelSerializer(UsuarioSerializer):
+    class Meta(UsuarioSerializer.Meta):
+        model = Responsavel
+        fields = UsuarioSerializer.Meta.fields
+
+    def validate_email(self, value):
+        if self.instance and self.instance.email.casefold() == value.casefold():
+            return value
+        if email_responsavel_em_uso(value):
+            raise serializers.ValidationError("Este e-mail já está cadastrado.")
+        return value
+
+    def create(self, validated_data):
+        return criar_responsavel_com_conta(validated_data)
+
+    def update(self, instance, validated_data):
+        user_model = get_user_model()
+        usuario = user_model.objects.get(username=instance.email)
+        email = validated_data.get("email", instance.email)
+        senha = validated_data.pop("senha", None)
+        usuario.username = email
+        usuario.email = email
+        if senha:
+            usuario.set_password(senha)
+            validated_data["senha_hash"] = make_password(senha)
+        with transaction.atomic():
+            usuario.save()
+            return super(UsuarioSerializer, self).update(instance, validated_data)
+
+
+class CadastroResponsavelSerializer(serializers.Serializer):
+    nome = serializers.CharField(max_length=150)
+    email = serializers.EmailField()
+    senha = serializers.CharField(write_only=True, min_length=8)
+
+    def validate_email(self, value):
+        if email_responsavel_em_uso(value):
+            raise serializers.ValidationError("Este e-mail já está cadastrado.")
+        return value
+
+    def create(self, validated_data):
+        return criar_responsavel_com_conta(validated_data)
+
+
+def email_responsavel_em_uso(email):
+    user_model = get_user_model()
+    return (
+        user_model.objects.filter(username__iexact=email).exists()
+        or Responsavel.objects.filter(email__iexact=email).exists()
+    )
+
+
+def criar_responsavel_com_conta(dados):
+    user_model = get_user_model()
+    validated_data = dict(dados)
+    senha = validated_data.pop("senha")
+    email = validated_data["email"]
+    with transaction.atomic():
+        user_model.objects.create_user(
+            username=email,
+            email=email,
+            password=senha,
+        )
+        validated_data.update(
+            senha_hash=make_password(senha),
+            telefone=validated_data.get("telefone", ""),
+            perfil="RESPONSAVEL",
+            ativo=True,
+        )
+        return Responsavel.objects.create(**validated_data)
 
 
 class ValidatedModelSerializer(serializers.ModelSerializer):
@@ -137,6 +254,20 @@ class AgendamentoSerializer(ValidatedModelSerializer):
 
     def validate(self, attrs):
         attrs = super().validate(attrs)
+        request = self.context.get("request")
+        if request and not request.user.is_staff:
+            responsavel = Responsavel.objects.filter(
+                email__iexact=request.user.username,
+                ativo=True,
+            ).first()
+            alunos = attrs.get("alunos", [])
+            if responsavel is None or any(
+                aluno.responsavel_id != responsavel.pk for aluno in alunos
+            ):
+                raise serializers.ValidationError(
+                    {"alunos": "Só é possível agendar para alunos sob sua responsabilidade."}
+                )
+
         if (
             self.instance is None
             and "status" in attrs
@@ -162,6 +293,25 @@ class AgendamentoSerializer(ValidatedModelSerializer):
     def create(self, validated_data):
         alunos = validated_data.pop("alunos")
         validated_data["status"] = StatusAgendamento.AGENDADO
+        request = self.context.get("request")
+
+        if request and not request.user.is_staff:
+            responsavel = Responsavel.objects.get(
+                email__iexact=request.user.username,
+                ativo=True,
+            )
+            try:
+                return responsavel.solicitar_agendamento(
+                    {**validated_data, "alunos": alunos}
+                )
+            except DjangoValidationError as exc:
+                detail = (
+                    exc.message_dict
+                    if hasattr(exc, "message_dict")
+                    else exc.messages
+                )
+                raise serializers.ValidationError(detail) from exc
+
         agendamento = Agendamento(**validated_data)
 
         try:

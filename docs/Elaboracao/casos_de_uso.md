@@ -15,7 +15,8 @@ skinparam packageStyle rectangle
 actor "Administrador" as Admin
 actor "Treinador" as Coach
 actor "Profissional de Saúde" as Health
-actor "Aluno / Responsável" as Student
+actor "Aluno" as Student
+actor "Responsável" as Guardian
 
 rectangle "Backend GAAP" {
   usecase "UC-01: Autenticar no Sistema" as UC01
@@ -49,9 +50,12 @@ Health --> UC09
 Health --> UC10
 
 Student --> UC01
-Student --> UC06
-Student --> UC07
 Student --> UC08
+
+Guardian --> UC01
+Guardian --> UC02
+Guardian --> UC06
+Guardian --> UC08
 @enduml
 ```
 
@@ -60,8 +64,8 @@ Student --> UC08
 ## 2. Detalhamento dos Casos de Uso Prioritários
 
 ### UC-01 — Autenticar no Sistema
-* **Atores**: Administrador, Treinador, Profissional de Saúde, Aluno.
-* **Pré-condições**: Usuário cadastrado e ativo.
+* **Atores**: Administrador, Treinador, Profissional de Saúde, Responsável.
+* **Pré-condições**: Usuário cadastrado e ativo. O Responsável pode criar uma conta com nome, e-mail e senha.
 * **Fluxo Principal**:
   1. Usuário informa e-mail e senha.
   2. Sistema valida as credenciais contra o hash criptográfico.
@@ -73,14 +77,14 @@ Student --> UC08
 ---
 
 ### UC-02 — Manter Cadastro de Alunos
-* **Atores**: Administrador.
-* **Pré-condições**: Administrador autenticado.
+* **Atores**: Administrador, Responsável.
+* **Pré-condições**: Responsável autenticado; ou Administrador autenticado para cadastro administrativo.
 * **Fluxo Principal**:
-  1. Administrador solicita cadastro de novo aluno com nome, e-mail, telefone e observações.
-  2. Sistema valida os campos obrigatórios e unicidade do e-mail.
-  3. Sistema persiste o registro no banco de dados.
+  1. Responsável informa os dados do aluno; o sistema o vincula automaticamente à conta autenticada.
+  2. Administrador pode cadastrar um aluno e selecionar seu responsável.
+  3. Sistema valida os campos obrigatórios e persiste o registro.
 * **Fluxos Alternativos**:
-  * *2a. E-mail já existente*: Sistema recusa e informa duplicidade.
+  * *3a. Dados inválidos ou duplicados*: Sistema recusa e informa o erro.
 
 ---
 
@@ -113,10 +117,10 @@ Student --> UC08
 ---
 
 ### UC-06 — Confirmar Agendamento de Sessão *(Caso Crítico)*
-* **Atores**: Aluno/Responsável, Administrador, Sistema.
-* **Pré-condições**: Aluno, profissional, sala e serviço cadastrados; usuário autenticado.
+* **Atores**: Responsável, Administrador, Sistema.
+* **Pré-condições**: Aluno, profissional, sala e serviço cadastrados; usuário autenticado; responsável vinculado ao aluno.
 * **Fluxo Principal**:
-  1. Usuário seleciona o Aluno, o Serviço (*Treino, Fisio, Psico, Nutri*), o Profissional, a Sala e o Horário desejado.
+  1. Responsável seleciona um aluno sob sua responsabilidade, o Serviço (*Treino, Fisio, Psico, Nutri*), o Profissional, a Sala e o Horário desejado.
   2. Sistema verifica a especialidade do profissional com o serviço solicitado (RN-04).
   3. Sistema verifica se o profissional já possui outro agendamento no horário (RN-01).
   4. Sistema verifica se a sala possui bloqueio ativo ou se excederá a capacidade máxima (RN-02, RN-03).
@@ -125,11 +129,12 @@ Student --> UC08
 * **Fluxos Alternativos**:
   * *3a. Conflito de profissional*: Sistema bloqueia e notifica que o profissional está ocupado.
   * *4a. Sala lotada ou bloqueada*: Sistema bloqueia a reserva e sugere outro horário/espaço.
+  * *1a. Aluno não vinculado*: Sistema recusa a solicitação.
 
 ---
 
 ### UC-07 — Cancelar ou Reagendar Sessão
-* **Atores**: Aluno/Responsável, Administrador.
+* **Atores**: Administrador.
 * **Pré-condições**: Sessão previamente agendada.
 * **Fluxo Principal**:
   1. Usuário solicita o cancelamento ou novo horário para a sessão.
@@ -138,7 +143,7 @@ Student --> UC08
 ---
 
 ### UC-08 — Consultar Agenda Operacional
-* **Atores**: Administrador, Treinador, Profissional de Saúde, Aluno.
+* **Atores**: Administrador, Treinador, Profissional de Saúde, Aluno, Responsável.
 * **Pré-condições**: Usuário autenticado.
 * **Fluxo Principal**:
   1. Usuário aplica filtros (data, serviço, profissional, sala).

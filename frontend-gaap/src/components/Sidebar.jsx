@@ -12,7 +12,13 @@ import {
   Settings,
 } from 'lucide-react';
 
-export default function Sidebar({ activeTab, setActiveTab, backendStatus, onOpenAuth }) {
+export default function Sidebar({
+  activeTab,
+  setActiveTab,
+  backendStatus,
+  userProfile,
+  onOpenAuth,
+}) {
   const menuItems = [
     { id: 'dashboard', label: 'Visão Geral', icon: LayoutDashboard },
     { id: 'agendamentos', label: 'Agendamentos', icon: Calendar },
@@ -22,7 +28,14 @@ export default function Sidebar({ activeTab, setActiveTab, backendStatus, onOpen
     { id: 'profissionais', label: 'Profissionais', icon: UserCheck },
     { id: 'espacos-servicos', label: 'Espaços & Serviços', icon: Building2 },
     { id: 'bloqueios', label: 'Bloqueios de Agenda', icon: Ban },
-  ];
+  ].filter((item) => userProfile.is_staff || (
+    userProfile.perfil === 'RESPONSAVEL' && [
+      'dashboard',
+      'agendamentos',
+      'novo-agendamento',
+      'alunos',
+    ].includes(item.id)
+  ));
 
   return (
     <aside className="sidebar">
@@ -60,7 +73,7 @@ export default function Sidebar({ activeTab, setActiveTab, backendStatus, onOpen
           onClick={onOpenAuth}
         >
           <Settings size={18} />
-          <span>Configurar API</span>
+          <span>Entrar / Criar conta</span>
         </button>
 
         <div className="status-badge">

@@ -10,6 +10,7 @@ class TipoPerfil(models.TextChoices):
     TREINADOR = "TREINADOR", "Treinador"
     PROFISSIONAL_SAUDE = "PROFISSIONAL_SAUDE", "Profissional de Saúde"
     ALUNO = "ALUNO", "Aluno"
+    RESPONSAVEL = "RESPONSAVEL", "Responsável"
 
 
 # Define as modalidades de serviço oferecidas.
@@ -172,32 +173,67 @@ class Profissional(Usuario):
             relatorio.preencher_relatorio()
         return relatorio
 
-# Representa o aluno e permite consultar seus agendamentos.
-class Aluno(Usuario):
-    matricula = models.TextField()
-    data_nascimento = models.DateField()
-    observacoes_medicas = models.TextField()
 
+# Representa o adulto autorizado a acompanhar e agendar para seus alunos.
+class Responsavel(Usuario):
     def __str__(self):
         return self.nome
 
-    # Retorna os agendamentos dos quais este aluno participa.
-    def consultar_agenda(self):
-        return list(Agendamento.objects.filter(alunos=self))
+    # Cadastra um aluno e o vincula automaticamente a este responsável.
+    def cadastrar_aluno(self, dados):
+        if not self.pk or not self.ativo:
+            raise ValidationError(
+                "O responsável precisa estar ativo e salvo para cadastrar alunos."
+            )
 
-    # Cria um agendamento e inclui este aluno como participante.
+        dados_aluno = dict(dados)
+        responsavel_informado = dados_aluno.pop("responsavel", self)
+        if responsavel_informado != self:
+            raise ValidationError(
+                {"responsavel": "O aluno deve ficar vinculado à sua própria conta."}
+            )
+        dados_aluno.setdefault("senha_hash", make_password(None))
+        dados_aluno.update(
+            perfil=TipoPerfil.ALUNO,
+            ativo=True,
+            responsavel=self,
+        )
+        aluno = Aluno(**dados_aluno)
+        aluno.full_clean()
+        aluno.save()
+        return aluno
+
+    # Retorna os agendamentos dos alunos vinculados a este responsável.
+    def consultar_agenda(self):
+        return list(
+            Agendamento.objects.filter(alunos__responsavel=self).distinct()
+        )
+
+    # Cria agendamentos somente para alunos sob sua responsabilidade.
     def solicitar_agendamento(self, dados):
-        if not self.pk:
-            raise ValidationError("O aluno precisa estar salvo para solicitar um agendamento.")
+        if not self.pk or not self.ativo:
+            raise ValidationError(
+                "O responsável precisa estar ativo e salvo para solicitar um agendamento."
+            )
 
         dados_agendamento = dict(dados)
+        alunos = list(dados_agendamento.pop("alunos", []))
+        if not alunos or any(aluno.responsavel_id != self.pk for aluno in alunos):
+            raise ValidationError(
+                {"alunos": "Só é possível agendar para alunos sob sua responsabilidade."}
+            )
+
         dados_agendamento.setdefault("status", StatusAgendamento.AGENDADO)
         agendamento = Agendamento(**dados_agendamento)
         agendamento.full_clean()
 
         with transaction.atomic():
             agendamento.save()
-            agendamento.alunos.add(self)
+            agendamento.alunos.set(alunos)
+            if len(alunos) > agendamento.espaco.capacidade_maxima:
+                raise ValidationError(
+                    "A quantidade de alunos excede a capacidade do espaço."
+                )
             if agendamento.validar_conflito():
                 raise ValidationError(
                     "O horário conflita com outro agendamento do profissional, espaço ou aluno."
@@ -205,8 +241,26 @@ class Aluno(Usuario):
 
         return agendamento
 
-        def __str__(self):
-            return self.nome
+
+# Representa o aluno e permite consultar seus agendamentos.
+class Aluno(Usuario):
+    matricula = models.TextField()
+    data_nascimento = models.DateField()
+    observacoes_medicas = models.TextField(blank=True)
+    responsavel = models.ForeignKey(
+        Responsavel,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="alunos",
+    )
+
+    def __str__(self):
+        return self.nome
+
+    # Retorna os agendamentos dos quais este aluno participa.
+    def consultar_agenda(self):
+        return list(Agendamento.objects.filter(alunos=self))
 
 # Armazena a modalidade e a duração de um serviço.
 class Servico(models.Model):

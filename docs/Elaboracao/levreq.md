@@ -26,7 +26,8 @@ O GAAP tem como objetivo centralizar e orquestrar a operação de agendamentos d
 | **Administrador** | Gestor do centro esportivo. | Cadastro de alunos, profissionais, serviços, salas e bloqueios; consulta de relatórios globais e lotação. |
 | **Treinador** | Profissional de educação física / técnico. | Consulta da grade de treinos, controle de presença e elaboração de relatórios técnicos de treino. |
 | **Profissional de Saúde** | Fisioterapeuta, Nutricionista e Psicólogo. | Gestão de atendimentos especializados e registro de evolução clínica/técnica. |
-| **Aluno / Atleta** | Praticante atendido pelo centro esportivo. | Consulta de disponibilidade, agendamento de sessões e acompanhamento de presença. |
+| **Aluno / Atleta** | Praticante atendido pelo centro esportivo. | Consulta de horários e acompanhamento de presença; não pode criar agendamentos. |
+| **Responsável** | Adulto vinculado a um ou mais alunos menores de idade. | Consulta de horários e criação de agendamentos para os alunos sob sua responsabilidade. |
 | **Academia Esportiva** | Organização mantenedora. | Maximização do uso dos espaços com segurança e excelência no acompanhamento dos atletas. |
 | **Equipe de Desenvolvimento** | Grupo 3 da disciplina PBE (Ibmec). | Entrega do sistema back-end funcional, testada e documentada com base no RUP/UP. |
 
@@ -39,14 +40,14 @@ O GAAP tem como objetivo centralizar e orquestrar a operação de agendamentos d
 | ID | Descrição | Prioridade |
 | :--- | :--- | :---: |
 | **RF-01** | O sistema deve autenticar usuários mediante e-mail e senha com hash seguro. | Must |
-| **RF-02** | O sistema deve restringir o acesso a funcionalidades e dados de acordo com o perfil do usuário (Administrador, Treinador, Profissional de Saúde e Aluno). | Must |
+| **RF-02** | O sistema deve restringir o acesso a funcionalidades e dados de acordo com o perfil do usuário (Administrador, Treinador, Profissional de Saúde, Aluno e Responsável). | Must |
 | **RF-03** | O sistema deve permitir a recuperação de senha por meio de instruções enviadas por e-mail. | Should |
 
 ### 2.2. Cadastros de Base
 
 | ID | Descrição | Prioridade |
 | :--- | :--- | :---: |
-| **RF-04** | O sistema deve permitir o cadastro, edição e inativação de Alunos com dados cadastrais e de contato. | Must |
+| **RF-04** | O sistema deve permitir o cadastro, edição e inativação de Alunos com dados cadastrais, de contato e vínculo obrigatório a um responsável. | Must |
 | **RF-05** | O sistema deve permitir o cadastro, edição e inativação de Profissionais, vinculando-os à sua especialidade (Treinador, Fisioterapeuta, Psicólogo, Nutricionista). | Must |
 | **RF-06** | O sistema deve permitir o cadastro de Serviços oferecidos (*Treino, Fisioterapia, Psicologia, Nutrição*), definindo duração padrão. | Must |
 | **RF-07** | O sistema deve permitir o cadastro de Espaços Físicos / Salas, estipulando a capacidade máxima de ocupação. | Must |
@@ -57,7 +58,8 @@ O GAAP tem como objetivo centralizar e orquestrar a operação de agendamentos d
 | :--- | :--- | :---: |
 | **RF-08** | O sistema deve permitir ao Administrador registrar bloqueios de agenda para profissionais ou salas em períodos específicos (manutenção, eventos ou indisponibilidade). | Must |
 | **RF-09** | O sistema deve permitir a consulta da agenda operacional com filtros por data, profissional, sala, aluno e tipo de serviço. | Must |
-| **RF-10** | O sistema deve exibir apenas os atendimentos pertinentes ao próprio profissional ou ao próprio aluno quando consultado por esses perfis. | Must |
+| **RF-10** | O sistema deve exibir apenas os atendimentos pertinentes ao próprio profissional ou ao aluno e seu responsável. | Must |
+| **RF-20** | O sistema deve permitir que alunos consultem horários sem criar, alterar ou excluir agendamentos; responsáveis podem criar agendamentos somente para os alunos vinculados a eles. | Must |
 
 ### 2.4. Agendamento e Validações
 
@@ -103,6 +105,7 @@ O GAAP tem como objetivo centralizar e orquestrar a operação de agendamentos d
 | **RN-04** | **Compatibilidade Profissional-Serviço** | Treinos só podem ser conduzidos por Treinadores; Fisioterapia, Psicologia e Nutrição exigem profissionais da respectiva especialidade. | RF-05, RF-06, RF-15 |
 | **RN-05** | **Autoria do Relatório e Presença** | Apenas o profissional vinculado à sessão ou o administrador possui permissão para lançar presença e finalizar o relatório de treino. | RF-17, RF-18 |
 | **RN-06** | **Imutabilidade Pós-Finalização** | Relatórios de treino finalizados não podem ser alterados sem autorização administrativa para fins de auditoria. | RF-18, RF-19 |
+| **RN-07** | **Agendamento por Responsável** | Alunos menores não podem criar agendamentos. Cada aluno deve estar vinculado a um responsável, que só pode agendar para os alunos associados ao seu cadastro. | RF-02, RF-04, RF-20 |
 
 ---
 

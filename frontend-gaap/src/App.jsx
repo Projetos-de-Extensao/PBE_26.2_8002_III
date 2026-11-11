@@ -23,10 +23,12 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [modalAuth, setModalAuth] = useState(false);
   const [modalNovoAgendamento, setModalNovoAgendamento] = useState(false);
+  const [userProfile, setUserProfile] = useState({ is_staff: false, perfil: null });
 
   // Estados dos recursos da API GAAP
   const [agendamentos, setAgendamentos] = useState([]);
   const [alunos, setAlunos] = useState([]);
+  const [responsaveis, setResponsaveis] = useState([]);
   const [profissionais, setProfissionais] = useState([]);
   const [espacos, setEspacos] = useState([]);
   const [servicos, setServicos] = useState([]);
@@ -38,6 +40,7 @@ export default function App() {
     online: true,
     authenticated: true,
   });
+  const canSchedule = userProfile.is_staff || userProfile.perfil === 'RESPONSAVEL';
 
   const carregarDados = useCallback(async () => {
     setLoading(true);
@@ -54,6 +57,8 @@ export default function App() {
           servicosData,
           relatoriosData,
           bloqueiosData,
+          userProfileData,
+          responsaveisData,
         ] = await Promise.allSettled([
           api.getAgendamentos(),
           api.getAlunos(),
@@ -62,8 +67,13 @@ export default function App() {
           api.getServicos(),
           api.getRelatorios(),
           api.getBloqueios(),
+          api.getCurrentUser(),
+          api.getResponsaveis(),
         ]);
 
+        if (userProfileData.status === 'fulfilled') {
+          setUserProfile(userProfileData.value);
+        }
         if (agendamentosData.status === 'fulfilled') setAgendamentos(agendamentosData.value || []);
         if (alunosData.status === 'fulfilled') setAlunos(alunosData.value || []);
         if (profissionaisData.status === 'fulfilled') setProfissionais(profissionaisData.value || []);
@@ -71,6 +81,7 @@ export default function App() {
         if (servicosData.status === 'fulfilled') setServicos(servicosData.value || []);
         if (relatoriosData.status === 'fulfilled') setRelatorios(relatoriosData.value || []);
         if (bloqueiosData.status === 'fulfilled') setBloqueios(bloqueiosData.value || []);
+        if (responsaveisData.status === 'fulfilled') setResponsaveis(responsaveisData.value || []);
       }
     } catch (err) {
       console.error('Erro ao carregar dados:', err);
@@ -119,6 +130,7 @@ export default function App() {
           }
         }}
         backendStatus={backendStatus}
+        userProfile={userProfile}
         onOpenAuth={() => setModalAuth(true)}
       />
 
@@ -128,7 +140,7 @@ export default function App() {
           title={getPageTitle()}
           onRefresh={carregarDados}
           onOpenAuth={() => setModalAuth(true)}
-          onNovoAgendamento={() => setModalNovoAgendamento(true)}
+          onNovoAgendamento={canSchedule ? () => setModalNovoAgendamento(true) : undefined}
           loading={loading}
         />
 
@@ -142,7 +154,7 @@ export default function App() {
               servicos={servicos}
               relatorios={relatorios}
               backendStatus={backendStatus}
-              onNovoAgendamento={() => setModalNovoAgendamento(true)}
+              onNovoAgendamento={canSchedule ? () => setModalNovoAgendamento(true) : undefined}
               onVerAgenda={() => setActiveTab('agendamentos')}
               onOpenAuth={() => setModalAuth(true)}
             />
@@ -155,13 +167,14 @@ export default function App() {
               profissionais={profissionais}
               espacos={espacos}
               servicos={servicos}
-              onNovoAgendamento={() => setModalNovoAgendamento(true)}
+              onNovoAgendamento={canSchedule ? () => setModalNovoAgendamento(true) : undefined}
               onAbrirRelatorio={() => setActiveTab('relatorios')}
               onReload={carregarDados}
+              isStaff={userProfile.is_staff}
             />
           )}
 
-          {activeTab === 'relatorios' && (
+          {userProfile.is_staff && activeTab === 'relatorios' && (
             <RelatoriosView
               relatorios={relatorios}
               agendamentos={agendamentos}
@@ -170,17 +183,22 @@ export default function App() {
           )}
 
           {activeTab === 'alunos' && (
-            <AlunosView alunos={alunos} onReload={carregarDados} />
+            <AlunosView
+              alunos={alunos}
+              responsaveis={responsaveis}
+              isResponsavel={userProfile.perfil === 'RESPONSAVEL'}
+              onReload={carregarDados}
+            />
           )}
 
-          {activeTab === 'profissionais' && (
+          {userProfile.is_staff && activeTab === 'profissionais' && (
             <ProfissionaisView
               profissionais={profissionais}
               onReload={carregarDados}
             />
           )}
 
-          {activeTab === 'espacos-servicos' && (
+          {userProfile.is_staff && activeTab === 'espacos-servicos' && (
             <EspacosServicosView
               espacos={espacos}
               servicos={servicos}
@@ -188,7 +206,7 @@ export default function App() {
             />
           )}
 
-          {activeTab === 'bloqueios' && (
+          {userProfile.is_staff && activeTab === 'bloqueios' && (
             <BloqueiosView
               bloqueios={bloqueios}
               profissionais={profissionais}
@@ -207,6 +225,7 @@ export default function App() {
         profissionais={profissionais}
         espacos={espacos}
         servicos={servicos}
+        isStaff={userProfile.is_staff}
         onCreated={() => {
           carregarDados();
           setActiveTab('agendamentos');

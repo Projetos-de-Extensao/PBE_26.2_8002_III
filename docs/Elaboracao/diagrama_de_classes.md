@@ -30,6 +30,7 @@ enum TipoPerfil {
   TREINADOR
   PROFISSIONAL_SAUDE
   ALUNO
+  RESPONSAVEL
 }
 
 enum TipoServico {
@@ -79,7 +80,12 @@ class Aluno {
   - data_nascimento: Date
   - observacoes_medicas: String
   + consultar_agenda(): List<Agendamento>
-  + solicitar_agendamento(): Agendamento
+}
+
+class Responsavel {
+  + consultar_agenda(): List<Agendamento>
+  + cadastrar_aluno(dados): Aluno
+  + solicitar_agendamento(dados): Agendamento
 }
 
 class Servico {
@@ -129,6 +135,8 @@ class RelatorioTreino {
 Usuario <|-- Administrador
 Usuario <|-- Profissional
 Usuario <|-- Aluno
+Usuario <|-- Responsavel
+Responsavel "1" -- "0..*" Aluno : responsavel_de >
 
 Profissional "1" -- "*" Agendamento : conduz >
 Aluno "1..*" -- "*" Agendamento : participa >
@@ -151,7 +159,8 @@ Agendamento "1" -- "0..1" RelatorioTreino : gera >
 | **Usuario** | Entidade base com autenticação, perfis de acesso e dados cadastrais unificados. |
 | **Administrador** | Herda de `Usuario`; gerencia cadastros de base, serviços, salas e bloqueios de agenda. |
 | **Profissional** | Herda de `Usuario`; representa treinadores e profissionais de saúde vinculados a sua especialidade. |
-| **Aluno** | Herda de `Usuario`; representa o atleta atendido nas sessões esportivas e clínicas. |
+| **Aluno** | Herda de `Usuario`; pode consultar sua agenda e fica vinculado a um responsável, que cadastra o aluno e agenda em seu nome. |
+| **Responsável** | Herda de `Usuario`; cria sua conta com nome, e-mail e senha, cadastra os próprios alunos e agenda somente para eles. |
 | **Servico** | Define as modalidades atendidas (*Treino, Fisioterapia, Psicologia, Nutrição*) e durações padrão. |
 | **Espaco** *(Sala)* | Ambientes físicos com controle de capacidade máxima e disponibilidade. |
 | **Agendamento** | Orquestra a sessão conectando Aluno, Profissional, Sala, Serviço e horário. |
@@ -168,6 +177,7 @@ Agendamento "1" -- "0..1" RelatorioTreino : gera >
 | **Administrador** | RF-04, RF-05, RF-06, RF-07, RF-08 | UC-02, UC-03, UC-04, UC-05 | Painel do Administrador |
 | **Profissional** | RF-05, RF-09, RF-15, RF-17, RF-18 | UC-03, UC-08, UC-09, UC-10 | Agenda do Profissional |
 | **Aluno** | RF-04, RF-09, RF-11 | UC-02, UC-06, UC-08 | Gestão de Alunos |
+| **Responsável** | Cadastro de conta e agendamento para aluno menor | UC-01, UC-02, UC-06, UC-08 | Cadastro de Aluno / Agendamento de Sessão |
 | **Servico** | RF-06, RF-15 | UC-04, UC-06 | Agendamento de Sessão |
 | **Espaco** *(Sala)* | RF-07, RF-11, RF-13 | UC-04, UC-06 | Agendamento de Sessão |
 | **Agendamento** | RF-11, RF-12, RF-13, RF-14, RF-16 | UC-06, UC-07, UC-08 | Agendamento de Sessão / Agenda |
@@ -183,3 +193,4 @@ Agendamento "1" -- "0..1" RelatorioTreino : gera >
 | 2026.2 | 1.0 | Versão inicial | Grupo 3 |
 | 2026.2 | 2.0 | Reestruturação completa da modelagem OO para o Backend GAAP | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
 | 2026.2 | 2.1 | Inclusão de Fontes de Entrada e Matriz de Rastreabilidade conforme modelo oficial | Arthur Calebe, Antonio Reuther, Pedro Henrique Becker e Breno Huf |
+| 2026.2 | 2.2 | Inclusão do responsável e restrição de agendamento para alunos menores | Grupo 3 |

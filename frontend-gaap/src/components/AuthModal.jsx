@@ -1,24 +1,43 @@
 // src/components/AuthModal.jsx
 import React, { useState } from 'react';
 import { X, KeyRound, ShieldAlert, CheckCircle2 } from 'lucide-react';
-import { getAuthCredentials, saveAuthCredentials, clearAuthCredentials } from '../api';
+import {
+  api,
+  getAuthCredentials,
+  saveAuthCredentials,
+  clearAuthCredentials,
+} from '../api';
 
 export default function AuthModal({ isOpen, onClose, onSaved }) {
   const current = getAuthCredentials();
   const [username, setUsername] = useState(current.user);
+  const [name, setName] = useState('');
   const [password, setPassword] = useState(current.pass);
   const [statusMsg, setStatusMsg] = useState(null);
+  const [mode, setMode] = useState('login');
+  const [submitting, setSubmitting] = useState(false);
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    saveAuthCredentials(username, password);
-    setStatusMsg({ type: 'success', text: 'Credenciais salvas com sucesso!' });
-    setTimeout(() => {
+    setSubmitting(true);
+    try {
+      if (mode === 'register') {
+        await api.cadastrarResponsavel({
+          nome: name,
+          email: username,
+          senha: password,
+        });
+      }
+      saveAuthCredentials(username, password);
       onSaved();
       onClose();
-    }, 600);
+    } catch (err) {
+      setStatusMsg({ type: 'danger', text: err.message });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleClear = () => {
@@ -34,7 +53,9 @@ export default function AuthModal({ isOpen, onClose, onSaved }) {
         <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <KeyRound size={20} color="var(--primary)" />
-            <h3 className="modal-title">Autenticação com a API GAAP</h3>
+            <h3 className="modal-title">
+              {mode === 'register' ? 'Criar conta de responsável' : 'Acessar o GAAP'}
+            </h3>
           </div>
           <button
             className="btn btn-secondary btn-sm"
@@ -50,7 +71,9 @@ export default function AuthModal({ isOpen, onClose, onSaved }) {
             <div className="alert-banner warning">
               <ShieldAlert size={20} style={{ flexShrink: 0 }} />
               <div>
-                <strong>Acesso Protegido:</strong> O backend GAAP exige autenticação (Basic Auth) para consultar e registrar dados. Use as credenciais de um superusuário ou usuário do Django.
+                {mode === 'register'
+                  ? 'Cadastre sua conta para incluir seus alunos e agendar horários para eles.'
+                  : 'Entre com seu e-mail e senha para consultar os horários e acessar seus alunos.'}
               </div>
             </div>
 
@@ -61,14 +84,28 @@ export default function AuthModal({ isOpen, onClose, onSaved }) {
               </div>
             )}
 
+            {mode === 'register' && (
+              <div className="form-group">
+                <label className="form-label">Nome completo</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  autoComplete="name"
+                  required
+                />
+              </div>
+            )}
+
             <div className="form-group">
-              <label className="form-label">Usuário (Django)</label>
+              <label className="form-label">E-mail</label>
               <input
-                type="text"
+                type="email"
                 className="form-control"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="ex: admin"
+                autoComplete="email"
                 required
               />
             </div>
@@ -80,28 +117,41 @@ export default function AuthModal({ isOpen, onClose, onSaved }) {
                 className="form-control"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="ex: admin123"
+                autoComplete={mode === 'register' ? 'new-password' : 'current-password'}
+                minLength={mode === 'register' ? 8 : undefined}
                 required
               />
             </div>
 
-            <div style={{ marginTop: '14px', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-              <strong>Dica:</strong> Para criar um superusuário no backend, abra o terminal no diretório <code>backend-gaap</code> e execute:
-              <pre style={{ background: '#f1f5f9', padding: '6px 10px', borderRadius: '4px', marginTop: '6px' }}>
-python manage.py createsuperuser
-              </pre>
-            </div>
+            <button
+              type="button"
+              className="btn btn-secondary btn-sm"
+              onClick={() => {
+                setMode(mode === 'register' ? 'login' : 'register');
+                setStatusMsg(null);
+              }}
+            >
+              {mode === 'register'
+                ? 'Já tenho uma conta'
+                : 'Criar conta de responsável'}
+            </button>
           </div>
 
           <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={handleClear}>
-              Limpar
-            </button>
+            {mode === 'login' && (
+              <button type="button" className="btn btn-secondary" onClick={handleClear}>
+                Limpar
+              </button>
+            )}
             <button type="button" className="btn btn-secondary" onClick={onClose}>
               Cancelar
             </button>
-            <button type="submit" className="btn btn-primary">
-              Salvar e Conectar
+            <button type="submit" className="btn btn-primary" disabled={submitting}>
+              {submitting
+                ? 'Aguarde...'
+                : mode === 'register'
+                  ? 'Cadastrar e entrar'
+                  : 'Entrar'}
             </button>
           </div>
         </form>

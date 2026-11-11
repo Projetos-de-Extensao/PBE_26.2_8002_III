@@ -30,16 +30,17 @@ export function getAuthHeader() {
 
 export async function apiRequest(endpoint, options = {}) {
   const url = `${API_BASE}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
+  const { skipAuth = false, ...requestOptions } = options;
   
   const headers = {
     'Content-Type': 'application/json',
-    ...getAuthHeader(),
-    ...(options.headers || {}),
+    ...(!skipAuth ? getAuthHeader() : {}),
+    ...(requestOptions.headers || {}),
   };
 
   try {
     const res = await fetch(url, {
-      ...options,
+      ...requestOptions,
       headers,
     });
 
@@ -101,6 +102,15 @@ export const api = {
       return { online: false, authenticated: false, message: err.message };
     }
   },
+
+  // Cadastro e perfil do responsável
+  cadastrarResponsavel: (dados) => apiRequest('/responsaveis/cadastro/', {
+    method: 'POST',
+    body: JSON.stringify(dados),
+    skipAuth: true,
+  }),
+  getCurrentUser: () => apiRequest('/responsaveis/me/'),
+  getResponsaveis: () => apiRequest('/responsaveis/'),
 
   // Agendamentos
   getAgendamentos: () => apiRequest('/agendamentos/'),

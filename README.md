@@ -18,6 +18,8 @@ O **GAAP (Gestão de Atletas de Alta Performance)** é uma solução completa de
 
 A plataforma conta com backend robusto em Django REST Framework com validação de conflitos em tempo real (*double-booking*), controle de capacidade de salas, gestão de bloqueios de agenda e registro de relatórios técnicos pós-sessão, além de frontend moderno e intuitivo em React (Vite).
 
+Responsáveis podem criar uma conta com nome, e-mail e senha, cadastrar e vincular seus alunos e agendar sessões para eles. Alunos menores não criam nem alteram agendamentos.
+
 ---
 
 ## Tecnologias Utilizadas

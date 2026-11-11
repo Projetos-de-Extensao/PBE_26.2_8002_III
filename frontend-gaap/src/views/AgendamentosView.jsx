@@ -23,6 +23,7 @@ export default function AgendamentosView({
   onNovoAgendamento,
   onAbrirRelatorio,
   onReload,
+  isStaff = false,
 }) {
   const [filtroStatus, setFiltroStatus] = useState('TODOS');
   const [loadingAction, setLoadingAction] = useState(null);
@@ -194,7 +195,7 @@ export default function AgendamentosView({
                     <th>Espaço Físico</th>
                     <th>Atletas</th>
                     <th>Status</th>
-                    <th style={{ textAlign: 'right' }}>Ações</th>
+                    {isStaff && <th style={{ textAlign: 'right' }}>Ações</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -242,7 +243,7 @@ export default function AgendamentosView({
                           {item.status}
                         </span>
                       </td>
-                      <td style={{ textAlign: 'right' }}>
+                      {isStaff && <td style={{ textAlign: 'right' }}>
                         <div style={{ display: 'inline-flex', gap: '6px' }}>
                           {item.status === 'AGENDADO' && (
                             <>
@@ -274,7 +275,7 @@ export default function AgendamentosView({
                             <Trash2 size={14} />
                           </button>
                         </div>
-                      </td>
+                      </td>}
                     </tr>
                   ))}
                 </tbody>

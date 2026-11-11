@@ -1,3 +1,4 @@
+from base64 import b64encode
 from datetime import date, datetime, timedelta, timezone
 
 from django.contrib.auth import get_user_model
@@ -14,6 +15,7 @@ from .models import (
     Espaco,
     Profissional,
     RelatorioTreino,
+    Responsavel,
     Servico,
     StatusAgendamento,
     TipoPerfil,
@@ -42,16 +44,29 @@ class DiagramaMethodsTest(TestCase):
             registro_profissional="CREF-MET-001",
             especialidade=TipoServico.TREINO,
         )
+        responsavel_user = get_user_model().objects.create_user(
+            username="responsavel-metodos",
+            password="senha-segura",
+        )
+        self.responsavel = Responsavel.objects.create(
+            nome="Responsável",
+            email="responsavel.metodos@gaap.com",
+            senha_hash="hash",
+            telefone="333",
+            perfil=TipoPerfil.RESPONSAVEL,
+            ativo=True,
+        )
         self.aluno = Aluno.objects.create(
             nome="Joana",
             email="joana.metodos@gaap.com",
             senha_hash="hash",
-            telefone="333",
+            telefone="444",
             perfil=TipoPerfil.ALUNO,
             ativo=True,
             matricula="MET-001",
             data_nascimento=date(2000, 5, 10),
             observacoes_medicas="",
+            responsavel=self.responsavel,
         )
         self.servico = Servico.objects.create(
             nome=TipoServico.TREINO,
@@ -87,6 +102,7 @@ class DiagramaMethodsTest(TestCase):
                 "matricula": "NOVO-001",
                 "data_nascimento": date(2001, 1, 1),
                 "observacoes_medicas": "Sem observacoes",
+                "responsavel": self.responsavel,
             }
         )
         sala = self.administrador.configurar_sala(
@@ -118,22 +134,52 @@ class DiagramaMethodsTest(TestCase):
         self.assertEqual(servico.obter_duracao(), 45)
         self.assertEqual(bloqueio.espaco, sala)
 
-    def test_aluno_solicita_agendamento_e_consulta_agenda(self):
+    def test_responsavel_agenda_para_aluno_e_consulta_agenda(self):
         inicio = datetime(2026, 10, 27, 10, tzinfo=timezone.utc)
-        agendamento = self.aluno.solicitar_agendamento(
-            self.criar_dados_agendamento(inicio)
+        agendamento = self.responsavel.solicitar_agendamento(
+            {
+                **self.criar_dados_agendamento(inicio),
+                "alunos": [self.aluno],
+            }
         )
 
         self.assertEqual(self.aluno.consultar_agenda(), [agendamento])
+        self.assertEqual(self.responsavel.consultar_agenda(), [agendamento])
         self.assertEqual(self.profissional.consultar_agenda(), [agendamento])
         self.assertEqual(agendamento.status, StatusAgendamento.AGENDADO)
 
     def test_solicitacao_rejeita_conflito_de_horario(self):
         inicio = datetime(2026, 10, 27, 10, tzinfo=timezone.utc)
-        self.aluno.solicitar_agendamento(self.criar_dados_agendamento(inicio))
+        dados = {
+            **self.criar_dados_agendamento(inicio),
+            "alunos": [self.aluno],
+        }
+        self.responsavel.solicitar_agendamento(dados)
 
         with self.assertRaises(ValidationError):
-            self.aluno.solicitar_agendamento(self.criar_dados_agendamento(inicio))
+            self.responsavel.solicitar_agendamento(dados)
+
+    def test_responsavel_nao_agenda_para_aluno_nao_vinculado(self):
+        outro_aluno = Aluno.objects.create(
+            nome="Outro aluno",
+            email="outro.metodos@gaap.com",
+            senha_hash="hash",
+            telefone="555",
+            perfil=TipoPerfil.ALUNO,
+            ativo=True,
+            matricula="MET-002",
+            data_nascimento=date(2001, 5, 10),
+        )
+
+        with self.assertRaises(ValidationError):
+            self.responsavel.solicitar_agendamento(
+                {
+                    **self.criar_dados_agendamento(
+                        datetime(2026, 10, 27, 10, tzinfo=timezone.utc)
+                    ),
+                    "alunos": [outro_aluno],
+                }
+            )
 
     def test_metodos_de_servico_espaco_agendamento_e_bloqueio(self):
         self.assertTrue(self.espaco.verificar_capacidade(10))
@@ -141,8 +187,11 @@ class DiagramaMethodsTest(TestCase):
         self.assertEqual(self.servico.obter_duracao(), 60)
 
         inicio = datetime(2026, 10, 27, 10, tzinfo=timezone.utc)
-        agendamento = self.aluno.solicitar_agendamento(
-            self.criar_dados_agendamento(inicio)
+        agendamento = self.responsavel.solicitar_agendamento(
+            {
+                **self.criar_dados_agendamento(inicio),
+                "alunos": [self.aluno],
+            }
         )
         self.assertFalse(agendamento.validar_conflito())
         agendamento.cancelar()
@@ -209,6 +258,7 @@ class DiagramaMethodsTest(TestCase):
         self.assertEqual(str(self.administrador), "Admin")
         self.assertEqual(str(self.profissional), "Carlos")
         self.assertEqual(str(self.aluno), "Joana")
+        self.assertEqual(str(self.responsavel), "Responsável")
         self.assertEqual(str(self.servico), "Treino")
         servico_personalizado = Servico(
             nome="Pilates",
@@ -261,6 +311,21 @@ class AgendamentoApiTest(APITestCase):
             password="test-password",
         )
         self.client.force_authenticate(user=self.api_user)
+        self.api_user.is_staff = True
+        self.api_user.save(update_fields=["is_staff"])
+        self.responsavel_user = get_user_model().objects.create_user(
+            username="responsavel.api@gaap.com",
+            email="responsavel.api@gaap.com",
+            password="senha-segura",
+        )
+        self.responsavel = Responsavel.objects.create(
+            nome="Responsável API",
+            email="responsavel.api@gaap.com",
+            senha_hash="hash",
+            telefone="333",
+            perfil=TipoPerfil.RESPONSAVEL,
+            ativo=True,
+        )
         self.profissional = Profissional.objects.create(
             nome="Profissional API",
             email="profissional.api@gaap.com",
@@ -281,6 +346,7 @@ class AgendamentoApiTest(APITestCase):
             matricula="API-001",
             data_nascimento=date(2000, 1, 1),
             observacoes_medicas="",
+            responsavel=self.responsavel,
         )
         self.espaco = Espaco.objects.create(
             nome="Sala API",
@@ -320,6 +386,70 @@ class AgendamentoApiTest(APITestCase):
             [self.aluno.pk],
         )
 
+    def test_responsavel_pode_agendar_para_aluno_vinculado(self):
+        self.client.force_authenticate(user=self.responsavel_user)
+
+        response = self.client.post(self.url, self.payload, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
+        self.assertEqual(Agendamento.objects.count(), 1)
+
+    def test_usuario_sem_perfil_responsavel_pode_consultar_mas_nao_agendar(self):
+        usuario_aluno = get_user_model().objects.create_user(
+            username="aluno-api",
+            password="senha-segura",
+        )
+        self.client.force_authenticate(user=usuario_aluno)
+
+        get_response = self.client.get(self.url)
+        post_response = self.client.post(self.url, self.payload, format="json")
+
+        self.assertEqual(get_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(post_response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(Agendamento.objects.count(), 0)
+
+    def test_responsavel_nao_agenda_para_aluno_de_outra_familia(self):
+        outro_aluno = Aluno.objects.create(
+            nome="Outro aluno",
+            email="outro.aluno.api@gaap.com",
+            senha_hash="hash",
+            telefone="444",
+            perfil=TipoPerfil.ALUNO,
+            ativo=True,
+            matricula="API-002",
+            data_nascimento=date(2001, 1, 1),
+        )
+        self.client.force_authenticate(user=self.responsavel_user)
+
+        response = self.client.post(
+            self.url,
+            {**self.payload, "alunos": [outro_aluno.pk]},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Agendamento.objects.count(), 0)
+
+    def test_responsavel_nao_pode_alterar_ou_excluir_agendamento(self):
+        agendamento_response = self.client.post(
+            self.url,
+            self.payload,
+            format="json",
+        )
+        self.assertEqual(agendamento_response.status_code, status.HTTP_201_CREATED)
+        agendamento_id = agendamento_response.data["id"]
+        self.client.force_authenticate(user=self.responsavel_user)
+
+        update_response = self.client.patch(
+            f"{self.url}{agendamento_id}/",
+            {"status": StatusAgendamento.CANCELADO},
+            format="json",
+        )
+        delete_response = self.client.delete(f"{self.url}{agendamento_id}/")
+
+        self.assertEqual(update_response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(delete_response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_post_rejeita_conflito_sem_persistir_agendamento(self):
         Agendamento.objects.create(
             data_hora_inicio="2026-11-02T10:00:00Z",
@@ -353,6 +483,96 @@ class AgendamentoApiTest(APITestCase):
         response = self.client.get(self.url)
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_responsavel_se_cadastra_e_cria_aluno_vinculado(self):
+        self.client.force_authenticate(user=None)
+        cadastro_response = self.client.post(
+            "/api/responsaveis/cadastro/",
+            {
+                "nome": "Responsável novo",
+                "email": "novo.responsavel@gaap.com",
+                "senha": "senha-segura-123",
+            },
+            format="json",
+        )
+
+        self.assertEqual(
+            cadastro_response.status_code,
+            status.HTTP_201_CREATED,
+            cadastro_response.data,
+        )
+        self.assertNotIn("senha", cadastro_response.data)
+        responsavel = Responsavel.objects.get(email="novo.responsavel@gaap.com")
+        credentials = b64encode(
+            b"novo.responsavel@gaap.com:senha-segura-123"
+        ).decode()
+        self.client.credentials(HTTP_AUTHORIZATION=f"Basic {credentials}")
+
+        perfil_response = self.client.get("/api/responsaveis/me/")
+        self.assertEqual(perfil_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(perfil_response.data["perfil"], "RESPONSAVEL")
+
+        aluno_response = self.client.post(
+            "/api/alunos/",
+            {
+                "nome": "Filho do responsável",
+                "email": "aluno.responsavel@gaap.com",
+                "telefone": "555",
+                "perfil": TipoPerfil.ALUNO,
+                "ativo": True,
+                "matricula": "RESP-001",
+                "data_nascimento": "2012-01-01",
+                "observacoes_medicas": "",
+            },
+            format="json",
+        )
+
+        self.assertEqual(
+            aluno_response.status_code,
+            status.HTTP_201_CREATED,
+            aluno_response.data,
+        )
+        aluno = Aluno.objects.get(pk=aluno_response.data["id"])
+        self.assertEqual(aluno.responsavel, responsavel)
+        self.assertFalse(aluno.autenticar("senha-segura-123"))
+        self.assertEqual(
+            list(self.client.get("/api/alunos/").data)[0]["id"],
+            aluno.pk,
+        )
+
+    def test_responsavel_consulta_apenas_os_proprios_alunos(self):
+        outro_aluno = Aluno.objects.create(
+            nome="Aluno de outra família",
+            email="outro.familia@gaap.com",
+            senha_hash="hash",
+            telefone="666",
+            perfil=TipoPerfil.ALUNO,
+            ativo=True,
+            matricula="API-003",
+            data_nascimento=date(2010, 1, 1),
+        )
+        self.client.force_authenticate(user=self.responsavel_user)
+
+        response = self.client.get("/api/alunos/")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual([aluno["id"] for aluno in response.data], [self.aluno.pk])
+        self.assertNotIn(outro_aluno.pk, [aluno["id"] for aluno in response.data])
+
+    def test_cadastro_de_responsavel_rejeita_email_em_uso(self):
+        self.client.force_authenticate(user=None)
+
+        response = self.client.post(
+            "/api/responsaveis/cadastro/",
+            {
+                "nome": "Duplicado",
+                "email": self.responsavel.email,
+                "senha": "senha-segura-123",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_crud_de_servico(self):
         response = self.client.post(
@@ -580,6 +800,7 @@ class AgendamentoApiTest(APITestCase):
                 "matricula": "API-002",
                 "data_nascimento": "2001-01-01",
                 "observacoes_medicas": "Restrito",
+                "responsavel": self.responsavel.pk,
             },
             format="json",
         )
@@ -660,6 +881,19 @@ class AdminTest(TestCase):
             "admin", "admin@gaap.com", "admin123"
         )
         self.client.force_login(user)
+        responsavel_user = get_user_model().objects.create_user(
+            username="responsavel-admin",
+            email="responsavel.admin@gaap.com",
+            password="senha-segura",
+        )
+        self.responsavel = Responsavel.objects.create(
+            nome="Responsável Admin",
+            email="responsavel.admin@gaap.com",
+            senha_hash="hash",
+            telefone="111",
+            perfil=TipoPerfil.RESPONSAVEL,
+            ativo=True,
+        )
 
     def test_paginas_admin_respondem_200(self):
         for url in (
@@ -670,6 +904,7 @@ class AdminTest(TestCase):
             "/admin/app/profissional/add/",
             "/admin/app/aluno/",
             "/admin/app/aluno/add/",
+            "/admin/app/responsavel/",
             "/admin/app/relatoriotreino/",
             "/admin/app/servico/",
             "/admin/app/espaco/",
@@ -683,13 +918,18 @@ class AdminTest(TestCase):
             {
                 "nome": "Maria",
                 "email": "maria@gaap.com",
-                "telefone": "",
+                "telefone": "555",
                 "ativo": "on",
                 "matricula": "2026010",
                 "data_nascimento": "2001-03-15",
                 "observacoes_medicas": "",
+                "responsavel": self.responsavel.pk,
             },
         )
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            response.status_code,
+            302,
+            response.content.decode()[:2000],
+        )
         aluno = Aluno.objects.get(matricula="2026010")
         self.assertEqual(aluno.perfil, TipoPerfil.ALUNO)

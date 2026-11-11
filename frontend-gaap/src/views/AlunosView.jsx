@@ -3,7 +3,12 @@ import React, { useState } from 'react';
 import { Users, Plus, Search, Trash2, HeartPulse, Phone, Mail, Calendar, X } from 'lucide-react';
 import { api } from '../api';
 
-export default function AlunosView({ alunos, onReload }) {
+export default function AlunosView({
+  alunos,
+  responsaveis = [],
+  isResponsavel = false,
+  onReload,
+}) {
   const [busca, setBusca] = useState('');
   const [modalAberto, setModalAberto] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -12,7 +17,7 @@ export default function AlunosView({ alunos, onReload }) {
   // Formulário de novo aluno
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('123456');
+  const [responsavelId, setResponsavelId] = useState('');
   const [telefone, setTelefone] = useState('');
   const [matricula, setMatricula] = useState('');
   const [dataNascimento, setDataNascimento] = useState('2000-01-01');
@@ -43,7 +48,6 @@ export default function AlunosView({ alunos, onReload }) {
     const payload = {
       nome,
       email,
-      senha,
       telefone,
       perfil: 'ALUNO',
       ativo: true,
@@ -51,6 +55,7 @@ export default function AlunosView({ alunos, onReload }) {
       data_nascimento: dataNascimento,
       observacoes_medicas: observacoesMedicas,
     };
+    if (!isResponsavel) payload.responsavel = Number(responsavelId);
 
     try {
       setSubmitting(true);
@@ -107,7 +112,7 @@ export default function AlunosView({ alunos, onReload }) {
 
           <button className="btn btn-primary" onClick={() => setModalAberto(true)}>
             <Plus size={16} />
-            Cadastrar Atleta
+            {isResponsavel ? 'Cadastrar meu aluno' : 'Cadastrar Atleta'}
           </button>
         </div>
 
@@ -129,7 +134,7 @@ export default function AlunosView({ alunos, onReload }) {
                     <th>Nascimento</th>
                     <th>Observações Médicas</th>
                     <th>Status</th>
-                    <th style={{ textAlign: 'right' }}>Ações</th>
+                    {!isResponsavel && <th style={{ textAlign: 'right' }}>Ações</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -185,7 +190,7 @@ export default function AlunosView({ alunos, onReload }) {
                           {al.ativo ? 'Ativo' : 'Inativo'}
                         </span>
                       </td>
-                      <td style={{ textAlign: 'right' }}>
+                      {!isResponsavel && <td style={{ textAlign: 'right' }}>
                         <button
                           className="btn btn-danger btn-sm"
                           onClick={() => handleExcluir(al.id)}
@@ -193,7 +198,7 @@ export default function AlunosView({ alunos, onReload }) {
                         >
                           <Trash2 size={14} />
                         </button>
-                      </td>
+                      </td>}
                     </tr>
                   ))}
                 </tbody>
@@ -208,7 +213,9 @@ export default function AlunosView({ alunos, onReload }) {
         <div className="modal-overlay" onClick={() => setModalAberto(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3 className="modal-title">Cadastrar Novo Atleta</h3>
+              <h3 className="modal-title">
+                {isResponsavel ? 'Cadastrar meu aluno' : 'Cadastrar Novo Atleta'}
+              </h3>
               <button
                 className="btn btn-secondary btn-sm"
                 onClick={() => setModalAberto(false)}
@@ -245,6 +252,25 @@ export default function AlunosView({ alunos, onReload }) {
                     />
                   </div>
                 </div>
+
+                {!isResponsavel && (
+                  <div className="form-group">
+                    <label className="form-label">Responsável</label>
+                    <select
+                      className="form-control"
+                      value={responsavelId}
+                      onChange={(e) => setResponsavelId(e.target.value)}
+                      required
+                    >
+                      <option value="">Selecione um responsável</option>
+                      {responsaveis.map((responsavel) => (
+                        <option key={responsavel.id} value={responsavel.id}>
+                          {responsavel.nome} ({responsavel.email})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
 
                 <div className="form-grid">
                   <div className="form-group">
@@ -284,16 +310,6 @@ export default function AlunosView({ alunos, onReload }) {
                     />
                   </div>
 
-                  <div className="form-group">
-                    <label className="form-label">Senha Inicial de Acesso</label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      value={senha}
-                      onChange={(e) => setSenha(e.target.value)}
-                      required
-                    />
-                  </div>
                 </div>
 
                 <div className="form-group">
