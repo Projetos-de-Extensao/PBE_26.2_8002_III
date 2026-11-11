@@ -33,11 +33,11 @@ class StatusAgendamento(models.TextChoices):
 class Usuario(models.Model):
     id = models.AutoField(primary_key=True)
     nome = models.TextField()
-    email = models.TextField()
+    email = models.EmailField(unique=True)
     senha_hash = models.TextField()
     telefone = models.TextField()
     perfil = models.CharField(max_length=20, choices=TipoPerfil.choices)
-    ativo = models.BooleanField()
+    ativo = models.BooleanField(default=True)
 
     # Marca Usuario como base sem tabela própria.
     class Meta:
@@ -109,8 +109,16 @@ class Administrador(Usuario):
 
 # Representa o profissional e permite consultar seus agendamentos.
 class Profissional(Usuario):
-    registro_profissional = models.TextField()
+    registro_profissional = models.CharField(max_length=30, unique=True)
     especialidade = models.CharField(max_length=20, choices=TipoServico.choices)
+
+    def save(self, *args, **kwargs):
+        if not self.perfil:
+            if self.especialidade == TipoServico.TREINO:
+                self.perfil = TipoPerfil.TREINADOR
+            else:
+                self.perfil = TipoPerfil.PROFISSIONAL_SAUDE
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.nome
@@ -244,7 +252,7 @@ class Responsavel(Usuario):
 
 # Representa o aluno e permite consultar seus agendamentos.
 class Aluno(Usuario):
-    matricula = models.TextField()
+    matricula = models.CharField(max_length=20, unique=True)
     data_nascimento = models.DateField()
     observacoes_medicas = models.TextField(blank=True)
     responsavel = models.ForeignKey(
@@ -254,6 +262,11 @@ class Aluno(Usuario):
         blank=True,
         related_name="alunos",
     )
+
+    def save(self, *args, **kwargs):
+        if not self.perfil:
+            self.perfil = TipoPerfil.ALUNO
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.nome
@@ -267,7 +280,7 @@ class Servico(models.Model):
     id = models.AutoField(primary_key=True)
     nome = models.CharField(max_length=100)
     duracao_minutos = models.IntegerField()
-    ativo = models.BooleanField()
+    ativo = models.BooleanField(default=True)
 
     # Retorna a duração configurada para o serviço, em minutos.
     def obter_duracao(self):
@@ -283,7 +296,7 @@ class Espaco(models.Model):
     nome = models.TextField()
     capacidade_maxima = models.IntegerField()
     localizacao = models.TextField()
-    ativo = models.BooleanField()
+    ativo = models.BooleanField(default=True)
 
     # Informa se a quantidade de alunos cabe no espaço.
     def verificar_capacidade(self, qtd_alunos):
@@ -298,7 +311,11 @@ class Agendamento(models.Model):
     id = models.AutoField(primary_key=True)
     data_hora_inicio = models.DateTimeField()
     data_hora_fim = models.DateTimeField()
-    status = models.CharField(max_length=20, choices=StatusAgendamento.choices)
+    status = models.CharField(
+        max_length=20,
+        choices=StatusAgendamento.choices,
+        default=StatusAgendamento.AGENDADO,
+    )
     profissional = models.ForeignKey(
         Profissional,
         on_delete=models.CASCADE,
