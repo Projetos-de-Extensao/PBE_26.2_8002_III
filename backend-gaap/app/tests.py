@@ -987,3 +987,346 @@ class TokenAuthenticationApiTest(APITestCase):
             [status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN],
         )
 
+
+
+class PerfisDeAcessoApiTest(APITestCase):
+    """Login, cadastro e permissões de treinador, profissional de saúde e aluno."""
+
+    senha = "senha-segura-123"
+
+    def setUp(self):
+        user_model = get_user_model()
+        self.admin = user_model.objects.create_user(
+            username="admin-perfis", password=self.senha, is_staff=True
+        )
+        user_model.objects.create_user(
+            username="responsavel.perfis@gaap.com", password=self.senha
+        )
+        self.responsavel = Responsavel.objects.create(
+            nome="Mãe do Atleta",
+            email="responsavel.perfis@gaap.com",
+            senha_hash="hash",
+            telefone="111",
+            perfil=TipoPerfil.RESPONSAVEL,
+        )
+        self.treinador = self._profissional("treinador@gaap.com", "CREF-1", TipoServico.TREINO)
+        self.fisio = self._profissional("fisio@gaap.com", "CREFITO-1", TipoServico.FISIOTERAPIA)
+        self.aluno = self._aluno("aluno.perfis@gaap.com", "PERF-001")
+        self.outro_aluno = self._aluno("outro.perfis@gaap.com", "PERF-002")
+        self.espaco = Espaco.objects.create(nome="Quadra", capacidade_maxima=10, localizacao="Térreo")
+        self.servico = Servico.objects.create(nome=TipoServico.TREINO, duracao_minutos=60)
+        self.agendamento_treinador = self._agendamento(self.treinador, self.aluno, "2026-12-01T10:00:00Z")
+        self.agendamento_fisio = self._agendamento(self.fisio, self.outro_aluno, "2026-12-01T12:00:00Z")
+
+    def _profissional(self, email, registro, especialidade):
+        get_user_model().objects.create_user(username=email, password=self.senha)
+        return Profissional.objects.create(
+            nome=email.split("@")[0].title(),
+            email=email,
+            senha_hash="hash",
+            telefone="222",
+            registro_profissional=registro,
+            especialidade=especialidade,
+        )
+
+    def _aluno(self, email, matricula):
+        get_user_model().objects.create_user(username=email, password=self.senha)
+        return Aluno.objects.create(
+            nome=email.split("@")[0].title(),
+            email=email,
+            senha_hash="hash",
+            telefone="333",
+            matricula=matricula,
+            data_nascimento=date(2012, 5, 10),
+            observacoes_medicas="Asma leve",
+            responsavel=self.responsavel,
+        )
+
+    def _agendamento(self, profissional, aluno, inicio):
+        inicio = datetime.fromisoformat(inicio.replace("Z", "+00:00"))
+        agendamento = Agendamento.objects.create(
+            data_hora_inicio=inicio,
+            data_hora_fim=inicio + timedelta(hours=1),
+            profissional=profissional,
+            espaco=self.espaco,
+            servico=self.servico,
+        )
+        agendamento.alunos.add(aluno)
+        return agendamento
+
+    def _logar(self, email):
+        self.client.force_authenticate(user=get_user_model().objects.get(username=email))
+
+    def test_me_informa_o_perfil_de_cada_usuario(self):
+        casos = {
+            "admin-perfis": "ADMINISTRADOR",
+            "responsavel.perfis@gaap.com": "RESPONSAVEL",
+            "treinador@gaap.com": "TREINADOR",
+            "fisio@gaap.com": "PROFISSIONAL_SAUDE",
+            "aluno.perfis@gaap.com": "ALUNO",
+        }
+        for username, perfil in casos.items():
+            with self.subTest(username=username):
+                self._logar(username)
+                response = self.client.get("/api/me/")
+                self.assertEqual(response.status_code, status.HTTP_200_OK)
+                self.assertEqual(response.data["perfil"], perfil)
+
+    def test_cadastro_de_profissional_fica_pendente_ate_aprovacao(self):
+        dados = {
+            "nome": "Nutri Nova",
+            "email": "nutri@gaap.com",
+            "senha": self.senha,
+            "registro_profissional": "CRN-9",
+            "especialidade": TipoServico.NUTRICAO,
+        }
+        response = self.client.post("/api/profissionais/cadastro/", dados, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
+        self.assertFalse(response.data["ativo"])
+        self.assertEqual(response.data["perfil"], TipoPerfil.PROFISSIONAL_SAUDE)
+
+        login = {"username": "nutri@gaap.com", "password": self.senha}
+        response = self.client.post("/api/token/", login, format="json")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data["codigo"], "aguardando_aprovacao")
+
+        self._logar("treinador@gaap.com")
+        nutri = Profissional.objects.get(email="nutri@gaap.com")
+        lista = self.client.get("/api/profissionais/").data
+        self.assertNotIn(nutri.pk, [p["id"] for p in lista])
+        self.assertEqual(
+            self.client.post(f"/api/profissionais/{nutri.pk}/aprovar/").status_code,
+            status.HTTP_403_FORBIDDEN,
+        )
+
+        self.client.force_authenticate(user=self.admin)
+        response = self.client.post(f"/api/profissionais/{nutri.pk}/aprovar/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data["ativo"])
+
+        self.client.force_authenticate(user=None)
+        response = self.client.post("/api/token/", login, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("token", response.data)
+
+    def test_cadastro_de_profissional_rejeita_email_em_uso(self):
+        response = self.client.post(
+            "/api/profissionais/cadastro/",
+            {
+                "nome": "Copia",
+                "email": "aluno.perfis@gaap.com",
+                "senha": self.senha,
+                "registro_profissional": "CRP-1",
+                "especialidade": TipoServico.PSICOLOGIA,
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("email", response.data)
+
+    def test_responsavel_define_senha_e_o_dependente_faz_login(self):
+        self._logar("responsavel.perfis@gaap.com")
+        response = self.client.post(
+            "/api/alunos/",
+            {
+                "nome": "Filho Atleta",
+                "email": "filho@gaap.com",
+                "perfil": TipoPerfil.ALUNO,
+                "senha": self.senha,
+                "telefone": "444",
+                "matricula": "PERF-010",
+                "data_nascimento": "2014-02-01",
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
+
+        self.client.force_authenticate(user=None)
+        response = self.client.post(
+            "/api/token/",
+            {"username": "filho@gaap.com", "password": self.senha},
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {response.data['token']}")
+        self.assertEqual(self.client.get("/api/me/").data["perfil"], "ALUNO")
+
+    def test_profissional_ve_apenas_os_proprios_agendamentos_e_alunos(self):
+        self._logar("treinador@gaap.com")
+
+        agendamentos = self.client.get("/api/agendamentos/").data
+        alunos = self.client.get("/api/alunos/").data
+
+        self.assertEqual([a["id"] for a in agendamentos], [self.agendamento_treinador.pk])
+        self.assertEqual([a["id"] for a in alunos], [self.aluno.pk])
+        self.assertEqual(alunos[0]["observacoes_medicas"], "Asma leve")
+        self.assertEqual(
+            self.client.get(f"/api/agendamentos/{self.agendamento_fisio.pk}/").status_code,
+            status.HTTP_404_NOT_FOUND,
+        )
+
+    def test_profissional_marca_agendamento_como_realizado(self):
+        self._logar("treinador@gaap.com")
+        url = f"/api/agendamentos/{self.agendamento_treinador.pk}/"
+
+        response = self.client.patch(url, {"status": StatusAgendamento.CANCELADO}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response = self.client.patch(url, {"espaco": self.espaco.pk}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response = self.client.patch(url, {"status": StatusAgendamento.REALIZADO}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK, response.data)
+        self.assertEqual(response.data["status"], StatusAgendamento.REALIZADO)
+
+        outro = f"/api/agendamentos/{self.agendamento_fisio.pk}/"
+        response = self.client.patch(outro, {"status": StatusAgendamento.REALIZADO}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(self.client.delete(url).status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_profissional_nao_cria_agendamento(self):
+        self._logar("treinador@gaap.com")
+        response = self.client.post(
+            "/api/agendamentos/",
+            {
+                "data_hora_inicio": "2026-12-05T10:00:00Z",
+                "data_hora_fim": "2026-12-05T11:00:00Z",
+                "profissional": self.treinador.pk,
+                "alunos": [self.aluno.pk],
+                "espaco": self.espaco.pk,
+                "servico": self.servico.pk,
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_profissional_registra_relatorio_somente_dos_proprios_agendamentos(self):
+        self._logar("treinador@gaap.com")
+        relatorio = {
+            "presenca": True,
+            "atividades_realizadas": "Fundamentos",
+            "observacoes_tecnicas": "Boa evolução",
+            "data_finalizacao": "2026-12-01T11:00:00Z",
+        }
+
+        response = self.client.post(
+            "/api/relatorios-treino/",
+            {**relatorio, "agendamento": self.agendamento_fisio.pk},
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response = self.client.post(
+            "/api/relatorios-treino/",
+            {**relatorio, "agendamento": self.agendamento_treinador.pk},
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
+        relatorio_id = response.data["id"]
+
+        response = self.client.patch(
+            f"/api/relatorios-treino/{relatorio_id}/", {"presenca": False}, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            self.client.delete(f"/api/relatorios-treino/{relatorio_id}/").status_code,
+            status.HTTP_403_FORBIDDEN,
+        )
+
+    def test_aluno_so_consulta_os_proprios_dados(self):
+        RelatorioTreino.objects.create(
+            agendamento=self.agendamento_treinador,
+            presenca=True,
+            atividades_realizadas="Treino",
+            observacoes_tecnicas="",
+            data_finalizacao=self.agendamento_treinador.data_hora_fim,
+        )
+        RelatorioTreino.objects.create(
+            agendamento=self.agendamento_fisio,
+            presenca=True,
+            atividades_realizadas="Fisio",
+            observacoes_tecnicas="",
+            data_finalizacao=self.agendamento_fisio.data_hora_fim,
+        )
+        self._logar("aluno.perfis@gaap.com")
+
+        self.assertEqual(
+            [a["id"] for a in self.client.get("/api/agendamentos/").data],
+            [self.agendamento_treinador.pk],
+        )
+        self.assertEqual([a["id"] for a in self.client.get("/api/alunos/").data], [self.aluno.pk])
+        relatorios = self.client.get("/api/relatorios-treino/").data
+        self.assertEqual([r["agendamento"] for r in relatorios], [self.agendamento_treinador.pk])
+
+        url = f"/api/agendamentos/{self.agendamento_treinador.pk}/"
+        self.assertEqual(
+            self.client.patch(url, {"status": StatusAgendamento.REALIZADO}, format="json").status_code,
+            status.HTTP_403_FORBIDDEN,
+        )
+        self.assertEqual(
+            self.client.post("/api/relatorios-treino/", {}, format="json").status_code,
+            status.HTTP_403_FORBIDDEN,
+        )
+        self.assertEqual(self.client.get("/api/administradores/").status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_bloqueio_do_profissional_impede_novo_agendamento(self):
+        self._logar("treinador@gaap.com")
+        response = self.client.post(
+            "/api/bloqueios-agenda/",
+            {
+                "data_hora_inicio": "2026-12-10T08:00:00Z",
+                "data_hora_fim": "2026-12-10T18:00:00Z",
+                "motivo": "Congresso",
+                "espaco": self.espaco.pk,
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response = self.client.post(
+            "/api/bloqueios-agenda/",
+            {
+                "data_hora_inicio": "2026-12-10T08:00:00Z",
+                "data_hora_fim": "2026-12-10T18:00:00Z",
+                "motivo": "Congresso",
+                "profissional": self.fisio.pk,
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, response.data)
+        self.assertEqual(response.data["profissional"], self.treinador.pk)
+
+        self._logar("fisio@gaap.com")
+        self.assertEqual(self.client.get("/api/bloqueios-agenda/").data, [])
+
+        self._logar("responsavel.perfis@gaap.com")
+        response = self.client.post(
+            "/api/agendamentos/",
+            {
+                "data_hora_inicio": "2026-12-10T10:00:00Z",
+                "data_hora_fim": "2026-12-10T11:00:00Z",
+                "profissional": self.treinador.pk,
+                "alunos": [self.aluno.pk],
+                "espaco": self.espaco.pk,
+                "servico": self.servico.pk,
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("bloqueada", str(response.data))
+        self.assertEqual(Agendamento.objects.count(), 2)
+
+    def test_desativar_profissional_no_admin_bloqueia_login(self):
+        self.client.force_login(get_user_model().objects.create_superuser("root", "r@gaap.com", "x"))
+        response = self.client.post(
+            "/admin/app/profissional/",
+            {"action": "aprovar_cadastros", "_selected_action": [self.treinador.pk]},
+        )
+        self.assertEqual(response.status_code, 302)
+
+        Profissional.objects.filter(pk=self.treinador.pk).update(ativo=False)
+        from .perfis import sincronizar_conta
+
+        self.treinador.refresh_from_db()
+        sincronizar_conta(self.treinador)
+        self.assertFalse(get_user_model().objects.get(username="treinador@gaap.com").is_active)
