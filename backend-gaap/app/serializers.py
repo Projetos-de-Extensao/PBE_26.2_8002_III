@@ -15,7 +15,9 @@ from .models import (
     Responsavel,
     Servico,
     StatusAgendamento,
+    TipoServico,
 )
+from .perfis import criar_conta, email_em_uso, obter_perfil, sincronizar_conta
 
 
 def validate_model_instance(serializer, attrs, excludes=()):
@@ -73,7 +75,24 @@ class AdministradorSerializer(UsuarioSerializer):
         fields = UsuarioSerializer.Meta.fields + ("setor",)
 
 
-class ProfissionalSerializer(UsuarioSerializer):
+class ContaDeAcessoMixin:
+    """Cria e mantém a conta de login (usuário Django) da pessoa cadastrada."""
+
+    def validate_email(self, value):
+        if email_em_uso(value, excluir=self.instance):
+            raise serializers.ValidationError("Este e-mail já está cadastrado.")
+        return value
+
+    def update(self, instance, validated_data):
+        email_anterior = instance.email
+        senha = validated_data.get("senha")
+        with transaction.atomic():
+            pessoa = super().update(instance, validated_data)
+            sincronizar_conta(pessoa, email_anterior, senha)
+        return pessoa
+
+
+class ProfissionalSerializer(ContaDeAcessoMixin, UsuarioSerializer):
     class Meta(UsuarioSerializer.Meta):
         model = Profissional
         fields = UsuarioSerializer.Meta.fields + (
@@ -81,8 +100,48 @@ class ProfissionalSerializer(UsuarioSerializer):
             "especialidade",
         )
 
+    def create(self, validated_data):
+        senha = validated_data.get("senha")
+        with transaction.atomic():
+            profissional = super().create(validated_data)
+            if senha:
+                criar_conta(profissional.email, senha, ativo=profissional.ativo)
+        return profissional
 
-class AlunoSerializer(UsuarioSerializer):
+
+class CadastroProfissionalSerializer(serializers.Serializer):
+    """Cadastro público de treinador ou profissional de saúde, pendente de aprovação."""
+
+    nome = serializers.CharField(max_length=150)
+    email = serializers.EmailField()
+    senha = serializers.CharField(write_only=True, min_length=8)
+    telefone = serializers.CharField(required=False, allow_blank=True, default="")
+    registro_profissional = serializers.CharField(max_length=30)
+    especialidade = serializers.ChoiceField(choices=TipoServico.choices)
+
+    def validate_email(self, value):
+        if email_em_uso(value):
+            raise serializers.ValidationError("Este e-mail já está cadastrado.")
+        return value
+
+    def validate_registro_profissional(self, value):
+        if Profissional.objects.filter(registro_profissional__iexact=value).exists():
+            raise serializers.ValidationError("Este registro profissional já está cadastrado.")
+        return value
+
+    def create(self, validated_data):
+        dados = dict(validated_data)
+        senha = dados.pop("senha")
+        with transaction.atomic():
+            criar_conta(dados["email"], senha, ativo=False)
+            return Profissional.objects.create(
+                **dados,
+                senha_hash=make_password(senha),
+                ativo=False,
+            )
+
+
+class AlunoSerializer(ContaDeAcessoMixin, UsuarioSerializer):
     observacoes_medicas = serializers.CharField(required=False, allow_blank=True)
     responsavel = serializers.PrimaryKeyRelatedField(
         queryset=Responsavel.objects.all(),
@@ -119,6 +178,14 @@ class AlunoSerializer(UsuarioSerializer):
 
     def create(self, validated_data):
         senha = validated_data.pop("senha", None)
+        with transaction.atomic():
+            aluno = self._criar_aluno(validated_data, senha)
+            # A senha é opcional: com ela, o aluno ganha login próprio.
+            if senha:
+                criar_conta(aluno.email, senha, ativo=aluno.ativo)
+        return aluno
+
+    def _criar_aluno(self, validated_data, senha):
         request = self.context.get("request")
         if request and not request.user.is_staff:
             responsavel = validated_data.pop("responsavel")
@@ -180,11 +247,7 @@ class CadastroResponsavelSerializer(serializers.Serializer):
 
 
 def email_responsavel_em_uso(email):
-    user_model = get_user_model()
-    return (
-        user_model.objects.filter(username__iexact=email).exists()
-        or Responsavel.objects.filter(email__iexact=email).exists()
-    )
+    return email_em_uso(email)
 
 
 def criar_responsavel_com_conta(dados):
@@ -253,13 +316,16 @@ class AgendamentoSerializer(ValidatedModelSerializer):
         read_only_fields = ("id",)
 
     def validate(self, attrs):
+        # Guarda o status atual: a validação do model aplica os novos valores na instância.
+        status_atual = getattr(self.instance, "status", None)
         attrs = super().validate(attrs)
         request = self.context.get("request")
         if request and not request.user.is_staff:
-            responsavel = Responsavel.objects.filter(
-                email__iexact=request.user.username,
-                ativo=True,
-            ).first()
+            acesso = obter_perfil(request.user)
+            if acesso.is_profissional and self.instance is not None:
+                self._validar_conclusao_pelo_profissional(attrs, status_atual)
+                return attrs
+            responsavel = acesso.objeto if acesso.is_responsavel else None
             alunos = attrs.get("alunos", [])
             if responsavel is None or any(
                 aluno.responsavel_id != responsavel.pk for aluno in alunos
@@ -267,6 +333,12 @@ class AgendamentoSerializer(ValidatedModelSerializer):
                 raise serializers.ValidationError(
                     {"alunos": "Só é possível agendar para alunos sob sua responsabilidade."}
                 )
+
+        profissional = attrs.get("profissional")
+        if self.instance is None and profissional is not None and not profissional.ativo:
+            raise serializers.ValidationError(
+                {"profissional": "Este profissional ainda não está ativo no sistema."}
+            )
 
         if (
             self.instance is None
@@ -290,16 +362,28 @@ class AgendamentoSerializer(ValidatedModelSerializer):
             )
         return attrs
 
+    def _validar_conclusao_pelo_profissional(self, attrs, status_atual):
+        # O profissional só conclui o próprio agendamento: muda o status para REALIZADO.
+        campos_enviados = set(self.initial_data) - {"status"}
+        if (
+            campos_enviados
+            or attrs.get("status") != StatusAgendamento.REALIZADO
+            or status_atual != StatusAgendamento.AGENDADO
+        ):
+            raise serializers.ValidationError(
+                {
+                    "status": "O profissional só pode marcar como REALIZADO "
+                    "um agendamento seu que esteja AGENDADO."
+                }
+            )
+
     def create(self, validated_data):
         alunos = validated_data.pop("alunos")
         validated_data["status"] = StatusAgendamento.AGENDADO
         request = self.context.get("request")
 
         if request and not request.user.is_staff:
-            responsavel = Responsavel.objects.get(
-                email__iexact=request.user.username,
-                ativo=True,
-            )
+            responsavel = obter_perfil(request.user).objeto
             try:
                 return responsavel.solicitar_agendamento(
                     {**validated_data, "alunos": alunos}
@@ -359,6 +443,13 @@ class AgendamentoSerializer(ValidatedModelSerializer):
                 "O horário conflita com outro agendamento do profissional, "
                 "espaço ou aluno."
             )
+        if (
+            agendamento.status == StatusAgendamento.AGENDADO
+            and agendamento.validar_bloqueio()
+        ):
+            raise serializers.ValidationError(
+                "O profissional ou o espaço está com a agenda bloqueada nesse horário."
+            )
 
 
 class BloqueioAgendaSerializer(ValidatedModelSerializer):
@@ -375,6 +466,20 @@ class BloqueioAgendaSerializer(ValidatedModelSerializer):
         read_only_fields = ("id",)
 
     def validate(self, attrs):
+        request = self.context.get("request")
+        if request and not request.user.is_staff:
+            # O profissional só bloqueia a própria agenda; espaços ficam com a equipe.
+            acesso = obter_perfil(request.user)
+            if not acesso.is_profissional:
+                raise serializers.ValidationError(
+                    "Somente a equipe ou o próprio profissional pode bloquear a agenda."
+                )
+            if attrs.get("espaco") is not None:
+                raise serializers.ValidationError(
+                    {"espaco": "O profissional só pode bloquear a própria agenda."}
+                )
+            attrs["profissional"] = acesso.objeto
+
         attrs = super().validate(attrs)
         inicio = attrs.get(
             "data_hora_inicio",
@@ -412,3 +517,22 @@ class RelatorioTreinoSerializer(ValidatedModelSerializer):
             "agendamento",
         )
         read_only_fields = ("id",)
+
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
+        request = self.context.get("request")
+        if request and not request.user.is_staff:
+            acesso = obter_perfil(request.user)
+            agendamento = attrs.get(
+                "agendamento",
+                getattr(self.instance, "agendamento", None),
+            )
+            if (
+                not acesso.is_profissional
+                or agendamento is None
+                or agendamento.profissional_id != acesso.objeto.pk
+            ):
+                raise serializers.ValidationError(
+                    {"agendamento": "Só é possível registrar o relatório dos seus próprios agendamentos."}
+                )
+        return attrs

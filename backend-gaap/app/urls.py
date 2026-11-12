@@ -6,7 +6,9 @@ from .api import (
     AgendamentoViewSet,
     AlunoViewSet,
     BloqueioAgendaViewSet,
+    CadastroProfissionalView,
     CadastroResponsavelView,
+    MeView,
     EspacoViewSet,
     ProfissionalViewSet,
     RelatorioTreinoViewSet,
@@ -26,6 +28,8 @@ router.register("bloqueios-agenda", BloqueioAgendaViewSet)
 router.register("relatorios-treino", RelatorioTreinoViewSet)
 
 urlpatterns = [
+    path("api/me/", MeView.as_view(), name="me"),
     path("api/responsaveis/cadastro/", CadastroResponsavelView.as_view()),
+    path("api/profissionais/cadastro/", CadastroProfissionalView.as_view()),
     path("api/", include(router.urls)),
 ]
