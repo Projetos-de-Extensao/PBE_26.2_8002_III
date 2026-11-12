@@ -17,6 +17,18 @@ export default function ProfissionaisView({ profissionais, onReload }) {
   const [especialidade, setEspecialidade] = useState('TREINO');
   const [registro, setRegistro] = useState('');
 
+  const handleAprovar = async (profissional) => {
+    try {
+      await api.aprovarProfissional(profissional.id);
+      setFeedback({ type: 'success', message: `Cadastro de ${profissional.nome} aprovado. O login já está liberado.` });
+      onReload();
+    } catch (err) {
+      setFeedback({ type: 'danger', message: err.message });
+    }
+  };
+
+  const pendentes = profissionais.filter((p) => !p.ativo);
+
   const handleExcluir = async (id) => {
     if (!confirm('Deseja realmente remover este profissional?')) return;
     try {
@@ -75,6 +87,15 @@ export default function ProfissionaisView({ profissionais, onReload }) {
 
   return (
     <div>
+      {pendentes.length > 0 && (
+        <div className="alert-banner warning">
+          <div>
+            <strong>{pendentes.length} cadastro(s) aguardando aprovação.</strong> Confira o registro
+            profissional e clique em <strong>Aprovar</strong> para liberar o login.
+          </div>
+        </div>
+      )}
+
       {feedback && (
         <div className={`alert-banner ${feedback.type}`}>
           <div>{feedback.message}</div>
@@ -156,10 +177,21 @@ export default function ProfissionaisView({ profissionais, onReload }) {
                       </td>
                       <td>
                         <span className={`badge ${p.ativo ? 'badge-realizado' : 'badge-cancelado'}`}>
-                          {p.ativo ? 'Ativo' : 'Inativo'}
+                          {p.ativo ? 'Ativo' : 'Aguardando aprovação'}
                         </span>
                       </td>
                       <td style={{ textAlign: 'right' }}>
+                        {!p.ativo && (
+                          <button
+                            className="btn btn-success btn-sm"
+                            onClick={() => handleAprovar(p)}
+                            title="Aprovar cadastro e liberar o login"
+                            style={{ marginRight: '6px' }}
+                          >
+                            <UserCheck size={14} />
+                            Aprovar
+                          </button>
+                        )}
                         <button
                           className="btn btn-danger btn-sm"
                           onClick={() => handleExcluir(p.id)}

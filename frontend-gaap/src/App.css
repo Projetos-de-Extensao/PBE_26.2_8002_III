@@ -95,6 +95,59 @@
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+/* Quem está logado e com qual perfil */
+.sidebar-user {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  font-size: 0.82rem;
+  overflow: hidden;
+}
+
+.sidebar-user strong {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-user span {
+  opacity: 0.7;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Escolha do tipo de conta no cadastro */
+.account-type-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.account-type-toggle button {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border, #e2e8f0);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.account-type-toggle button.active {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.account-type-toggle small {
+  display: block;
+  opacity: 0.7;
+  font-size: 0.75rem;
+}
+
 .status-badge {
   display: flex;
   align-items: center;

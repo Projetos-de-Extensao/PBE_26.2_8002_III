@@ -41,7 +41,12 @@ export default function App() {
     online: true,
     authenticated: !!getAuthToken(),
   });
-  const canSchedule = userProfile.is_staff || userProfile.perfil === 'RESPONSAVEL';
+  // Perfis de acesso devolvidos por /api/me/
+  const isStaff = userProfile.is_staff;
+  const isResponsavel = userProfile.perfil === 'RESPONSAVEL';
+  const isProfissional = ['TREINADOR', 'PROFISSIONAL_SAUDE'].includes(userProfile.perfil);
+  const isAluno = userProfile.perfil === 'ALUNO';
+  const canSchedule = isStaff || isResponsavel;
 
   const carregarDados = useCallback(async () => {
     setLoading(true);
@@ -50,6 +55,18 @@ export default function App() {
       setBackendStatus(status);
 
       if (status.online && status.authenticated) {
+        // Primeiro descobre quem está logado; o perfil decide o que buscar.
+        let perfil = { is_staff: false, perfil: null };
+        try {
+          perfil = await api.getCurrentUser();
+        } catch (err) {
+          console.error('Erro ao carregar o perfil:', err);
+        }
+        setUserProfile(perfil);
+        const isEquipe = Boolean(perfil.is_staff);
+        const isProfissionalLogado = ['TREINADOR', 'PROFISSIONAL_SAUDE'].includes(perfil.perfil);
+        const vazio = Promise.resolve([]);
+
         const [
           agendamentosData,
           alunosData,
@@ -58,7 +75,6 @@ export default function App() {
           servicosData,
           relatoriosData,
           bloqueiosData,
-          userProfileData,
           responsaveisData,
         ] = await Promise.allSettled([
           api.getAgendamentos(),
@@ -66,15 +82,11 @@ export default function App() {
           api.getProfissionais(),
           api.getEspacos(),
           api.getServicos(),
-          api.getRelatorios(),
-          api.getBloqueios(),
-          api.getCurrentUser(),
-          api.getResponsaveis(),
+          perfil.perfil || isEquipe ? api.getRelatorios() : vazio,
+          isEquipe || isProfissionalLogado ? api.getBloqueios() : vazio,
+          isEquipe ? api.getResponsaveis() : vazio,
         ]);
 
-        if (userProfileData.status === 'fulfilled') {
-          setUserProfile(userProfileData.value);
-        }
         if (agendamentosData.status === 'fulfilled') setAgendamentos(agendamentosData.value || []);
         if (alunosData.status === 'fulfilled') setAlunos(alunosData.value || []);
         if (profissionaisData.status === 'fulfilled') setProfissionais(profissionaisData.value || []);
@@ -100,19 +112,24 @@ export default function App() {
       case 'dashboard':
         return 'Visão Geral & Dashboard';
       case 'agendamentos':
+        if (isProfissional) return 'Minha Agenda';
+        if (isAluno) return 'Meus Treinos';
         return 'Grade de Agendamentos';
       case 'novo-agendamento':
         return 'Novo Agendamento';
       case 'relatorios':
-        return 'Relatórios de Treino Pós-Sessão';
+        return isAluno ? 'Meus Relatórios de Treino' : 'Relatórios de Treino Pós-Sessão';
       case 'alunos':
+        if (isResponsavel) return 'Meus Dependentes';
+        if (isProfissional) return 'Meus Atletas';
+        if (isAluno) return 'Meus Dados';
         return 'Gestão de Alunos e Atletas';
       case 'profissionais':
         return 'Equipe Multidisciplinar';
       case 'espacos-servicos':
         return 'Espaços Físicos e Modalidades';
       case 'bloqueios':
-        return 'Bloqueios de Agenda';
+        return isProfissional ? 'Bloqueios da Minha Agenda' : 'Bloqueios de Agenda';
       default:
         return 'GAAP';
     }
@@ -181,17 +198,20 @@ export default function App() {
               espacos={espacos}
               servicos={servicos}
               onNovoAgendamento={canSchedule ? () => setModalNovoAgendamento(true) : undefined}
-              onAbrirRelatorio={() => setActiveTab('relatorios')}
+              onAbrirRelatorio={isProfissional || isStaff ? () => setActiveTab('relatorios') : undefined}
               onReload={carregarDados}
-              isStaff={userProfile.is_staff}
+              isStaff={isStaff}
+              canConcluir={isStaff || isProfissional}
             />
           )}
 
-          {userProfile.is_staff && activeTab === 'relatorios' && (
+          {(isStaff || isProfissional || isAluno) && activeTab === 'relatorios' && (
             <RelatoriosView
               relatorios={relatorios}
               agendamentos={agendamentos}
               onReload={carregarDados}
+              canWrite={isStaff || isProfissional}
+              canDelete={isStaff}
             />
           )}
 
@@ -199,7 +219,15 @@ export default function App() {
             <AlunosView
               alunos={alunos}
               responsaveis={responsaveis}
-              isResponsavel={userProfile.perfil === 'RESPONSAVEL'}
+              isResponsavel={isResponsavel}
+              canCadastrar={isStaff || isResponsavel}
+              canExcluir={isStaff}
+              titulo={
+                isResponsavel ? 'Meus Dependentes'
+                  : isProfissional ? 'Atletas que eu atendo'
+                    : isAluno ? 'Meus Dados'
+                      : 'Atletas e Alunos'
+              }
               onReload={carregarDados}
             />
           )}
@@ -219,12 +247,13 @@ export default function App() {
             />
           )}
 
-          {userProfile.is_staff && activeTab === 'bloqueios' && (
+          {(isStaff || isProfissional) && activeTab === 'bloqueios' && (
             <BloqueiosView
               bloqueios={bloqueios}
               profissionais={profissionais}
               espacos={espacos}
               onReload={carregarDados}
+              proprioProfissional={isProfissional ? { id: userProfile.id, nome: userProfile.nome } : null}
             />
           )}
         </main>

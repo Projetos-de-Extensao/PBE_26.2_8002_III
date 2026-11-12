@@ -3,7 +3,13 @@ import React, { useState } from 'react';
 import { FileText, CheckCircle2, XCircle, Plus, Calendar, Clock, Trash2, AlertCircle } from 'lucide-react';
 import { api } from '../api';
 
-export default function RelatoriosView({ relatorios, agendamentos, onReload }) {
+export default function RelatoriosView({
+  relatorios,
+  agendamentos,
+  onReload,
+  canWrite = true,
+  canDelete = true,
+}) {
   const [modalAberto, setModalAberto] = useState(false);
   const [agendamentoId, setAgendamentoId] = useState('');
   const [presenca, setPresenca] = useState(true);
@@ -86,14 +92,16 @@ export default function RelatoriosView({ relatorios, agendamentos, onReload }) {
             <FileText size={20} color="var(--primary)" />
             <h3 className="card-title">Relatórios Técnicos Pós-Sessão ({relatorios.length})</h3>
           </div>
-          <button
-            className="btn btn-primary"
-            onClick={() => setModalAberto(true)}
-            disabled={agendamentosDisponiveis.length === 0}
-          >
-            <Plus size={16} />
-            Novo Relatório
-          </button>
+          {canWrite && (
+            <button
+              className="btn btn-primary"
+              onClick={() => setModalAberto(true)}
+              disabled={agendamentosDisponiveis.length === 0}
+            >
+              <Plus size={16} />
+              Novo Relatório
+            </button>
+          )}
         </div>
 
         <div className="card-body" style={{ padding: 0 }}>
@@ -116,7 +124,7 @@ export default function RelatoriosView({ relatorios, agendamentos, onReload }) {
                     <th>Atividades Conduzidas</th>
                     <th>Observações Técnicas</th>
                     <th>Finalizado em</th>
-                    <th style={{ textAlign: 'right' }}>Ações</th>
+                    {canDelete && <th style={{ textAlign: 'right' }}>Ações</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -169,15 +177,17 @@ export default function RelatoriosView({ relatorios, agendamentos, onReload }) {
                           <span>{formatData(rel.data_finalizacao)}</span>
                         </div>
                       </td>
-                      <td style={{ textAlign: 'right' }}>
-                        <button
-                          className="btn btn-danger btn-sm"
-                          onClick={() => handleExcluir(rel.id)}
-                          title="Excluir relatório"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </td>
+                      {canDelete && (
+                        <td style={{ textAlign: 'right' }}>
+                          <button
+                            className="btn btn-danger btn-sm"
+                            onClick={() => handleExcluir(rel.id)}
+                            title="Excluir relatório"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </td>
+                      )}
                     </tr>
                   ))}
                 </tbody>

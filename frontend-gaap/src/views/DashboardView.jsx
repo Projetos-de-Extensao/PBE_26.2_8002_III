@@ -161,10 +161,12 @@ python manage.py runserver
             <button className="btn btn-secondary btn-sm" onClick={onVerAgenda}>
               Ver Toda a Agenda
             </button>
-            <button className="btn btn-primary btn-sm" onClick={onNovoAgendamento}>
-              <PlusCircle size={14} />
-              Novo Agendamento
-            </button>
+            {onNovoAgendamento && (
+              <button className="btn btn-primary btn-sm" onClick={onNovoAgendamento}>
+                <PlusCircle size={14} />
+                Novo Agendamento
+              </button>
+            )}
           </div>
         </div>
 

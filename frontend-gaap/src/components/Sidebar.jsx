@@ -30,14 +30,32 @@ export default function Sidebar({
     { id: 'profissionais', label: 'Profissionais', icon: UserCheck },
     { id: 'espacos-servicos', label: 'Espaços & Serviços', icon: Building2 },
     { id: 'bloqueios', label: 'Bloqueios de Agenda', icon: Ban },
-  ].filter((item) => userProfile.is_staff || (
-    userProfile.perfil === 'RESPONSAVEL' && [
-      'dashboard',
-      'agendamentos',
-      'novo-agendamento',
-      'alunos',
-    ].includes(item.id)
-  ));
+  ];
+
+  // Telas liberadas para cada perfil (a equipe vê todas)
+  const telasPorPerfil = {
+    RESPONSAVEL: ['dashboard', 'agendamentos', 'novo-agendamento', 'alunos'],
+    TREINADOR: ['dashboard', 'agendamentos', 'relatorios', 'alunos', 'bloqueios'],
+    PROFISSIONAL_SAUDE: ['dashboard', 'agendamentos', 'relatorios', 'alunos', 'bloqueios'],
+    ALUNO: ['dashboard', 'agendamentos', 'relatorios', 'alunos'],
+  };
+  const rotulosPorPerfil = {
+    RESPONSAVEL: { alunos: 'Meus Dependentes' },
+    TREINADOR: { agendamentos: 'Minha Agenda', alunos: 'Meus Atletas', bloqueios: 'Bloquear Agenda' },
+    PROFISSIONAL_SAUDE: { agendamentos: 'Minha Agenda', alunos: 'Meus Atletas', bloqueios: 'Bloquear Agenda' },
+    ALUNO: { agendamentos: 'Meus Treinos', relatorios: 'Meus Relatórios', alunos: 'Meus Dados' },
+  };
+  const nomesDosPerfis = {
+    ADMINISTRADOR: 'Administrador',
+    RESPONSAVEL: 'Responsável',
+    TREINADOR: 'Treinador',
+    PROFISSIONAL_SAUDE: 'Profissional de Saúde',
+    ALUNO: 'Aluno',
+  };
+
+  const visibleItems = menuItems
+    .filter((item) => userProfile.is_staff || (telasPorPerfil[userProfile.perfil] || []).includes(item.id))
+    .map((item) => ({ ...item, label: rotulosPorPerfil[userProfile.perfil]?.[item.id] || item.label }));
 
   return (
     <aside className="sidebar">
@@ -52,7 +70,7 @@ export default function Sidebar({
       </div>
 
       <nav className="sidebar-nav">
-        {menuItems.map((item) => {
+        {visibleItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
           return (
@@ -69,6 +87,13 @@ export default function Sidebar({
       </nav>
 
       <div className="sidebar-footer">
+        {userProfile.perfil && (
+          <div className="sidebar-user" title={userProfile.email}>
+            <strong>{userProfile.nome || userProfile.email}</strong>
+            <span>{nomesDosPerfis[userProfile.perfil] || userProfile.perfil}</span>
+          </div>
+        )}
+
         <button
           className="nav-item"
           style={{ marginBottom: '4px' }}

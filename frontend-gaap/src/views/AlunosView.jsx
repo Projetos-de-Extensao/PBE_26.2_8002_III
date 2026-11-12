@@ -7,6 +7,9 @@ export default function AlunosView({
   alunos,
   responsaveis = [],
   isResponsavel = false,
+  canCadastrar = true,
+  canExcluir = !isResponsavel,
+  titulo = 'Atletas e Alunos',
   onReload,
 }) {
   const [busca, setBusca] = useState('');
@@ -19,6 +22,7 @@ export default function AlunosView({
   const [email, setEmail] = useState('');
   const [responsavelId, setResponsavelId] = useState('');
   const [telefone, setTelefone] = useState('');
+  const [senha, setSenha] = useState('');
   const [matricula, setMatricula] = useState('');
   const [dataNascimento, setDataNascimento] = useState('2000-01-01');
   const [observacoesMedicas, setObservacoesMedicas] = useState('');
@@ -56,6 +60,8 @@ export default function AlunosView({
       observacoes_medicas: observacoesMedicas,
     };
     if (!isResponsavel) payload.responsavel = Number(responsavelId);
+    // Senha opcional: com ela o aluno ganha login próprio para ver os treinos e relatórios.
+    if (senha) payload.senha = senha;
 
     try {
       setSubmitting(true);
@@ -65,6 +71,7 @@ export default function AlunosView({
       setNome('');
       setEmail('');
       setTelefone('');
+      setSenha('');
       setMatricula('');
       setObservacoesMedicas('');
       onReload();
@@ -92,7 +99,7 @@ export default function AlunosView({
       <div className="card">
         <div className="card-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
-            <h3 className="card-title">Atletas e Alunos ({alunos.length})</h3>
+            <h3 className="card-title">{titulo} ({alunos.length})</h3>
             <div style={{ position: 'relative', width: '260px' }}>
               <input
                 type="text"
@@ -110,10 +117,12 @@ export default function AlunosView({
             </div>
           </div>
 
-          <button className="btn btn-primary" onClick={() => setModalAberto(true)}>
-            <Plus size={16} />
-            {isResponsavel ? 'Cadastrar meu aluno' : 'Cadastrar Atleta'}
-          </button>
+          {canCadastrar && (
+            <button className="btn btn-primary" onClick={() => setModalAberto(true)}>
+              <Plus size={16} />
+              {isResponsavel ? 'Cadastrar dependente' : 'Cadastrar Atleta'}
+            </button>
+          )}
         </div>
 
         <div className="card-body" style={{ padding: 0 }}>
@@ -134,7 +143,7 @@ export default function AlunosView({
                     <th>Nascimento</th>
                     <th>Observações Médicas</th>
                     <th>Status</th>
-                    {!isResponsavel && <th style={{ textAlign: 'right' }}>Ações</th>}
+                    {canExcluir && <th style={{ textAlign: 'right' }}>Ações</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -190,7 +199,7 @@ export default function AlunosView({
                           {al.ativo ? 'Ativo' : 'Inativo'}
                         </span>
                       </td>
-                      {!isResponsavel && <td style={{ textAlign: 'right' }}>
+                      {canExcluir && <td style={{ textAlign: 'right' }}>
                         <button
                           className="btn btn-danger btn-sm"
                           onClick={() => handleExcluir(al.id)}
@@ -214,7 +223,7 @@ export default function AlunosView({
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h3 className="modal-title">
-                {isResponsavel ? 'Cadastrar meu aluno' : 'Cadastrar Novo Atleta'}
+                {isResponsavel ? 'Cadastrar dependente' : 'Cadastrar Novo Atleta'}
               </h3>
               <button
                 className="btn btn-secondary btn-sm"
@@ -310,6 +319,18 @@ export default function AlunosView({
                     />
                   </div>
 
+                  <div className="form-group">
+                    <label className="form-label">Senha de acesso do aluno (opcional)</label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      value={senha}
+                      onChange={(e) => setSenha(e.target.value)}
+                      placeholder="Mínimo de 8 caracteres"
+                      minLength={8}
+                      autoComplete="new-password"
+                    />
+                  </div>
                 </div>
 
                 <div className="form-group">

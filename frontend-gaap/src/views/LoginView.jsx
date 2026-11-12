@@ -10,6 +10,9 @@ import {
   AlertCircle,
   Sparkles,
   Info,
+  Award,
+  Phone,
+  CheckCircle2,
 } from 'lucide-react';
 import { api, getAuthCredentials } from '../api';
 
@@ -19,15 +22,39 @@ export default function LoginView({ onLoginSuccess }) {
   const [username, setUsername] = useState(current.user || '');
   const [password, setPassword] = useState(current.pass || '');
   const [name, setName] = useState('');
+  const [accountType, setAccountType] = useState('responsavel'); // 'responsavel' | 'profissional'
+  const [telefone, setTelefone] = useState('');
+  const [registro, setRegistro] = useState('');
+  const [especialidade, setEspecialidade] = useState('TREINO');
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [successMsg, setSuccessMsg] = useState(null);
+
+  const isProfissional = mode === 'register' && accountType === 'profissional';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg(null);
+    setSuccessMsg(null);
     setLoading(true);
 
     try {
+      if (isProfissional) {
+        // Profissional não entra direto: o administrador precisa aprovar o cadastro.
+        await api.cadastrarProfissional({
+          nome: name,
+          email: username,
+          senha: password,
+          telefone,
+          registro_profissional: registro,
+          especialidade,
+        });
+        setSuccessMsg('Cadastro enviado! Você poderá entrar assim que o administrador aprovar.');
+        setMode('login');
+        setPassword('');
+        return;
+      }
+
       if (mode === 'register') {
         await api.cadastrarResponsavel({
           nome: name,
@@ -43,7 +70,9 @@ export default function LoginView({ onLoginSuccess }) {
     } catch (err) {
       console.error('Erro de autenticação:', err);
       let msg = err.message || 'Falha ao autenticar no servidor.';
-      if (err.status === 400) {
+      if (err.data?.codigo === 'aguardando_aprovacao') {
+        msg = err.data.non_field_errors[0];
+      } else if (err.status === 400 && mode === 'login') {
         msg = 'Credenciais inválidas. Verifique seu usuário/e-mail e senha.';
       } else if (err.status === 0) {
         msg = 'Servidor Django inacessível. Certifique-se de que o backend está rodando na porta 8000.';
@@ -87,6 +116,7 @@ export default function LoginView({ onLoginSuccess }) {
               onClick={() => {
                 setMode('login');
                 setErrorMsg(null);
+                setSuccessMsg(null);
               }}
             >
               Entrar
@@ -97,6 +127,7 @@ export default function LoginView({ onLoginSuccess }) {
               onClick={() => {
                 setMode('register');
                 setErrorMsg(null);
+                setSuccessMsg(null);
               }}
             >
               Criar Conta
@@ -108,6 +139,37 @@ export default function LoginView({ onLoginSuccess }) {
               <div className="alert-banner danger">
                 <AlertCircle size={18} style={{ flexShrink: 0 }} />
                 <span>{errorMsg}</span>
+              </div>
+            )}
+
+            {successMsg && (
+              <div className="alert-banner success">
+                <CheckCircle2 size={18} style={{ flexShrink: 0 }} />
+                <span>{successMsg}</span>
+              </div>
+            )}
+
+            {mode === 'register' && (
+              <div className="form-group">
+                <label className="form-label">Tipo de conta</label>
+                <div className="account-type-toggle">
+                  <button
+                    type="button"
+                    className={accountType === 'responsavel' ? 'active' : ''}
+                    onClick={() => setAccountType('responsavel')}
+                  >
+                    Responsável
+                    <small>Pai, mãe ou responsável legal do atleta</small>
+                  </button>
+                  <button
+                    type="button"
+                    className={accountType === 'profissional' ? 'active' : ''}
+                    onClick={() => setAccountType('profissional')}
+                  >
+                    Profissional
+                    <small>Treinador, fisio, nutri ou psicólogo</small>
+                  </button>
+                </div>
               </div>
             )}
 
@@ -130,7 +192,7 @@ export default function LoginView({ onLoginSuccess }) {
 
             <div className="form-group">
               <label className="form-label">
-                {mode === 'register' ? 'E-mail do Responsável' : 'Usuário ou E-mail'}
+                {mode === 'register' ? 'E-mail' : 'Usuário ou E-mail'}
               </label>
               <div className="input-icon-wrapper">
                 <Mail size={16} className="input-icon" />
@@ -163,12 +225,68 @@ export default function LoginView({ onLoginSuccess }) {
               </div>
             </div>
 
+            {isProfissional && (
+              <>
+                <div className="form-group">
+                  <label className="form-label">Especialidade</label>
+                  <select
+                    className="form-control"
+                    value={especialidade}
+                    onChange={(e) => setEspecialidade(e.target.value)}
+                  >
+                    <option value="TREINO">Treinador</option>
+                    <option value="FISIOTERAPIA">Fisioterapeuta</option>
+                    <option value="NUTRICAO">Nutricionista</option>
+                    <option value="PSICOLOGIA">Psicólogo</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Registro profissional (CREF, CREFITO, CRN, CRP)</label>
+                  <div className="input-icon-wrapper">
+                    <Award size={16} className="input-icon" />
+                    <input
+                      type="text"
+                      className="form-control with-icon"
+                      placeholder="ex: CREF 012345-G/RJ"
+                      value={registro}
+                      onChange={(e) => setRegistro(e.target.value)}
+                      maxLength={30}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Telefone / WhatsApp</label>
+                  <div className="input-icon-wrapper">
+                    <Phone size={16} className="input-icon" />
+                    <input
+                      type="text"
+                      className="form-control with-icon"
+                      placeholder="(21) 99999-9999"
+                      value={telefone}
+                      onChange={(e) => setTelefone(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+
             <button
               type="submit"
               className="btn btn-primary login-submit-btn"
               disabled={loading}
             >
-              <span>{loading ? 'Autenticando...' : mode === 'register' ? 'Criar Conta e Entrar' : 'Acessar Sistema'}</span>
+              <span>
+                {loading
+                  ? 'Enviando...'
+                  : isProfissional
+                    ? 'Enviar cadastro para aprovação'
+                    : mode === 'register'
+                      ? 'Criar Conta e Entrar'
+                      : 'Acessar Sistema'}
+              </span>
               {!loading && <ArrowRight size={18} />}
             </button>
 

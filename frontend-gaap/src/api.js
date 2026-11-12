@@ -149,7 +149,15 @@ export const api = {
     body: JSON.stringify(dados),
     skipAuth: true,
   }),
-  getCurrentUser: () => apiRequest('/responsaveis/me/'),
+  getCurrentUser: () => apiRequest('/me/'),
+
+  // Cadastro de treinador / profissional de saúde (fica pendente até o admin aprovar)
+  cadastrarProfissional: (dados) => apiRequest('/profissionais/cadastro/', {
+    method: 'POST',
+    body: JSON.stringify(dados),
+    skipAuth: true,
+  }),
+  aprovarProfissional: (id) => apiRequest(`/profissionais/${id}/aprovar/`, { method: 'POST' }),
   getResponsaveis: () => apiRequest('/responsaveis/'),
 
   // Agendamentos

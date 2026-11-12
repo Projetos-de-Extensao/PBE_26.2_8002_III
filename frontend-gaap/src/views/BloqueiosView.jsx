@@ -3,7 +3,13 @@ import React, { useState } from 'react';
 import { Ban, Plus, Trash2, Clock, MapPin, User, X } from 'lucide-react';
 import { api } from '../api';
 
-export default function BloqueiosView({ bloqueios, profissionais, espacos, onReload }) {
+export default function BloqueiosView({
+  bloqueios,
+  profissionais,
+  espacos,
+  onReload,
+  proprioProfissional = null,
+}) {
   const [modalAberto, setModalAberto] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [feedback, setFeedback] = useState(null);
@@ -55,13 +61,22 @@ export default function BloqueiosView({ bloqueios, profissionais, espacos, onRel
       return;
     }
 
-    const payload = {
-      motivo,
-      data_hora_inicio: new Date(inicioStr).toISOString(),
-      data_hora_fim: new Date(fimStr).toISOString(),
-      profissional: tipoBloqueio === 'profissional' && profissionalId ? Number(profissionalId) : null,
-      espaco: tipoBloqueio === 'espaco' && espacoId ? Number(espacoId) : null,
-    };
+    const payload = proprioProfissional
+      ? {
+          // O profissional só bloqueia a própria agenda.
+          motivo,
+          data_hora_inicio: new Date(inicioStr).toISOString(),
+          data_hora_fim: new Date(fimStr).toISOString(),
+          profissional: proprioProfissional.id,
+          espaco: null,
+        }
+      : {
+          motivo,
+          data_hora_inicio: new Date(inicioStr).toISOString(),
+          data_hora_fim: new Date(fimStr).toISOString(),
+          profissional: tipoBloqueio === 'profissional' && profissionalId ? Number(profissionalId) : null,
+          espaco: tipoBloqueio === 'espaco' && espacoId ? Number(espacoId) : null,
+        };
 
     if (!payload.profissional && !payload.espaco) {
       setFeedback({ type: 'danger', message: 'Informe pelo menos um espaço ou profissional para o bloqueio.' });
@@ -211,6 +226,14 @@ export default function BloqueiosView({ bloqueios, profissionais, espacos, onRel
                   />
                 </div>
 
+                {proprioProfissional ? (
+                  <div className="form-group">
+                    <label className="form-label">O que será bloqueado?</label>
+                    <p style={{ margin: 0 }}>
+                      A sua agenda ({proprioProfissional.nome}). Nesse período ninguém consegue agendar com você.
+                    </p>
+                  </div>
+                ) : (
                 <div className="form-group">
                   <label className="form-label">O que será bloqueado?</label>
                   <div style={{ display: 'flex', gap: '18px', marginBottom: '8px' }}>
@@ -267,6 +290,7 @@ export default function BloqueiosView({ bloqueios, profissionais, espacos, onRel
                     </select>
                   )}
                 </div>
+                )}
 
                 <div className="form-grid">
                   <div className="form-group">

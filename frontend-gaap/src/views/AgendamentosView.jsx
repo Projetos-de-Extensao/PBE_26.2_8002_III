@@ -24,6 +24,7 @@ export default function AgendamentosView({
   onAbrirRelatorio,
   onReload,
   isStaff = false,
+  canConcluir = isStaff,
 }) {
   const [filtroStatus, setFiltroStatus] = useState('TODOS');
   const [loadingAction, setLoadingAction] = useState(null);
@@ -168,10 +169,12 @@ export default function AgendamentosView({
             </div>
           </div>
 
-          <button className="btn btn-primary" onClick={onNovoAgendamento}>
-            <Plus size={16} />
-            Novo Agendamento
-          </button>
+          {onNovoAgendamento && (
+            <button className="btn btn-primary" onClick={onNovoAgendamento}>
+              <Plus size={16} />
+              Novo Agendamento
+            </button>
+          )}
         </div>
 
         <div className="card-body" style={{ padding: 0 }}>
@@ -195,7 +198,7 @@ export default function AgendamentosView({
                     <th>Espaço Físico</th>
                     <th>Atletas</th>
                     <th>Status</th>
-                    {isStaff && <th style={{ textAlign: 'right' }}>Ações</th>}
+                    {canConcluir && <th style={{ textAlign: 'right' }}>Ações</th>}
                   </tr>
                 </thead>
                 <tbody>
@@ -243,7 +246,7 @@ export default function AgendamentosView({
                           {item.status}
                         </span>
                       </td>
-                      {isStaff && <td style={{ textAlign: 'right' }}>
+                      {canConcluir && <td style={{ textAlign: 'right' }}>
                         <div style={{ display: 'inline-flex', gap: '6px' }}>
                           {item.status === 'AGENDADO' && (
                             <>
@@ -256,24 +259,28 @@ export default function AgendamentosView({
                                 <FileCheck size={14} />
                                 Concluir
                               </button>
-                              <button
-                                className="btn btn-secondary btn-sm"
-                                onClick={() => handleCancelar(item.id)}
-                                title="Cancelar agendamento"
-                                disabled={loadingAction === item.id}
-                              >
-                                <XCircle size={14} color="var(--danger)" />
-                              </button>
+                              {isStaff && (
+                                <button
+                                  className="btn btn-secondary btn-sm"
+                                  onClick={() => handleCancelar(item.id)}
+                                  title="Cancelar agendamento"
+                                  disabled={loadingAction === item.id}
+                                >
+                                  <XCircle size={14} color="var(--danger)" />
+                                </button>
+                              )}
                             </>
                           )}
-                          <button
-                            className="btn btn-danger btn-sm"
-                            onClick={() => handleExcluir(item.id)}
-                            title="Excluir do banco"
-                            disabled={loadingAction === item.id}
-                          >
-                            <Trash2 size={14} />
-                          </button>
+                          {isStaff && (
+                            <button
+                              className="btn btn-danger btn-sm"
+                              onClick={() => handleExcluir(item.id)}
+                              title="Excluir do banco"
+                              disabled={loadingAction === item.id}
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          )}
                         </div>
                       </td>}
                     </tr>
