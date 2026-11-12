@@ -246,6 +246,10 @@ class Responsavel(Usuario):
                 raise ValidationError(
                     "O horário conflita com outro agendamento do profissional, espaço ou aluno."
                 )
+            if agendamento.validar_bloqueio():
+                raise ValidationError(
+                    "O profissional ou o espaço está com a agenda bloqueada nesse horário."
+                )
 
         return agendamento
 
@@ -349,6 +353,15 @@ class Agendamento(models.Model):
         if self.pk:
             agendamentos = agendamentos.exclude(pk=self.pk)
         return agendamentos.exists()
+
+    # Verifica se o profissional ou o espaço está bloqueado no horário do agendamento.
+    def validar_bloqueio(self):
+        return BloqueioAgenda.objects.filter(
+            data_hora_inicio__lt=self.data_hora_fim,
+            data_hora_fim__gt=self.data_hora_inicio,
+        ).filter(
+            models.Q(profissional=self.profissional) | models.Q(espaco=self.espaco)
+        ).exists()
 
     # Confirma o agendamento se não houver outro horário conflitante.
     def confirmar(self):
